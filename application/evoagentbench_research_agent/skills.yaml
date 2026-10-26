@@ -1,0 +1,6 @@
+# Evolvable native Skill selection; config/agent.yaml stays frozen.
+# Create skills/<name>/SKILL.md (name + description frontmatter), then enable it here.
+# Runtime injects the catalog and skill_view; references stay relative to the Skill.
+# Keep both lists empty when no native Skill is enabled.
+skill_roots: []
+enabled_skills: []

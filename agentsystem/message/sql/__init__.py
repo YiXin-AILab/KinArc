@@ -1,0 +1,1 @@
+"""SQL MessageManager adapter。"""

@@ -1,0 +1,155 @@
+/* 紧凑的任务进度，与输入区和现有中性色卡片对齐。 */
+.todo-panel {
+  margin: 0 auto 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--soft);
+  color: var(--ink);
+  font-size: 12px;
+  overflow: hidden;
+}
+.todo-toggle {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.todo-toggle:hover {
+  background: var(--panel2);
+}
+.todo-toggle:focus-visible {
+  outline-offset: -3px;
+}
+.todo-panel svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  stroke-width: 1.5;
+}
+.todo-title-row,
+.todo-summary-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.todo-summary-row {
+  color: var(--muted);
+}
+.todo-list-icon,
+.todo-heading {
+  color: var(--ink);
+}
+.todo-heading {
+  flex-shrink: 0;
+  font-weight: 400;
+}
+.todo-count {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.todo-summary {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.todo-chevron {
+  margin-left: auto;
+  color: var(--muted);
+}
+.todo-chevron.expanded {
+  transform: rotate(180deg);
+}
+.todo-items {
+  max-height: min(220px, 28dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  margin: 0;
+  padding: 6px 12px 10px;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+.todo-items li {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 6px 0;
+  line-height: 1.6;
+}
+.todo-number {
+  min-width: 16px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.todo-status-icon {
+  margin-top: 2px;
+  color: var(--muted);
+  stroke-width: 1.5;
+}
+.todo-spinner {
+  animation: todo-spin 1s linear infinite;
+}
+@keyframes todo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .todo-spinner {
+    animation: none;
+  }
+}
+.todo-content {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.todo-status {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 10px;
+  padding-top: 2px;
+}
+.todo-items [data-status='completed'] .todo-status-icon {
+  color: var(--success);
+}
+.todo-items [data-status='completed'] .todo-content {
+  color: var(--muted);
+}
+.todo-items [data-status='in_progress'] .todo-status-icon,
+.todo-items [data-status='in_progress'] .todo-status {
+  color: var(--ink);
+}
+.todo-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.todo-error button {
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 3px;
+}
+.todo-error button:disabled {
+  color: var(--muted);
+  cursor: wait;
+}

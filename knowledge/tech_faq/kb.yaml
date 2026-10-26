@@ -1,0 +1,10 @@
+name: tech_faq
+description: 常见故障与用车技术问答（48V 轻混、车机、异响、召回等）
+retrieval:
+  strategy: bm25
+  top_k: 5
+relevance_gate:
+  model: ${AUTO_LLM_MODEL}
+  api_key: ${AUTO_LLM_API_KEY}
+  base_url: ${AUTO_LLM_BASE_URL}
+  min_relevance: partial

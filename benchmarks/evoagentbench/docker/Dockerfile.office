@@ -1,0 +1,8 @@
+FROM python:3.13-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libreoffice poppler-utils git ripgrep fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
+# This image is a tool environment, never a grader or dataset store.
+RUN pip install --no-cache-dir python-docx==1.2.0 openpyxl==3.1.5 \
+    python-pptx==1.0.2 pypdf==6.0.0 reportlab==4.4.3 pillow==11.3.0
+WORKDIR /workspace

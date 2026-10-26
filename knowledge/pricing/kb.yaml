@@ -1,0 +1,10 @@
+name: pricing
+description: 保养/维修价格、工时费标准、套餐、质保与服务时长
+retrieval:
+  strategy: bm25
+  top_k: 5
+relevance_gate:
+  model: ${AUTO_LLM_MODEL}
+  api_key: ${AUTO_LLM_API_KEY}
+  base_url: ${AUTO_LLM_BASE_URL}
+  min_relevance: partial

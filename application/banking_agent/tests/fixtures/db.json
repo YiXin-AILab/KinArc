@@ -1,0 +1,172 @@
+{
+  "users": {
+    "data": {
+      "123": {
+        "name": "Test Customer",
+        "user_id": "123",
+        "address": "Test address",
+        "email": "customer@example.test",
+        "phone_number": "0000000000",
+        "date_of_birth": "01/01/1990"
+      },
+      "125": {
+        "name": "Test Customer",
+        "user_id": "125",
+        "address": "Test address",
+        "email": "customer@example.test",
+        "phone_number": "0000000000",
+        "date_of_birth": "01/01/1990"
+      },
+      "lj82d4f1a9": {
+        "name": "Test Customer",
+        "user_id": "lj82d4f1a9",
+        "address": "Test address",
+        "email": "customer@example.test",
+        "phone_number": "0000000000",
+        "date_of_birth": "01/01/1990"
+      }
+    }
+  },
+  "accounts": {
+    "data": {
+      "03": {
+        "account_id": "03",
+        "user_id": "125",
+        "class": "checking",
+        "level": "Green Account",
+        "date_opened": "09/02/2023",
+        "status": "OPEN",
+        "current_holdings": "3400"
+      },
+      "04": {
+        "account_id": "04",
+        "user_id": "125",
+        "class": "saving",
+        "level": "Silver Account",
+        "date_opened": "09/02/2023",
+        "status": "OPEN",
+        "current_holdings": "900"
+      },
+      "chk_538bfb9cba": {
+        "account_id": "chk_538bfb9cba",
+        "user_id": "lj82d4f1a9",
+        "class": "checking",
+        "level": "Light Green Account",
+        "date_opened": "06/01/2018",
+        "status": "OPEN",
+        "current_holdings": "1847.50"
+      },
+      "05": {
+        "account_id": "05",
+        "user_id": "224959b99e",
+        "class": "checking",
+        "level": "Green Account",
+        "date_opened": "11/10/2022",
+        "status": "OPEN",
+        "current_holdings": "2850.00"
+      },
+      "chk_lj82d4f1a9": {
+        "account_id": "chk_lj82d4f1a9",
+        "user_id": "lj82d4f1a9",
+        "class": "checking",
+        "level": "Bluest Account",
+        "date_opened": "03/15/2024",
+        "status": "OPEN",
+        "current_holdings": "127450.00"
+      }
+    }
+  },
+  "debit_cards": {
+    "data": {
+      "dbc_7a3f9c2b1e": {
+        "card_id": "dbc_7a3f9c2b1e",
+        "account_id": "03",
+        "user_id": "125",
+        "cardholder_name": "Test Customer",
+        "last_4_digits": "2847",
+        "cvv": "516",
+        "status": "PENDING",
+        "issue_date": "01/05/2026",
+        "expiration_date": "01/31/2030",
+        "issue_reason": "new_account"
+      },
+      "dbc_4e8d2a6f9c": {
+        "card_id": "dbc_4e8d2a6f9c",
+        "account_id": "05",
+        "user_id": "224959b99e",
+        "cardholder_name": "Test Customer",
+        "last_4_digits": "8765",
+        "cvv": "432",
+        "status": "PENDING",
+        "issue_date": "01/05/2026",
+        "expiration_date": "01/31/2030",
+        "issue_reason": "stolen"
+      },
+      "dbc_lj82d4f1a9_bluest": {
+        "card_id": "dbc_lj82d4f1a9_bluest",
+        "account_id": "chk_lj82d4f1a9",
+        "user_id": "lj82d4f1a9",
+        "cardholder_name": "Test Customer",
+        "last_4_digits": "4821",
+        "cvv": "739",
+        "status": "ACTIVE",
+        "issue_date": "03/20/2024",
+        "expiration_date": "03/31/2028",
+        "issue_reason": "new_account"
+      },
+      "dbc_538bfb9cba": {
+        "card_id": "dbc_538bfb9cba",
+        "account_id": "chk_538bfb9cba",
+        "user_id": "lj82d4f1a9",
+        "cardholder_name": "Test Customer",
+        "last_4_digits": "7293",
+        "cvv": "451",
+        "status": "ACTIVE",
+        "issue_date": "06/15/2018",
+        "expiration_date": "06/30/2026",
+        "issue_reason": "expired"
+      }
+    }
+  },
+  "credit_card_accounts": {
+    "data": {
+      "cc_lj82d4f1a9_silver": {
+        "account_id": "cc_lj82d4f1a9_silver",
+        "user_id": "lj82d4f1a9",
+        "card_type": "Silver Rewards Card",
+        "status": "ACTIVE",
+        "date_of_account_open": "05/20/2024",
+        "current_balance": "$842.15",
+        "reward_points": "2156 points"
+      }
+    }
+  },
+  "credit_card_transaction_history": {
+    "data": {
+      "txn_8d1aa1219382": {
+        "transaction_id": "txn_8d1aa1219382",
+        "user_id": "01f21c9970",
+        "credit_card_type": "Gold Rewards Card",
+        "merchant_name": "Test Merchant",
+        "transaction_amount": "$156.78",
+        "transaction_date": "10/02/2025",
+        "category": "Groceries",
+        "status": "COMPLETED",
+        "rewards_earned": "391 points"
+      }
+    }
+  },
+  "bank_account_transaction_history": {
+    "data": {
+      "btxn_bd30d42f67a2": {
+        "transaction_id": "btxn_bd30d42f67a2",
+        "account_id": "chk_538bfb9cba",
+        "date": "11/01/2025",
+        "description": "Test transaction",
+        "amount": -50.0,
+        "type": "atm_withdrawal",
+        "status": "posted"
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "id": "gen-20261001-011718-001",
+    "input": "你好，我开的是汽车S1，想问下A保基础保养大概多少钱？都包含哪些项目呀？",
+    "expected": {
+      "key_points": [
+        "汽车S1A保示例参考价区间为1100-1400元",
+        "含机油机滤更换与全车检查，包含原厂5W-30全合成机油5.5L、机油滤芯与工时费",
+        "实际价格以到店检测后报价为准，会员可享工时费9折"
+      ],
+      "forbidden": [],
+      "must_refuse": false,
+      "gold_doc_ids": [
+        "pricing-001"
+      ],
+      "required_tools": [],
+      "forbidden_tools": [],
+      "max_latency_seconds": null,
+      "max_total_tokens": null
+    },
+    "rules": null,
+    "dims": null,
+    "tags": [
+      "pricing",
+      "single_doc"
+    ],
+    "meta": {
+      "source": "question_set",
+      "question_set": "gen-20261001-011718",
+      "reference_answer": "汽车S1A保示例参考价区间为1100-1400元；含机油机滤更换与全车检查，包含原厂5W-30全合成机油5.5L、机油滤芯与工时费；实际价格以到店检测后报价为准，会员可享工时费9折。"
+    }
+  },
+  {
+    "id": "gen-20261001-011718-002",
+    "input": "你好，我的 S4 快该做 A 保了，最近开空调老有股霉味儿，想顺便把空调系统也养护一下。这两项一起做大概得花多少钱？工时费是怎么算的呀？",
+    "expected": {
+      "key_points": [
+        "S4 A 保（基础保养）价格可参考 pricing-007，空调系统养护价格可参考 pricing-011，工时费标准可参考 pricing-009",
+        "A 保一般包含机油、机滤更换和常规检查",
+        "空调系统养护通常包括空调清洗、杀菌、滤芯更换等项目",
+        "两项同时做时，材料费和工时费分别计算，最终总价需根据车辆具体配置、所用材料和 4S 店实际报价确定"
+      ],
+      "forbidden": [],
+      "must_refuse": false,
+      "gold_doc_ids": [
+        "pricing-007",
+        "pricing-009",
+        "pricing-011"
+      ],
+      "required_tools": [],
+      "forbidden_tools": [],
+      "max_latency_seconds": null,
+      "max_total_tokens": null
+    },
+    "rules": null,
+    "dims": null,
+    "tags": [
+      "pricing",
+      "multi_doc"
+    ],
+    "meta": {
+      "source": "question_set",
+      "question_set": "gen-20261001-011718",
+      "reference_answer": "S4 A 保（基础保养）价格可参考 pricing-007，空调系统养护价格可参考 pricing-011，工时费标准可参考 pricing-009。A 保一般包含机油、机滤更换和常规检查；空调系统养护通常包括空调清洗、杀菌、滤芯更换等项目。两项同时做时，材料费和工时费分别计算，最终总价需根据车辆具体配置、所用材料和 4S 店实际报价确定。"
+    }
+  }
+]

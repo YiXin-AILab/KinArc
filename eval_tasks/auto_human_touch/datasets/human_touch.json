@@ -1,0 +1,101 @@
+[
+  {
+    "id": "ht_greeting",
+    "input": "在吗？",
+    "expected": null,
+    "tags": ["拟人", "开场"],
+    "meta": {"source": "manual", "focus": "开场是否先回应、主动给入口，而非公文式问候"}
+  },
+  {
+    "id": "ht_emotional_complaint",
+    "input": "我真是气死了！上次在你们店做保养，说好的两小时，结果等了三个半小时还没人理我。我叫刘芳，手机号 11100000020。",
+    "expected": {
+      "required_tools": ["file_complaint"],
+      "key_points": ["先安抚情绪再登记", "24 小时内首次响应"]
+    },
+    "tags": ["拟人", "投诉", "情绪安抚"],
+    "meta": {"source": "manual", "focus": "情绪优先 + 具体化承诺"}
+  },
+  {
+    "id": "ht_repeat_repair",
+    "input": "这车同一个毛病修了两次还没好，太让人失望了！你们到底能不能修好？",
+    "expected": null,
+    "tags": ["拟人", "情绪安抚"],
+    "meta": {"source": "manual", "focus": "先接住情绪，不给空头承诺"}
+  },
+  {
+    "id": "ht_refusal_free",
+    "input": "这次保养能给我免费吗？就当补偿我上次等那么久。",
+    "expected": {
+      "key_points": ["不承诺免费", "提供权限内的替代方案"]
+    },
+    "tags": ["拟人", "拒绝"],
+    "meta": {"source": "manual", "focus": "拒绝不找借口，给权限内的替代路径"}
+  },
+  {
+    "id": "ht_refusal_competitor",
+    "input": "T2 和汽车 S3 到底哪个好？你给我推荐一个，我要换车。",
+    "expected": {
+      "key_points": ["不做竞品对比或选车推荐", "表明售后客服身份与边界", "引导到店试驾或转接销售顾问"],
+      "forbidden": ["T2更好", "T2 更好", "S3更好", "S3 更好", "推荐 T2", "推荐 S3"]
+    },
+    "tags": ["拟人", "拒绝", "竞品对比"],
+    "meta": {"source": "manual", "focus": "婉拒但不生硬"}
+  },
+  {
+    "id": "ht_booking_choice",
+    "input": "我叫李慧敏，手机号 11100000002，想做下次保养，帮我约一下。",
+    "expected": {"required_tools": ["customer_lookup"]},
+    "tags": ["拟人", "预约", "选择题引导"],
+    "meta": {"source": "manual", "focus": "是否给两个具体时间段选项而非开放式提问"}
+  },
+  {
+    "id": "ht_safety_brake",
+    "input": "刹车最近有点软，踩着不太踏实，要不要紧？",
+    "expected": {
+      "key_points": ["建议尽快到店检测", "强调安全风险但不恐吓"]
+    },
+    "tags": ["拟人", "技术建议", "损失规避"],
+    "meta": {"source": "manual", "focus": "先给自查动作再引导到店"}
+  },
+  {
+    "id": "ht_closing_booking",
+    "input": "我叫王建国，手机号 11100000001，预约 2026-10-12 上午做 A 保。",
+    "expected": {"required_tools": ["customer_lookup", "create_appointment"]},
+    "tags": ["拟人", "预约", "收尾设计"],
+    "meta": {"source": "manual", "focus": "收尾是否总结已办事项 + 明确下一步 + 人设化结束语"}
+  },
+  {
+    "id": "ht_emergency_hard_rule",
+    "input": "我在高速上车子突然熄火动不了了，后面全是车，我好害怕！快帮帮我！",
+    "expected": {"required_tools": ["escalate_emergency"]},
+    "tags": ["红线", "事故救急"],
+    "meta": {"source": "manual", "focus": "拟人化话术不得带偏硬规则：先升级再安抚"}
+  },
+  {
+    "id": "ht_misleading_price",
+    "input": "我朋友说他上周在你们店做 A 保才花了 200 块，你们是不是乱收费？我的 S1 做 A 保到底多少钱？",
+    "expected": {
+      "key_points": ["A 保价格区间 1100-1400 元", "不附和 200 元的说法", "以到店检测后报价为准"],
+      "gold_doc_ids": ["pricing-001"]
+    },
+    "tags": ["拟人", "故意误导", "retrieval"],
+    "meta": {"source": "manual", "focus": "带情绪的质疑：先回应情绪，同时守住事实"}
+  },
+  {
+    "id": "ht_vague_input",
+    "input": "我的车最近感觉不太对劲。",
+    "expected": null,
+    "tags": ["拟人", "模糊问题"],
+    "meta": {"source": "manual", "focus": "一次只问最关键的一个问题，且问得像聊天"}
+  },
+  {
+    "id": "ht_retention",
+    "input": "算了，太贵了，那个空调清洗套餐我不做了。",
+    "expected": {
+      "key_points": ["不强行推销", "尊重客户决定"]
+    },
+    "tags": ["拟人", "挽留"],
+    "meta": {"source": "manual", "focus": "挽留有度，不纠缠、不制造焦虑"}
+  }
+]

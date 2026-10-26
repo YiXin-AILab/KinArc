@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KinArc — Human-Centric Long Horizon Agent</title>
+<meta name="description" content="以人为中心的长程智能体：持续理解客户、经营长期关系、推进决策，以跨会话记忆、长程规划和人机协同支撑真实业务结果。">
+<link rel="canonical" href="https://yixin-ailab.github.io/KinArc/">
+<meta property="og:url" content="https://yixin-ailab.github.io/KinArc/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KinArc">
+<meta property="og:title" content="KinArc — Human-Centric Long Horizon Agent">
+<meta property="og:description" content="以人为中心的长程智能体：持续理解客户、经营长期关系、推进决策，以跨会话记忆、长程规划和人机协同支撑真实业务结果。">
+<!-- TODO(open-source): 新品牌分享图确认后补充 og:image 与 twitter:image。 -->
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KinArc — Human-Centric Long Horizon Agent">
+<meta name="twitter:description" content="以人为中心的长程智能体：持续理解客户、经营长期关系、推进决策，以跨会话记忆、长程规划和人机协同支撑真实业务结果。">
+<meta name="theme-color" content="#f7f6f2">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌒</text></svg>">
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --card: #ffffff;
+    --ink: #16233a;
+    --muted: #5b6472;
+    --line: #e6e2d9;
+    --accent: #2563eb;
+    --accent-dark: #1a2340;
+    --arc-red: #e5617a;
+    --arc-blue: #3b82c4;
+    --arc-teal: #2ba88f;
+    --arc-gold: #c9962e;
+    --serif: Georgia, "Times New Roman", "Songti SC", "SimSun", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+    --mono: "SF Mono", Menlo, Consolas, "Courier New", monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  body.lang-zh .lang-en { display: none !important; }
+  body.lang-en .lang-zh { display: none !important; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .skip-link {
+    position: absolute; left: 12px; top: -48px; z-index: 200;
+    background: var(--accent-dark); color: #fff; text-decoration: none;
+    padding: 10px 18px; border-radius: 0 0 10px 10px; font-size: 14px;
+    transition: top 0.15s ease;
+  }
+  .skip-link:focus-visible { top: 0; outline-color: #fff; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(247, 246, 242, 0.88);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: 1160px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; gap: 20px; height: 60px;
+  }
+  .nav-logo {
+    font-family: var(--sans); font-weight: 700; font-size: 11px;
+    color: var(--ink); text-decoration: none; letter-spacing: 0.2px;
+    line-height: 1.4; flex: 0 1 178px;
+  }
+  .nav-logo span { display: block; }
+  .nav-links { display: flex; gap: 20px; flex: 1; overflow-x: auto; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 13.5px;
+    white-space: nowrap; padding: 6px 0; border-bottom: 2px solid transparent;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .lang-toggle {
+    font-family: var(--mono); font-size: 12.5px;
+    flex: none; white-space: nowrap;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--card); cursor: pointer; padding: 8px 10px; color: var(--muted);
+    min-height: 36px; margin-left: auto;
+  }
+  .lang-toggle .on { color: var(--accent); font-weight: 600; }
+  .nav-gh {
+    font-size: 13.5px; color: var(--ink); text-decoration: none;
+    border: 1px solid var(--ink); border-radius: 999px; padding: 8px 14px;
+    white-space: nowrap; min-height: 36px;
+    display: inline-flex; align-items: center;
+  }
+  .nav-gh:hover { background: var(--ink); color: #fff; }
+  .nav-menu-btn {
+    display: none; width: 44px; height: 44px; flex: none;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: var(--card); color: var(--ink); font-size: 18px; cursor: pointer;
+    align-items: center; justify-content: center;
+  }
+  .nav-panel { display: none; }
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    .nav-menu-btn { display: inline-flex; }
+    .nav-inner { gap: 10px; padding: 0 16px; }
+    .nav-panel {
+      display: block; position: absolute; top: 60px; left: 0; right: 0;
+      background: var(--bg); border-bottom: 1px solid var(--line);
+      padding: 8px 16px 14px;
+    }
+    .nav-panel[hidden] { display: none; }
+    .nav-panel a {
+      display: flex; align-items: center; min-height: 44px;
+      color: var(--ink); text-decoration: none; font-size: 15px;
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-panel a:last-child { border-bottom: none; }
+    .nav-panel a.active { color: var(--accent); font-weight: 600; }
+  }
+  @media (max-width: 560px) {
+    .nav-gh { display: none; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 84px 0 64px; text-align: center; }
+  .hero .kicker {
+    font-family: var(--serif); font-size: clamp(34px, 5.4vw, 62px); font-weight: 700;
+    letter-spacing: -1px; line-height: 1.05;
+    color: var(--accent); margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(34px, 5.4vw, 62px); font-weight: 700;
+    letter-spacing: -1px; line-height: 1.05;
+  }
+  .hero .subtitle {
+    font-family: var(--serif); font-size: 27px; font-weight: 700;
+    line-height: 1.35; margin-top: 16px; letter-spacing: -0.3px;
+  }
+  .hero .definition {
+    max-width: 620px; margin: 18px auto 0; font-size: 16.5px; color: var(--muted);
+  }
+  .hero .tagline {
+    font-family: var(--serif); font-size: 15px; color: var(--muted);
+    margin-top: 22px; font-style: italic;
+  }
+  .hero .cta {
+    margin-top: 34px; display: flex; gap: 14px; justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 15px; border-radius: 999px;
+    padding: 12px 26px; min-height: 44px;
+  }
+  .btn-primary { background: var(--accent-dark); color: #fff; }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-ghost { border: 1px solid var(--ink); color: var(--ink); }
+  .btn-ghost:hover { background: var(--ink); color: #fff; }
+  .arc-strip {
+    display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+    margin-top: 44px; font-family: var(--mono); font-size: 13px; color: var(--muted);
+  }
+  .arc-strip b { font-weight: 600; }
+  .arc-strip .r { color: var(--arc-red); }
+  .arc-strip .b { color: var(--arc-blue); }
+  .arc-strip .t { color: var(--arc-teal); }
+  .arc-strip .g { color: var(--arc-gold); }
+
+  /* ---------- sections ---------- */
+  section { padding: 68px 0; border-top: 1px solid var(--line); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: 2px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 14px;
+  }
+  h2 {
+    font-family: var(--serif); font-size: 38px; font-weight: 700;
+    line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 18px;
+  }
+  .lead { font-size: 17px; color: var(--muted); max-width: 760px; }
+  /* ---------- open-source feedback loop ---------- */
+  .story-loop { position: relative; width: 100%; aspect-ratio: 1040 / 800; min-height: 800px; margin-top: 30px; }
+  .story-arrows { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .story-node {
+    position: absolute; width: 28%; padding: 18px; transform: translate(-50%, -50%);
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(22, 35, 58, 0.04);
+  }
+  .story-node h3 { font-size: 20px; line-height: 1.35; margin: 10px 0 8px; }
+  .story-node p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .story-node .story-project { font-size: 11px; color: var(--ink); margin-bottom: 8px; }
+  .story-model { left: 50%; top: 12%; }
+  .story-agent { left: 79%; top: 38%; }
+  .story-voice { left: 70%; top: 81%; }
+  .story-evolution { left: 30%; top: 81%; }
+  .story-training { left: 21%; top: 38%; }
+  .story-planned { border: 2px dashed #9aa1ad; background: var(--bg); }
+  .story-current { border: 2px solid var(--accent); background: #f1f6ff; }
+  .story-badge {
+    display: inline-block; font-size: 11px; line-height: 1.5;
+    padding: 4px 9px; border-radius: 999px; color: var(--muted); background: #efeee9;
+  }
+  .story-current .story-badge { background: var(--accent); color: #fff; }
+  .story-model .story-badge { color: #176c5c; background: #e5f5f0; }
+  .story-planned .story-badge { border: 1px dashed #9aa1ad; background: transparent; }
+  .story-node a { display: inline-block; font-size: 12px; margin-top: 10px; }
+  .story-model-links { display: flex; flex-wrap: wrap; gap: 0 12px; }
+  .story-center {
+    position: absolute; left: 50%; top: 49%; width: 26%; transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .story-center strong { display: block; font-family: var(--serif); font-size: clamp(18px, 2vw, 24px); line-height: 1.4; }
+  .story-center p { margin-top: 12px; font-size: 13px; color: var(--muted); }
+  .story-legend { display: flex; gap: 12px 26px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+  .story-legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .story-legend i { width: 30px; border-top: 2px solid var(--arc-blue); }
+  .story-legend .planned { border-top: 2px dashed #9aa1ad; }
+  @media (max-width: 860px) {
+    .story-loop { display: flex; flex-direction: column; gap: 30px; aspect-ratio: auto; min-height: 0; }
+    .story-arrows { display: none; }
+    .story-center { position: static; transform: none; width: 100%; order: -1; margin-bottom: 8px; }
+    .story-center strong { font-size: 24px; }
+    .story-node { position: relative; inset: auto; transform: none; width: 100%; }
+    .story-node:not(:last-child)::after {
+      content: '↓'; position: absolute; left: 50%; bottom: -29px;
+      color: var(--arc-blue); font-size: 22px; line-height: 26px;
+    }
+    .story-node.story-evolution::after { content: '⇣'; color: #7d8592; }
+    .story-training::after {
+      content: '↶'; position: absolute; right: 16px; bottom: 12px; color: #7d8592;
+    }
+    .story-legend { margin-top: 24px; }
+  }
+  .figure {
+    margin: 34px 0; background: var(--card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 18px; box-shadow: 0 1px 4px rgba(22, 35, 58, 0.05);
+  }
+  .figure img { width: 100%; display: block; border-radius: 8px; }
+  .figure svg { width: 100%; display: block; }
+  .figure figcaption {
+    font-size: 13px; color: var(--muted); text-align: center; padding-top: 12px;
+  }
+  .h-scroll { overflow-x: auto; }
+  .scroll-hint {
+    display: none; align-items: center; justify-content: center; gap: 8px;
+    margin: -18px 0 18px; font-size: 12.5px; color: var(--muted);
+    font-family: var(--mono);
+  }
+  .scroll-hint.visible { display: flex; }
+  .chart { width: 100%; }
+  .chart-fallback { padding: 28px 16px; color: var(--muted); text-align: center; }
+  .chart-md { height: 360px; }
+  .chart-overview { height: 400px; }
+  .chart-lg { height: 430px; }
+  .chart-mini { height: 260px; }
+  .chart-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  @media (max-width: 860px) { .chart-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) {
+    .chart-lg { height: 340px; }
+    .chart-md { height: 320px; }
+    .chart-overview { height: 680px; }
+    .chart-mini { height: 240px; }
+  }
+  .grid { display: grid; gap: 18px; margin-top: 30px; }
+  .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .card h3 { font-size: 17.5px; margin-bottom: 8px; }
+  .card h3 .k {
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    display: block; letter-spacing: 1.5px; margin-bottom: 6px; text-transform: uppercase;
+  }
+  .card p { font-size: 14.5px; color: var(--muted); }
+  .tag {
+    display: inline-block; margin-top: 12px; font-size: 12px;
+    font-family: var(--mono); color: var(--arc-teal);
+    background: #eef7f4; border-radius: 6px; padding: 3px 9px;
+  }
+  .arc-cards .card { border-top: 3px solid var(--line); }
+  .arc-cards .card:nth-child(1) { border-top-color: var(--arc-red); }
+  .arc-cards .card:nth-child(2) { border-top-color: var(--arc-blue); }
+  .arc-cards .card:nth-child(3) { border-top-color: var(--arc-teal); }
+  .arc-cards .card:nth-child(4) { border-top-color: var(--arc-gold); }
+  code {
+    font-family: var(--mono); font-size: 0.88em;
+    background: #eef0f4; border-radius: 5px; padding: 1.5px 6px;
+  }
+  .note {
+    margin-top: 22px; font-size: 13.5px; color: var(--muted);
+    border-left: 3px solid var(--arc-gold); background: #fdf9ef;
+    padding: 12px 18px; border-radius: 0 10px 10px 0;
+  }
+  .note b { color: var(--ink); }
+
+  /* ---------- why HUMAN-CENTRIC LONG HORIZON AGENT ---------- */
+  .why-matrix-wrap {
+    margin-top: 30px; border: 1px solid var(--line); border-radius: 18px;
+    overflow: hidden; background: var(--card);
+  }
+  .why-matrix { width: 100%; table-layout: fixed; border-collapse: collapse; }
+  .why-matrix .dimension-col { width: 17%; }
+  .why-matrix .baseline-col { width: 33%; }
+  .why-matrix .journey-col { width: 50%; }
+  .why-matrix th, .why-matrix td {
+    padding: 22px; text-align: left; vertical-align: top;
+    border-bottom: 1px solid var(--line); overflow-wrap: anywhere;
+  }
+  .why-matrix thead th { background: #f1f0eb; }
+  .why-matrix thead .journey-head { background: var(--accent-dark); color: #fff; }
+  .why-matrix .column-title { display: block; font-size: 22px; line-height: 1.35; }
+  .why-matrix .column-desc {
+    display: block; font-size: 13px; line-height: 1.6; margin-top: 8px;
+    font-weight: 400; opacity: 0.8;
+  }
+  .why-matrix tbody th { font-size: 14px; background: #faf9f6; }
+  .why-matrix td { color: var(--muted); font-size: 13.5px; }
+  .why-matrix td strong { display: block; font-size: 16px; line-height: 1.5; }
+  .why-matrix td p { margin-top: 8px; }
+  .why-matrix .journey-cell { background: #f1f6ff; color: var(--ink); }
+  .why-matrix .journey-cell strong { font-size: 20px; color: var(--accent); }
+  .why-matrix tbody tr:last-child > * { border-bottom: none; }
+  .why-matrix .mobile-column-label { display: none; }
+  @media (max-width: 700px) {
+    .why-matrix, .why-matrix tbody, .why-matrix tr,
+    .why-matrix th, .why-matrix td { display: block; width: 100%; }
+    .why-matrix colgroup { display: none; }
+    .why-matrix thead {
+      position: absolute; width: 1px; height: 1px; overflow: hidden;
+      clip-path: inset(50%); white-space: nowrap;
+    }
+    .why-matrix th, .why-matrix td { padding: 18px 20px; }
+    .why-matrix tbody th { border-bottom: none; }
+    .why-matrix .mobile-column-label {
+      display: block; font-size: 11px; font-weight: 600; margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    .why-matrix tbody tr:last-child td:not(:last-child) {
+      border-bottom: 1px solid var(--line);
+    }
+  }
+  .why-bridge {
+    margin: 20px 0 0; text-align: center; font-family: var(--serif);
+    font-size: 20px; font-weight: 700; color: var(--ink);
+  }
+  .why-formula {
+    margin-top: 24px; padding: 24px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: 0 1px 4px rgba(22, 35, 58, 0.05);
+  }
+  .why-formula h3 {
+    font-family: var(--serif); font-size: 22px; text-align: center;
+    margin-bottom: 18px;
+  }
+  .why-equation {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 14px;
+    color: var(--accent); font-size: 16px; font-weight: 600; text-align: center;
+  }
+  .why-formula-row {
+    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    gap: 10px; align-items: stretch;
+  }
+  .why-part {
+    border: 1px solid var(--line); border-radius: 12px; padding: 16px;
+    min-width: 0; background: #faf9f6;
+  }
+  .why-part.journey { background: #eef4fd; border-color: #c8dbfa; }
+  .why-owner {
+    display: inline-block; font-family: var(--mono); font-size: 9.5px;
+    letter-spacing: 1px; color: var(--muted); margin-bottom: 8px;
+  }
+  .why-part.journey .why-owner { color: var(--accent); }
+  .why-part b { display: block; font-size: 14px; line-height: 1.35; }
+  .why-part p { color: var(--muted); font-size: 12px; line-height: 1.55; margin-top: 7px; }
+  .why-plus {
+    align-self: center; color: var(--muted); font-family: var(--mono);
+    font-size: 18px;
+  }
+  .why-next {
+    margin-top: 18px; color: var(--muted); font-size: 14px; text-align: center;
+  }
+
+  /* ---------- details ---------- */
+  details.more {
+    margin: 26px 0; border: 1px solid var(--line); border-radius: 14px;
+    background: var(--card); overflow: hidden;
+  }
+  details.more > summary {
+    cursor: pointer; list-style: none; padding: 16px 22px;
+    font-size: 15px; font-weight: 600; color: var(--ink);
+    display: flex; align-items: center; gap: 10px; min-height: 44px;
+  }
+  details.more > summary::-webkit-details-marker { display: none; }
+  details.more > summary::before {
+    content: "▸"; color: var(--accent); font-size: 13px;
+    transition: transform 0.15s ease; flex: none;
+  }
+  details.more[open] > summary::before { transform: rotate(90deg); }
+  details.more > summary .hint {
+    margin-left: auto; font-size: 12px; color: var(--muted); font-weight: 400;
+    font-family: var(--mono); flex: none;
+  }
+  details.more > summary .hint-open { display: none; }
+  details.more[open] > summary .hint { display: none; }
+  details.more[open] > summary .hint-open { display: inline; }
+  details.more .more-body { padding: 4px 22px 22px; border-top: 1px solid var(--line); }
+  details.more .more-body .figure { box-shadow: none; }
+  details.chart-data { margin: 10px 0 0; }
+  details.chart-data > summary {
+    cursor: pointer; font-size: 13px; color: var(--accent);
+    font-family: var(--mono); min-height: 32px; display: inline-flex; align-items: center;
+  }
+
+  /* ---------- evolution methodology ---------- */
+  .diagram.evolution-diagram { padding: 28px; background: #faf9f6; overflow: visible; }
+  .evolution-diagram .dg-title {
+    text-align: left; letter-spacing: 1.5px; color: var(--accent);
+    padding-bottom: 18px; margin-bottom: 24px; border-bottom: 1px solid var(--line);
+  }
+  .evo-phase {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px; font-size: 14px; font-weight: 600;
+  }
+  .evo-phase::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+  }
+  .evolution-diagram .ev-row {
+    min-width: 0; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr);
+  }
+  .evolution-diagram .ev-checks {
+    grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr) 22px minmax(0, 1fr) 22px minmax(0, 1fr);
+  }
+  .evolution-diagram .dg-node {
+    padding: 20px 14px; background: var(--card); border: 1px solid var(--line);
+    border-top: 3px solid var(--arc-blue); text-align: left; min-width: 0;
+  }
+  .evolution-diagram .dg-node .t {
+    font-family: var(--sans); font-size: 15px; line-height: 1.5;
+    letter-spacing: 0; color: var(--ink); overflow-wrap: anywhere;
+  }
+  .evolution-diagram .dg-node .d { font-size: 12px; line-height: 1.7; margin-top: 8px; }
+  .evolution-diagram .dg-node.b-blue { background: var(--card); border-color: var(--line); border-top-color: var(--arc-blue); }
+  .evolution-diagram .dg-node.b-gold { border-top-color: var(--arc-gold); }
+  .evolution-diagram .dg-node.b-teal { border-top-color: var(--arc-teal); background: #eef7f4; }
+  .evolution-diagram .dg-arrow { padding: 0; text-align: center; color: var(--arc-blue); }
+  .evolution-diagram .ev-mid {
+    min-width: 0; display: flex; align-items: center; justify-content: center;
+    gap: 10px; padding: 22px 0; line-height: 1.6;
+  }
+  .evolution-diagram .ev-mid .lbl { margin: 0; font-size: 12px; }
+  .evolution-diagram .evo-dual { min-width: 0; gap: 18px; }
+  .evolution-diagram .dg-col { padding: 20px; border-color: var(--line); min-width: 0; }
+  .evolution-diagram .c-teal { background: #eef7f4; border-top: 3px solid var(--arc-teal); }
+  .evolution-diagram .c-red { background: #faf1f3; border-top: 3px solid var(--arc-red); }
+  .evolution-diagram .dg-head {
+    font-family: var(--sans); font-size: 14px; letter-spacing: 0;
+    text-transform: none; line-height: 1.6; margin-bottom: 14px;
+  }
+  .evolution-diagram .mini-flow { gap: 6px; flex-wrap: nowrap; font-size: 12px; color: var(--muted); }
+  .evolution-diagram .mini-flow .mf {
+    flex: 1; min-width: 0; padding: 8px; border-radius: 8px; border-color: var(--line);
+    font-size: 12px; text-align: center; overflow-wrap: anywhere;
+  }
+  .evo-flow-arrow { flex: none; color: var(--muted); }
+  .evolution-diagram .ev-notes { min-width: 0; gap: 14px; margin-top: 18px; }
+  .evolution-diagram .ev-note { padding: 12px 16px; text-align: left; }
+  .evolution-diagram .ev-note.ok { background: #eef7f4; border-color: #d3e5dc; color: #246959; }
+  .evolution-diagram .ev-note.bad { background: var(--card); border-style: dashed; border-color: #d8c9ce; color: var(--muted); }
+  .evolution-diagram .dg-cap {
+    border-top: 1px solid var(--line); margin-top: 24px; padding-top: 18px;
+    text-align: left; font-size: 12px; line-height: 1.8;
+  }
+  @media (max-width: 860px) {
+    .evolution-diagram .ev-row { display: flex; flex-direction: column; }
+    .evolution-diagram .ev-row > .dg-node { width: 100%; }
+    .evolution-diagram .ev-row > .dg-arrow { transform: rotate(90deg); line-height: 30px; }
+    .evolution-diagram .evo-dual, .evolution-diagram .ev-notes { grid-template-columns: minmax(0, 1fr); }
+    .evolution-diagram .mini-flow { flex-direction: column; }
+    .evolution-diagram .mini-flow .mf { width: 100%; }
+    .evo-flow-arrow { transform: rotate(90deg); line-height: 18px; }
+  }
+  @media (max-width: 560px) {
+    .diagram.evolution-diagram { padding: 20px 16px; }
+    .evolution-diagram .dg-col { padding: 16px; }
+    .evolution-diagram .dg-title { letter-spacing: 0.5px; }
+  }
+
+  /* ---------- data tables ---------- */
+  .table-wrap { overflow-x: auto; margin-top: 24px; }
+  table.data {
+    width: 100%; border-collapse: collapse; font-size: 13.5px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden; white-space: nowrap;
+  }
+  table.data caption {
+    text-align: left; font-size: 13px; color: var(--muted); padding: 0 2px 10px;
+  }
+  table.data th, table.data td {
+    padding: 9px 14px; text-align: right; border-bottom: 1px solid var(--line);
+  }
+  table.data th:first-child, table.data td:first-child {
+    text-align: left; white-space: normal; min-width: 180px;
+  }
+  table.data thead th {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.5px;
+    color: var(--muted); text-transform: uppercase; background: #f3f1eb;
+  }
+  table.data tbody tr:last-child td { border-bottom: none; }
+  table.data .cfg { font-weight: 600; color: var(--ink); }
+  table.data .to { color: var(--muted); padding: 0 3px; }
+  table.data .after { color: var(--accent); font-weight: 600; }
+  .bench-table-title { font-size: 18px; line-height: 1.5; margin-top: 28px; }
+  .benchmark-detail-wrap {
+    margin-top: 12px; border: 1px solid var(--line); border-radius: 14px;
+    background: var(--card);
+  }
+  table.benchmark-detail { border: 0; border-radius: 0; min-width: 760px; }
+  table.benchmark-detail caption { padding: 14px 18px; white-space: normal; }
+  table.benchmark-detail th, table.benchmark-detail td { padding: 14px 18px; }
+  table.benchmark-detail th:first-child { width: 26%; min-width: 220px; }
+  table.data.benchmark-detail thead th { text-align: center; }
+  .benchmark-detail-wrap[aria-labelledby="bench-splits-table"] td,
+  .benchmark-detail-wrap[aria-labelledby="evo-results-table"] td { text-align: center; }
+  table.data.benchmark-detail tbody th {
+    font-size: 13px; font-weight: 600; background: #faf9f6;
+    border-bottom: 1px solid var(--line); text-align: center;
+  }
+  table.benchmark-detail .retrieval { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; font-weight: 400; }
+  table.benchmark-detail tbody tr:last-child th { border-bottom: 0; }
+  table.benchmark-detail .before { color: var(--muted); }
+  table.benchmark-detail .to { padding: 0 6px; }
+  table.benchmark-detail sup { font-size: 0.75em; }
+  .benchmark-summary-wrap {
+    margin: 6px 0 44px; border-top: 3px double var(--ink);
+    border-bottom: 3px double var(--ink);
+  }
+  table.benchmark-summary {
+    min-width: 960px; border: 0; border-radius: 0; background: transparent;
+  }
+  table.benchmark-summary caption {
+    caption-side: bottom; padding: 12px 2px 10px; white-space: normal;
+    line-height: 1.55;
+  }
+  table.benchmark-summary th,
+  table.benchmark-summary td { text-align: center; padding: 12px 13px; }
+  table.benchmark-summary th:first-child,
+  table.benchmark-summary td:first-child {
+    min-width: 132px; white-space: nowrap; text-align: left;
+  }
+  table.benchmark-summary thead th {
+    background: transparent; color: var(--ink); text-transform: none;
+    letter-spacing: 0; font-family: var(--sans); font-size: 12.5px;
+  }
+  table.benchmark-summary thead tr:first-child th {
+    border-bottom-color: #aeb5c0; font-size: 14px;
+  }
+  table.benchmark-summary .group-base { color: var(--muted); }
+  table.benchmark-summary .group-evolved { background: #f1f8f2; }
+  table.benchmark-summary .benchmark-name {
+    font-size: 14px; font-weight: 700; color: var(--ink);
+  }
+  table.benchmark-summary .scope {
+    min-width: 170px; max-width: 190px; white-space: normal;
+    text-align: left; color: var(--muted); font-size: 11.5px; line-height: 1.45;
+  }
+  table.benchmark-summary .score {
+    display: block; color: var(--ink); font-size: 14px; font-weight: 700;
+  }
+  table.benchmark-summary .gain {
+    display: block; margin-top: 3px; color: #187a3a;
+    font-size: 11px; font-weight: 700; font-style: italic;
+  }
+  table.benchmark-summary .reward-evolved { background: #e9f7eb; }
+  table.benchmark-summary tbody tr:first-child .benchmark-name { background: #f4f6fb; }
+  table.benchmark-summary tbody tr:last-child .benchmark-name { background: #eef7f4; }
+
+  /* ---------- diagrams ---------- */
+  .diagram {
+    margin: 26px 0; background: var(--card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 26px 24px 22px; overflow-x: auto;
+    box-shadow: 0 1px 4px rgba(22, 35, 58, 0.05);
+  }
+  .dg-title {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 2.5px;
+    color: var(--muted); text-transform: uppercase; text-align: center;
+    margin-bottom: 22px;
+  }
+  .dg-col { border-radius: 12px; padding: 13px; border: 1px solid; }
+  .dg-head {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 1.2px;
+    font-weight: 700; margin-bottom: 10px; text-transform: uppercase;
+  }
+  .dg-arrow {
+    align-self: center; color: var(--accent); font-size: 17px;
+    padding: 0 7px; font-family: var(--mono);
+  }
+  .dg-node { border-radius: 12px; padding: 12px 8px; text-align: center; border: 1.5px solid; }
+  .dg-node .t { font-family: var(--mono); font-weight: 700; font-size: 13px; letter-spacing: 0.5px; }
+  .dg-node .d { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+  .dg-node.b-blue { background: #eef4fd; border-color: #c8dbfa; }
+  .dg-node.b-blue .t { color: #2563eb; }
+  .dg-node.b-teal { background: #eafaf5; border-color: #bfe8dc; }
+  .dg-node.b-teal .t { color: #1d8a73; }
+  .dg-node.b-gold { background: #fdf6ea; border-color: #f0dcb4; }
+  .dg-node.b-gold .t { color: #b07f1f; }
+  .dg-node.b-red { background: #fdeef1; border-color: #f5c6d0; }
+  .dg-node.b-red .t { color: #cf4f68; }
+  .ev-row { display: grid; align-items: stretch; min-width: 900px;
+    grid-template-columns: 1fr auto 1fr auto 1fr; }
+  .ev-mid { min-width: 900px; text-align: center; padding: 8px 0; }
+  .ev-mid .dg-arrow { padding: 0; }
+  .ev-mid .lbl { font-size: 11.5px; color: var(--muted); margin-left: 8px; }
+  .ev-notes { display: grid; grid-template-columns: 1.25fr 1fr; gap: 12px;
+    min-width: 900px; margin-top: 12px; }
+  .ev-note { border-radius: 10px; padding: 8px 14px; font-size: 12px;
+    text-align: center; line-height: 1.6; }
+  .ev-note.ok { background: #eafaf5; border: 1px solid #bfe8dc; color: #1d8a73; }
+  .ev-note.bad { background: #fdeef1; border: 1px solid #f5c6d0; color: #cf4f68; }
+  .dg-h3 { font-family: var(--serif); font-size: 22px; margin: 38px 0 10px; }
+  .dg-cap { font-size: 12.5px; color: var(--muted); text-align: center; margin-top: 12px; }
+  .c-purple { background: #f3eefd; border-color: #ddd0f7; }
+  .c-purple .dg-head { color: #7c5cd6; }
+  .c-blue { background: #eef4fd; border-color: #c8dbfa; }
+  .c-blue .dg-head { color: #2563eb; }
+  .c-teal { background: #eafaf5; border-color: #bfe8dc; }
+  .c-teal .dg-head { color: #1d8a73; }
+  .c-gold { background: #fdf6ea; border-color: #f0dcb4; }
+  .c-gold .dg-head { color: #b07f1f; }
+  .c-red { background: #fdeef1; border-color: #f5c6d0; }
+  .c-red .dg-head { color: #cf4f68; }
+  .dg-desc { font-size: 12px; color: var(--muted); line-height: 1.55; margin-bottom: 8px; }
+  .dg-scenes {
+    display: inline-block; font-size: 11px; background: #fff;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 2px 9px; margin: 0 4px 8px 0; color: var(--muted);
+  }
+  .cs-grid { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 14px;
+    min-width: 880px; }
+  .cs-hub {
+    background: var(--accent-dark); color: #fff; border-radius: 18px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; padding: 24px 16px; gap: 6px;
+  }
+  .cs-badge {
+    font-family: var(--mono); font-size: 10.5px; background: var(--arc-gold);
+    color: var(--accent-dark); border-radius: 999px; padding: 2px 10px;
+    font-weight: 700;
+  }
+  .cs-title { font-family: var(--serif); font-size: 21px; font-weight: 700; }
+  .cs-sub { font-size: 12.5px; color: #c7d2e8; line-height: 1.6; }
+  .cs-ch { font-family: var(--mono); font-size: 11px; color: #8fa0bd; margin-top: 4px; }
+  .cs-base {
+    margin-top: 14px; border: 1px dashed var(--line); border-radius: 12px;
+    padding: 14px 18px; min-width: 880px;
+  }
+  .cs-base-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .cs-base-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .cs-base-chip {
+    background: #fff; border: 1px solid var(--line); border-radius: 8px;
+    padding: 8px 10px; font-size: 12px; line-height: 1.5;
+  }
+  .cs-base-chip b { display: block; font-size: 12.5px; }
+  .cs-base-chip span { color: var(--muted); font-size: 11px; }
+  .evo-dual { display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    min-width: 900px; }
+  .mini-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--accent); font-family: var(--mono); }
+  .mini-flow .mf {
+    background: #fff; border: 1px solid var(--line); border-radius: 7px;
+    padding: 5px 9px; color: var(--ink); font-family: var(--sans);
+  }
+
+  /* ---------- telesales 14-day journey ---------- */
+  .j-legend {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+    min-width: 900px; margin-bottom: 18px;
+  }
+  .j-chip {
+    display: inline-flex; align-items: center; gap: 7px; font-size: 12px;
+    color: var(--muted); background: #fff; border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 12px;
+  }
+  .j-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .jd-blue { background: var(--arc-blue); }
+  .jd-teal { background: var(--arc-teal); }
+  .jd-gold { background: var(--arc-gold); }
+  .j-row {
+    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 12px; min-width: 900px; align-items: stretch;
+  }
+  .j-arrow {
+    align-self: center; color: var(--accent);
+    font-family: var(--mono); font-size: 17px;
+  }
+  .jb-blue { --jc: var(--arc-blue); --jc-bg: #eef4fd; }
+  .jb-teal { --jc: var(--arc-teal); --jc-bg: #eafaf5; }
+  .jb-gold { --jc: var(--arc-gold); --jc-bg: #fdf6ea; }
+  .jb-red { --jc: var(--arc-red); --jc-bg: #fdeef1; }
+  .jb-purple { --jc: #7c5cd6; --jc-bg: #f3eefd; }
+  .jb-navy { --jc: var(--accent-dark); --jc-bg: #eceff6; }
+  .j-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 16px; border-top: 3px solid var(--jc, var(--line));
+  }
+  .j-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .j-num {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--jc);
+    color: #fff; font-family: var(--mono); font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex: none;
+  }
+  .j-title { font-weight: 700; font-size: 14px; line-height: 1.35; }
+  .j-day {
+    margin-left: auto; font-family: var(--mono); font-size: 10.5px;
+    color: var(--muted); background: #f3f1eb; border-radius: 999px;
+    padding: 2px 9px; white-space: nowrap;
+  }
+  .j-card .mini-flow { font-size: 12px; }
+  .j-sub { font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .j-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
+  .j-cap {
+    display: inline-block; margin-top: 10px; font-size: 11px;
+    font-family: var(--mono); border-radius: 6px; padding: 2px 9px;
+    background: var(--jc-bg); color: var(--jc);
+  }
+  .j-mid {
+    min-width: 900px; text-align: center; padding: 10px 0;
+    font-size: 12px; color: var(--muted);
+  }
+  .j-mid .dg-arrow { padding: 0; }
+
+  .benchmark-block {
+    margin-top: 52px; padding-top: 38px; border-top: 1px solid var(--line);
+  }
+  .benchmark-kicker {
+    margin-bottom: 8px; color: var(--accent); font-family: var(--mono);
+    font-size: 11.5px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase;
+  }
+  .benchmark-title { margin-bottom: 12px; font-size: 25px; }
+  .benchmark-overview {
+    background: transparent; border: 0; border-radius: 0;
+    padding: 0; box-shadow: none;
+  }
+  .benchmark-overview figcaption { max-width: 820px; margin: 0 auto; }
+
+  /* ---------- quickstart ---------- */
+  .qs-setup {
+    margin-top: 28px; padding: 22px 24px; background: #f4f7fc;
+    border: 1px solid #c8dbfa; border-radius: 16px;
+  }
+  .qs-kicker {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 1.3px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 7px;
+  }
+  .qs-setup h3, .qs-module h3 {
+    font-family: var(--serif); font-size: 22px; line-height: 1.3;
+  }
+  .qs-setup > p:not(.qs-kicker), .qs-module > p:not(.qs-kicker) {
+    color: var(--muted); font-size: 14px; margin-top: 8px;
+  }
+  .qs-grid {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px; margin-top: 18px;
+  }
+  .qs-module {
+    min-width: 0; padding: 24px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 16px;
+  }
+  .qs-module .pre-wrap, .qs-setup .pre-wrap { margin-top: 16px; }
+  .qs-module pre, .qs-setup pre { font-size: 12.5px; padding: 20px 22px; }
+  .qs-module pre { padding-top: 52px; }
+  .qs-result {
+    padding-top: 13px; border-top: 1px solid var(--line);
+  }
+  .qs-result code { overflow-wrap: anywhere; }
+  .qs-path {
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+    gap: 9px; margin-top: 24px; color: var(--muted); font-size: 13px;
+  }
+  .qs-path b {
+    padding: 7px 11px; border: 1px solid var(--line); border-radius: 999px;
+    background: var(--card); color: var(--ink); font-weight: 600;
+  }
+  .qs-path span { font-family: var(--mono); color: var(--accent); }
+  .pre-wrap { position: relative; margin-top: 24px; }
+  pre {
+    background: var(--accent-dark); color: #dbe4f5; border-radius: 14px;
+    padding: 22px 26px; overflow-x: auto; font-family: var(--mono);
+    font-size: 13.5px; line-height: 1.8; margin: 0;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  pre .c { color: #7c8db0; }
+  .copy-btn {
+    position: absolute; top: 10px; right: 10px;
+    font-family: var(--mono); font-size: 12px;
+    background: rgba(255, 255, 255, 0.08); color: #c7d2e8;
+    border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px;
+    padding: 6px 12px; cursor: pointer; min-height: 32px;
+  }
+  .copy-btn:hover { background: rgba(255, 255, 255, 0.16); color: #fff; }
+  .copy-btn.copied { color: #7fe0c3; border-color: #7fe0c3; }
+
+  /* ---------- footer ---------- */
+  footer {
+    border-top: 1px solid var(--line); padding: 44px 0 60px;
+    color: var(--muted); font-size: 13.5px;
+  }
+  footer .f-inner { display: flex; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer .f-logo { font-family: var(--serif); font-weight: 700; font-size: 17px; color: var(--ink); }
+  footer .f-col p { margin-bottom: 6px; }
+  footer .f-head {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+  }
+  footer .f-links { list-style: none; }
+  footer .f-links li { margin-bottom: 8px; }
+  footer .f-links a { min-height: 24px; display: inline-flex; align-items: center; }
+
+  @media (max-width: 860px) {
+    .hero { padding: 56px 0 48px; }
+    .hero .kicker { font-size: clamp(28px, 6.5vw, 52px); }
+    .hero h1 { font-size: clamp(28px, 6.5vw, 52px); }
+    .hero .subtitle { font-size: 22px; }
+    h2 { font-size: 30px; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .qs-grid { grid-template-columns: 1fr; }
+    .why-formula-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .why-plus { display: none; }
+  }
+  @media (max-width: 560px) {
+    .container { padding: 0 16px; }
+    .why-formula-row { grid-template-columns: 1fr; }
+    .why-formula { padding: 20px; }
+    .qs-setup, .qs-module { padding: 20px; }
+    .qs-module pre, .qs-setup pre { padding: 18px; font-size: 12px; }
+    .qs-module pre { padding-top: 50px; }
+  }
+  @media (max-width: 380px) {
+    .hero .kicker { font-size: 28px; }
+    .hero h1 { font-size: 28px; }
+    .hero .subtitle { font-size: 19px; }
+    .hero .cta .btn { width: 100%; }
+  }
+</style>
+</head>
+<body class="lang-zh">
+
+<a class="skip-link lang-zh" href="#main">跳到主要内容</a>
+<a class="skip-link lang-en" href="#main">Skip to main content</a>
+
+<nav aria-label="HUMAN-CENTRIC LONG HORIZON AGENT">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top"><span>KinArc</span><span>HUMAN-CENTRIC</span><span>LONG HORIZON AGENT</span></a>
+    <div class="nav-links">
+      <a href="#why" data-spy="why"><span class="lang-zh">为什么</span><span class="lang-en">Why</span></a>
+      <a href="#story" data-spy="story"><span class="lang-zh">开源实践</span><span class="lang-en">Open-source work</span></a>
+      <a href="#capabilities" data-spy="capabilities"><span class="lang-zh">核心能力</span><span class="lang-en">Capabilities</span></a>
+      <a href="#evolution" data-spy="evolution"><span class="lang-zh">自进化</span><span class="lang-en">Evolution</span></a>
+      <a href="#benchmark" data-spy="benchmark"><span class="lang-zh">评测基准</span><span class="lang-en">Benchmark</span></a>
+      <a href="#scenarios" data-spy="scenarios"><span class="lang-zh">场景样例</span><span class="lang-en">Scenarios</span></a>
+      <a href="#quickstart" data-spy="quickstart"><span class="lang-zh">快速开始</span><span class="lang-en">Quickstart</span></a>
+    </div>
+    <button class="lang-toggle" id="langToggle" aria-label="切换语言：当前中文，点击切换为 English">
+      <span class="opt-zh on">中</span> / <span class="opt-en">EN</span>
+    </button>
+    <a class="nav-gh" href="https://github.com/YiXin-AILab/KinArc"><span class="lang-zh">开源项目</span><span class="lang-en">Open source</span></a>
+    <button class="nav-menu-btn" id="navMenuBtn" aria-expanded="false" aria-controls="navPanel"
+      aria-label="打开章节导航">☰</button>
+  </div>
+  <div class="nav-panel" id="navPanel" hidden>
+    <a href="#why" data-spy="why"><span class="lang-zh">为什么</span><span class="lang-en">Why</span></a>
+    <a href="#story" data-spy="story"><span class="lang-zh">开源实践</span><span class="lang-en">Open-source work</span></a>
+    <a href="#capabilities" data-spy="capabilities"><span class="lang-zh">核心能力</span><span class="lang-en">Capabilities</span></a>
+    <a href="#evolution" data-spy="evolution"><span class="lang-zh">自进化</span><span class="lang-en">Evolution</span></a>
+    <a href="#benchmark" data-spy="benchmark"><span class="lang-zh">评测基准</span><span class="lang-en">Benchmark</span></a>
+    <a href="#scenarios" data-spy="scenarios"><span class="lang-zh">场景样例</span><span class="lang-en">Scenarios</span></a>
+    <a href="#quickstart" data-spy="quickstart"><span class="lang-zh">快速开始</span><span class="lang-en">Quickstart</span></a>
+    <a href="https://github.com/YiXin-AILab/KinArc"><span class="lang-zh">开源项目</span><span class="lang-en">Open source</span></a>
+  </div>
+</nav>
+
+<header class="hero container" id="top">
+  <p class="kicker">KinArc</p>
+  <h1>HUMAN-CENTRIC<br>LONG HORIZON AGENT</h1>
+  <p class="subtitle lang-zh">以人为中心的长程智能体</p>
+  <p class="subtitle lang-en">Understand people. Advance decisions. Deliver outcomes.</p>
+  <p class="definition lang-zh">
+    从完成任务，到成就人的决策：基于关系的上下文管理、理解意图与信任的变化、
+    持续推进决策进程，让每一次交互最终转化为真实的业务结果。
+  </p>
+  <p class="definition lang-en">
+    From task execution to human-centric outcomes: relationship based context management,
+    trust and intent modeling, and continuous decision progression —
+    turning every interaction into real business results.
+  </p>
+  <div class="cta">
+    <a class="btn btn-primary" href="#quickstart">
+      <span class="lang-zh">5 分钟快速开始</span><span class="lang-en">Quickstart in 5 minutes</span>
+    </a>
+    <a class="btn btn-ghost" href="#capabilities">
+      <span class="lang-zh">查看核心能力</span><span class="lang-en">Core capabilities</span>
+    </a>
+    <!-- 正式仓库发布前，统一链接至页内开源信息。 -->
+    <a class="btn btn-ghost" href="https://github.com/YiXin-AILab/KinArc">
+      <span class="lang-zh">开源项目</span><span class="lang-en">Open source</span>
+    </a>
+  </div>
+  <p class="tagline lang-zh">为人的长期决策旅程而生。</p>
+  <p class="tagline lang-en">Agents for the evolving arc of human decisions.</p>
+  <div class="arc-strip">
+    <span lang="en"><b class="r">Empathy Model</b> +
+    <b class="b">Vertical Agentic Model</b> + <b class="t">Agent Harness</b>
+    → <b class="g">HUMAN-CENTRIC LONG HORIZON AGENT</b></span>
+  </div>
+</header>
+
+<main id="main">
+
+<section id="why" aria-labelledby="why-h">
+  <div class="container">
+    <p class="eyebrow">01 / Beyond Task Delivery</p>
+    <h2 id="why-h"><span class="lang-zh">把任务做成，把客户旅程持续推进</span><span class="lang-en">Deliver the task. Keep the customer journey moving.</span></h2>
+    <p class="lead lang-zh">一次方案交付之后，客户可能还在犹豫，审批可能仍在等待。HUMAN-CENTRIC LONG HORIZON AGENT 将可靠的任务执行连接到客户的长期决策：理解客户变化、延续任务目标，让任务成果转化为持续的业务进展。</p>
+    <p class="lead lang-en">After an offer is delivered, a customer may still be deciding or an approval may still be pending. HUMAN-CENTRIC LONG HORIZON AGENT connects reliable task execution to long-term customer decisions through evolving customer understanding, lasting relationships, and continued business progress.</p>
+    <div class="why-matrix-wrap">
+      <table class="why-matrix" aria-label="Agent capability comparison / Agent 能力对比">
+        <colgroup><col class="dimension-col"><col class="baseline-col"><col class="journey-col"></colgroup>
+        <thead><tr>
+          <th scope="col"><span class="lang-zh">能力维度</span><span class="lang-en">Dimension</span></th>
+          <th scope="col"><span class="column-title"><span class="lang-zh">通用任务 Agent</span><span class="lang-en">General-purpose task agent</span></span><span class="column-desc"><span class="lang-zh">侧重复杂任务的执行与交付</span><span class="lang-en">Focused on complex task execution and delivery</span></span></th>
+          <th scope="col" class="journey-head"><span class="column-title">HUMAN-CENTRIC<br>LONG HORIZON AGENT</span><span class="column-desc"><span class="lang-zh">在可靠交付之上，持续推进客户与业务</span><span class="lang-en">Build on reliable delivery to advance customers and business</span></span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <th scope="row"><span class="lang-zh">任务目标</span><span class="lang-en">Task objectives</span></th>
+            <td>
+              <span class="mobile-column-label"><span class="lang-zh">通用任务 Agent</span><span class="lang-en">General-purpose task agent</span></span>
+              <strong><span class="lang-zh">完成明确的任务目标</span><span class="lang-en">Complete a defined task objective</span></strong>
+              <p class="lang-zh">围绕明确的任务要求规划与执行，以交付约定结果为目标，解决客户提出的具体问题。</p>
+              <p class="lang-en">Plan and execute against defined requirements to deliver the agreed result and resolve a specific customer request.</p>
+            </td>
+            <td class="journey-cell">
+              <span class="mobile-column-label">HUMAN-CENTRIC LONG HORIZON AGENT</span>
+              <strong><span class="lang-zh">跨时间接续执行，持续推进长期目标</span><span class="lang-en">Resume execution across time to advance long-term goals.</span></strong>
+              <p class="lang-zh">围绕长期目标组织阶段任务，跨多次交互保留上下文与任务进度；在等待、外部反馈或条件变化后接续执行，让目标在时间跨度中持续推进。</p>
+              <p class="lang-en">Organize tasks around long-term goals and preserve context and progress across interactions. Resume after waits, external feedback, or changed conditions to sustain progress over time.</p>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><span class="lang-zh">垂直领域融合</span><span class="lang-en">Domain integration</span></th>
+            <td>
+              <span class="mobile-column-label"><span class="lang-zh">通用任务 Agent</span><span class="lang-en">General-purpose task agent</span></span>
+              <strong><span class="lang-zh">围绕任务完成规划行动</span><span class="lang-en">Plan actions toward task completion</span></strong>
+              <p class="lang-zh">结合任务所需的知识与工具，拆解复杂任务、执行业务流程，关注完成质量与效率。</p>
+              <p class="lang-en">Combine task knowledge and tools to break down complex tasks and execute workflows, focusing on quality and efficiency.</p>
+            </td>
+            <td class="journey-cell">
+              <span class="mobile-column-label">HUMAN-CENTRIC LONG HORIZON AGENT</span>
+              <strong><span class="lang-zh">融合领域知识，支撑长程任务决策</span><span class="lang-en">Apply domain knowledge to guide long-horizon task decisions.</span></strong>
+              <p class="lang-zh">结合领域知识、业务规则与工具能力，理解任务约束与行动条件；依据用户需求、任务状态和执行反馈选择后续行动，并随条件变化调整决策。</p>
+              <p class="lang-en">Combine domain knowledge, business rules, and tools to understand task constraints and conditions for action. Choose next steps based on user needs, task state, and execution feedback, adapting decisions as conditions change.</p>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><span class="lang-zh">共情理解</span><span class="lang-en">Empathetic understanding</span></th>
+            <td>
+              <span class="mobile-column-label"><span class="lang-zh">通用任务 Agent</span><span class="lang-en">General-purpose task agent</span></span>
+              <strong><span class="lang-zh">理解任务需要什么</span><span class="lang-en">Understand what the task requires</span></strong>
+              <p class="lang-zh">从指令与对话中识别需求，为当前任务提供上下文。</p>
+              <p class="lang-en">Identify needs in instructions and conversation to inform the current task.</p>
+            </td>
+            <td class="journey-cell">
+              <span class="mobile-column-label">HUMAN-CENTRIC LONG HORIZON AGENT</span>
+              <strong><span class="lang-zh">记住一个人，理解每一次变化</span><span class="lang-en">Remember the person. Understand what changes.</span></strong>
+              <p class="lang-zh">将共情模型融入客户理解：跨会话记住偏好与承诺，识别意愿、预算、信任与顾虑的变化，让方案和沟通贴合客户当下的处境。</p>
+              <p class="lang-en">Bring an empathy model into customer understanding: remember preferences and commitments across conversations, recognize changes in intent, budget, trust, and concerns, and adapt offers and communication to the customer's situation.</p>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><span class="lang-zh">价值衡量</span><span class="lang-en">Value measures</span></th>
+            <td>
+              <span class="mobile-column-label"><span class="lang-zh">通用任务 Agent</span><span class="lang-en">General-purpose task agent</span></span>
+              <strong><span class="lang-zh">关注任务是否完成</span><span class="lang-en">Measure whether the task was completed</span></strong>
+              <p class="lang-zh">主要衡量完成率、结果质量、执行效率与成本，判断一次任务的交付表现。</p>
+              <p class="lang-en">Assess task delivery through completion rates, result quality, execution efficiency, and cost.</p>
+            </td>
+            <td class="journey-cell">
+              <span class="mobile-column-label">HUMAN-CENTRIC LONG HORIZON AGENT</span>
+              <strong><span class="lang-zh">自动持续优化，提升任务效果</span><span class="lang-en">Continuously optimize automatically to improve task outcomes.</span></strong>
+              <p class="lang-zh">衡量交付质量、需求满足程度与长期目标进展，将执行反馈转化为改进依据；通过失败归因、候选优化与回归评测，持续改进策略与技能，提升后续任务表现。</p>
+              <p class="lang-en">Evaluate delivery quality, user needs, and progress toward long-term goals, using execution feedback to guide improvement. Diagnose failures, refine candidates, and run regression evaluations to improve strategies, skills, and future task performance.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="story" aria-labelledby="story-h">
+  <div class="container">
+    <p class="eyebrow">02 / Open-source Feedback Loop</p>
+    <h2 id="story-h"><span class="lang-zh">从模型到业务，再以反馈持续改进</span><span class="lang-en">From models to business, improved through feedback</span></h2>
+    <p class="lead lang-zh">以垂域模型为基础，连接长程任务、语音交互与评测自进化；未来将进一步探索训练回流，持续优化模型能力。</p>
+    <p class="lead lang-en">Connect domain models with long-horizon tasks, voice interaction, and evaluation-driven evolution. Future work will explore feeding these insights back into model training.</p>
+    <div class="story-loop" id="source-links">
+      <svg class="story-arrows" viewBox="0 0 1040 800" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <defs>
+          <marker id="story-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82c4"/></marker>
+          <marker id="story-plan-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9aa1ad"/></marker>
+        </defs>
+        <circle cx="520" cy="400" r="320" fill="none" stroke="#e6e2d9" stroke-width="1"/>
+        <g fill="none" stroke="#3b82c4" stroke-width="2.5" marker-end="url(#story-arrow)">
+          <path d="M 669 117 A 320 320 0 0 1 754 180"/>
+          <path d="M 837 445 A 320 320 0 0 1 803 550"/>
+          <path d="M 570 716 A 320 320 0 0 1 470 716"/>
+        </g>
+        <g fill="none" stroke="#9aa1ad" stroke-width="2.5" stroke-dasharray="7 7" marker-end="url(#story-plan-arrow)">
+          <path d="M 237 550 A 320 320 0 0 1 203 445"/>
+          <path d="M 286 180 A 320 320 0 0 1 371 117"/>
+        </g>
+      </svg>
+      <div class="story-center">
+        <strong><span class="lang-zh">围绕真实业务<br>持续提升任务完成能力</span><span class="lang-en">Real business.<br>Better task outcomes.</span></strong>
+        <p><span class="lang-zh">模型 · 交互 · 执行 · 反馈</span><span class="lang-en">Models · Interaction · Execution · Feedback</span></p>
+      </div>
+      <article class="story-node story-model">
+        <span class="story-badge"><span class="lang-zh">已开源</span><span class="lang-en">Already open source</span></span>
+        <h3><span class="lang-zh">垂域模型</span><span class="lang-en">Domain models</span></h3>
+        <p><span class="lang-zh">YiXin 模型系列，提供推理、多轮交互与工具使用能力。</span><span class="lang-en">YiXin models offer reasoning, multi-turn interaction, and tool use.</span></p>
+        <div class="story-model-links">
+          <a href="https://huggingface.co/YiXin-AILab/YiXin-Distill-Qwen-72B" target="_blank" rel="noopener" aria-label="YiXin-Distill-Qwen-72B">Distill-72B ↗</a>
+          <a href="https://huggingface.co/YiXin-AILab/YiXin-Distill-Qwen-72B-AWQ" target="_blank" rel="noopener" aria-label="YiXin-Distill-Qwen-72B-AWQ">72B-AWQ ↗</a>
+          <a href="https://huggingface.co/YiXin-AILab/YiXin-Agentic-Qwen3-14B" target="_blank" rel="noopener" aria-label="YiXin-Agentic-Qwen3-14B">Agentic-14B ↗</a>
+        </div>
+      </article>
+      <article class="story-node story-agent story-current">
+        <span class="story-badge"><span class="lang-zh">本次开源 · 主项目</span><span class="lang-en">This release · Main project</span></span>
+        <h3><span class="lang-zh">长程 Agent 系统</span><span class="lang-en">Long-horizon agent system</span></h3>
+        <p class="story-project">HUMAN-CENTRIC LONG HORIZON AGENT</p>
+        <p><span class="lang-zh">以记忆、暂停恢复与人机协同，持续推进任务。</span><span class="lang-en">Advance tasks with memory, resumable execution, and human collaboration.</span></p>
+        <a href="#capabilities"><span class="lang-zh">了解核心能力 →</span><span class="lang-en">Explore capabilities →</span></a>
+      </article>
+      <article class="story-node story-voice story-planned">
+        <span class="story-badge"><span class="lang-zh">后续规划</span><span class="lang-en">Planned</span></span>
+        <h3>VoiceAgent</h3>
+        <p><span class="lang-zh">快慢思考协作、动态轮次等待与预测性生成，让语音交互跟上用户意图。</span><span class="lang-en">Slow Thinker–Fast Responder coordination, adaptive turn waiting, and predictive generation help voice interaction follow user intent.</span></p>
+      </article>
+      <article class="story-node story-evolution story-current">
+        <span class="story-badge"><span class="lang-zh">本次开源 · 主项目能力</span><span class="lang-en">This release · Main project capability</span></span>
+        <h3><span class="lang-zh">评测与自进化</span><span class="lang-en">Evaluation &amp; evolution</span></h3>
+        <p><span class="lang-zh">从执行证据中诊断问题，改进 Prompt、Skill 与策略，并通过评测选优。</span><span class="lang-en">Diagnose execution evidence, improve prompts, skills, and strategies, and select candidates through evaluation.</span></p>
+        <a href="#evolution"><span class="lang-zh">了解自进化 →</span><span class="lang-en">Explore evolution →</span></a>
+      </article>
+      <article class="story-node story-training story-planned">
+        <span class="story-badge"><span class="lang-zh">后续规划</span><span class="lang-en">Planned</span></span>
+        <h3><span class="lang-zh">领域训练与模型优化</span><span class="lang-en">Domain training &amp; model optimization</span></h3>
+        <p><span class="lang-zh">计划将评测反馈转化为训练数据，回流优化垂域模型。</span><span class="lang-en">Plan to turn evaluation feedback into training data to improve domain models.</span></p>
+        <p><span class="lang-zh">┄ 回流至垂域模型 ↶</span><span class="lang-en">┄ Back to domain models ↶</span></p>
+      </article>
+    </div>
+    <div class="story-legend">
+      <span><i aria-hidden="true"></i><span class="lang-zh">能力与反馈关系</span><span class="lang-en">Capability and feedback relationships</span></span>
+      <span><i class="planned" aria-hidden="true"></i><span class="lang-zh">后续规划：训练回流</span><span class="lang-en">Planned: feedback into training</span></span>
+    </div>
+  </div>
+</section>
+
+<section id="capabilities" aria-labelledby="cap-h">
+  <div class="container">
+    <p class="eyebrow">03 / Capabilities</p>
+    <h2 id="cap-h" class="lang-zh">支撑长期客户旅程的八项系统能力</h2>
+    <h2 id="cap-h-en" class="lang-en">Eight capabilities for the long arc of customer relationships</h2>
+    <p class="lead lang-zh">围绕记忆、状态、判断、目标与策略组织上下文，将理解人、执行行动、人工介入与结果反馈连接起来，让业务目标跨会话持续推进。</p>
+    <p class="lead lang-en">Organize context around memory, state, beliefs, goals, and policy. Connect human understanding, action, human oversight, and outcome feedback to advance goals across conversations.</p>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3><span class="lang-zh">跨会话记忆：延续客户关系</span><span class="lang-en">Cross-session memory: sustain the relationship</span></h3>
+        <p class="lang-zh">保留历史交流、客户偏好与关键承诺，结合当前会话构建上下文。上周说“下个月再考虑”，再次沟通时能接续前情，减少客户重复说明。</p>
+        <p class="lang-en">Retain past exchanges, preferences, and commitments, then combine them with the current conversation. Pick up where the relationship left off, so customers do not need to explain everything again.</p>
+      </div>
+      <div class="card">
+        <h3><span class="lang-zh">客户状态建模：理解变化中的人</span><span class="lang-en">Human state modeling: understand change</span></h3>
+        <p class="lang-zh">业务应用可通过上下文扩展，组织客户意图、预算、信任、紧迫度与购买阶段；区分历史事实、当前状态与判断假设，为下一步行动提供依据。</p>
+        <p class="lang-en">Applications can use context extensions to organize intent, budget, trust, urgency, and buying stage. Separate historical facts, current state, and working beliefs to inform the next action.</p>
+      </div>
+      <div class="card">
+        <h3><span class="lang-zh">长程任务推进：按策略持续跟进</span><span class="lang-en">Long-horizon progression: follow up over time</span></h3>
+        <p class="lang-zh">任务状态跨天持久化；按业务目标拆解阶段，结合调度与唤醒策略，在资料补充、审批反馈或新方案出现时接续推进，形成观察、决策、行动与反馈闭环。</p>
+        <p class="lang-en">Persist task state across days. Break goals into stages and use scheduling and wakeup policies to continue after new documents, approval feedback, or a new offer, closing the loop from observation to action and feedback.</p>
+      </div>
+      <div class="card">
+        <h3><span class="lang-zh">多步骤规划与工具执行</span><span class="lang-en">Multi-step planning and tool execution</span></h3>
+        <p class="lang-zh">把查额度、算方案、约定回访等步骤连接起来，通过 Tool 对接业务系统执行操作；遇到异步审批或外部反馈时挂起等待，收到结果后恢复执行。</p>
+        <p class="lang-en">Connect steps such as checking eligibility, calculating offers, and arranging follow-up. Tools execute actions in business systems; suspend for asynchronous approvals or external feedback and resume when results arrive.</p>
+      </div>
+      <div class="card">
+        <h3><span class="lang-zh">实时交互：响应新的意图</span><span class="lang-en">Live interaction: respond to new intent</span></h3>
+        <p class="lang-zh">用户可在 Agent 执行中插话、打断或补充信息。新消息进入当前运行，Agent 结合已有上下文调整下一步，及时响应客户需求与约束的变化。</p>
+        <p class="lang-en">Users can interrupt or add information while the agent runs. New messages join the active run, allowing the agent to adjust its next step as needs and constraints change.</p>
+      </div>
+      <div class="card">
+        <h3><span class="lang-zh">人机协同：关键时刻交给人</span><span class="lang-en">Human-in-the-loop: involve people when it matters</span></h3>
+        <p class="lang-zh">通过工具挂起与恢复机制，支持应用在合规风险、重大权益或例外场景引入人工确认；携带必要上下文完成接力，处理后由 AI 继续推进。具体介入规则由业务应用定义。</p>
+        <p class="lang-en">Tool suspension and resumption let applications involve people for compliance risks, material rights, or exceptions. Carry the necessary context into the handoff and let AI continue afterwards. Applications define intervention policies.</p>
+      </div>
+      <div class="card">
+        <h3><span class="lang-zh">快速接入：配置业务知识与行动</span><span class="lang-en">Fast onboarding: configure knowledge and actions</span></h3>
+        <p class="lang-zh">通过 YAML 组合模型、工具、Skill 与知识库，将垂直领域知识和业务动作接入同一运行基础。配置平台提供在线编辑与 dry-run 校验，保存后重启生效。</p>
+        <p class="lang-en">Compose models, tools, skills, and knowledge bases in YAML to connect domain expertise and business actions. The configuration platform supports online editing and dry-run validation; save and restart to apply.</p>
+      </div>
+      <div class="card">
+        <h3><span class="lang-zh">评测驱动进化：从反馈中改进</span><span class="lang-en">Evaluation-driven evolution: learn from feedback</span></h3>
+        <p class="lang-zh">完整 Trace 支撑评测与失败归因，成功经验沉淀为可复用 Skill；候选版本通过回归评测后再发布。业务应用可围绕预约、到店、成交等目标定义评测口径。</p>
+        <p class="lang-en">Full traces support evaluation and failure diagnosis; successful patterns become reusable skills. Release candidates after regression evaluation. Applications can define evaluation criteria around appointments, visits, and conversion.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="evolution" aria-labelledby="evo-h">
+  <div class="container">
+    <p class="eyebrow">04 / Evolution</p>
+    <h2 id="evo-h" class="lang-zh">评测驱动的安全进化，而不是让 Agent 随意改自己</h2>
+    <h2 id="evo-h-en" class="lang-en">Evaluation-driven safe evolution, not an agent rewriting itself at will</h2>
+    <p class="lead lang-zh">
+      HUMAN-CENTRIC LONG HORIZON AGENT 把自进化设计为数据运营驱动的迭代闭环：线上运行的完整 Trace 经分层评测分流——
+      成功经验沉淀为 Skill 复用，失败案例归因后产出候选版本；候选与当前最佳对比、
+      通过 GoldenSet 回归评测后才允许发布。Test 是独立的手动动作，不参与优化选优。
+    </p>
+    <p class="lead lang-en">
+      HUMAN-CENTRIC LONG HORIZON AGENT evolves through a data-operations loop: full production traces are evaluated in
+      layers and split — successes are distilled into reusable skills, while failures are
+      diagnosed into challenger candidates. A candidate ships only after beating the current
+      best and passing golden-set regression. Test is a separate manual action and never
+      participates in selection.
+    </p>
+    <p class="lead lang-zh" style="font-size:15.5px">
+      方法设计服务三个目的：及时预警线上同类型大批量错误；沉淀优秀案例、复用成功经验；
+      让线上 case 自动修复并产出优化后的新版本。
+    </p>
+    <p class="lead lang-en" style="font-size:15.5px">
+      The methodology serves three goals: early warning when the same kind of failure repeats at
+      scale in production; distilling successful cases for reuse; and turning online failures into
+      an improved new version automatically.
+    </p>
+    <div class="diagram evolution-diagram" tabindex="0" role="region" aria-labelledby="evo-diagram-title">
+      <p class="dg-title" id="evo-diagram-title">Self-Evolution Methodology<span class="lang-zh"> · 自进化方法设计</span></p>
+      <p class="evo-phase"><span class="lang-zh">运行与评测</span><span class="lang-en">Execution &amp; evaluation</span></p>
+      <div class="ev-row">
+        <div class="dg-node b-blue">
+          <p class="t"><span class="lang-zh">业务 AGENT</span><span class="lang-en">BUSINESS AGENT</span></p>
+          <p class="d lang-zh">线上运行</p><p class="d lang-en">online serving</p>
+        </div>
+        <div class="dg-arrow" aria-hidden="true">→</div>
+        <div class="dg-node b-blue">
+          <p class="t"><span class="lang-zh">TRACE 记录</span><span class="lang-en">TRACE LOGGING</span></p>
+          <p class="d lang-zh">完整会话 · 工具/Skill 调用 · 知识库检索 · Memory</p>
+          <p class="d lang-en">full sessions · tool/skill calls · KB lookups · memory</p>
+        </div>
+        <div class="dg-arrow" aria-hidden="true">→</div>
+        <div class="dg-node b-blue">
+          <p class="t"><span class="lang-zh">分层评测</span><span class="lang-en">LAYERED EVAL</span></p>
+          <p class="d">L1 <span class="lang-zh">规则</span><span class="lang-en">rules</span> · L2 LLM-as-a-Judge · L3 <span class="lang-zh">人工标注</span><span class="lang-en">human labeling</span></p>
+        </div>
+      </div>
+      <p class="ev-mid"><span class="dg-arrow" aria-hidden="true">↓</span><span class="lbl"><span class="lang-zh">trace 结果分流：成功沉淀经验，失败归因修复</span><span class="lang-en">traces fan out: successes distilled, failures diagnosed</span></span></p>
+      <p class="evo-phase"><span class="lang-zh">经验沉淀与失败诊断</span><span class="lang-en">Learning &amp; diagnosis</span></p>
+      <div class="evo-dual">
+        <div class="dg-col c-teal">
+          <p class="dg-head">2-A · <span class="lang-zh">成功路径：Skill 沉淀</span><span class="lang-en">Success path: skill distillation</span></p>
+          <div class="mini-flow">
+            <span class="mf"><span class="lang-zh">成功 Trace</span><span class="lang-en">success traces</span></span> <span class="evo-flow-arrow" aria-hidden="true">→</span>
+            <span class="mf"><span class="lang-zh">可重复经验聚类</span><span class="lang-en">cluster reusable patterns</span></span> <span class="evo-flow-arrow" aria-hidden="true">→</span>
+            <span class="mf"><span class="lang-zh">沉淀 Skill 技能库</span><span class="lang-en">distill into skills</span></span>
+          </div>
+        </div>
+        <div class="dg-col c-red">
+          <p class="dg-head">2-B · <span class="lang-zh">失败路径：BadCase 归因</span><span class="lang-en">Failure path: bad-case diagnosis</span></p>
+          <div class="mini-flow">
+            <span class="mf"><span class="lang-zh">失败 Trace</span><span class="lang-en">failure traces</span></span> <span class="evo-flow-arrow" aria-hidden="true">→</span>
+            <span class="mf">Train / Val<span class="lang-zh"> 数据集</span><span class="lang-en"> dataset</span></span> <span class="evo-flow-arrow" aria-hidden="true">→</span>
+            <span class="mf"><span class="lang-zh">归因分析</span><span class="lang-en">root-cause analysis</span></span> <span class="evo-flow-arrow" aria-hidden="true">→</span>
+            <span class="mf">Challenger<span class="lang-zh"> 候选策略</span><span class="lang-en"> candidate</span></span>
+          </div>
+        </div>
+      </div>
+      <p class="ev-mid"><span class="dg-arrow" aria-hidden="true">↓</span><span class="lbl"><span class="lang-zh">迭代优化与回归评测</span><span class="lang-en">iteration &amp; regression</span></span></p>
+      <p class="evo-phase"><span class="lang-zh">验证与发布</span><span class="lang-en">Validation &amp; release</span></p>
+      <div class="ev-row ev-checks">
+        <div class="dg-node b-gold">
+          <p class="t">CHAMPION × CHALLENGER</p>
+          <p class="d lang-zh">候选与当前最佳对比</p><p class="d lang-en">candidate vs current best</p>
+        </div>
+        <div class="dg-arrow" aria-hidden="true">→</div>
+        <div class="dg-node b-gold">
+          <p class="t">BADCASE VAL</p>
+          <p class="d lang-zh">验证集复测</p><p class="d lang-en">validation re-run</p>
+        </div>
+        <div class="dg-arrow" aria-hidden="true">→</div>
+        <div class="dg-node b-gold">
+          <p class="t">GOLDENSET<span class="lang-zh"> 回归</span><span class="lang-en"> REGRESSION</span></p>
+          <p class="d lang-zh">全量基准回归测评</p><p class="d lang-en">full golden-set regression</p>
+        </div>
+        <div class="dg-arrow" aria-hidden="true">→</div>
+        <div class="dg-node b-teal">
+          <p class="t"><span class="lang-zh">发布决策</span><span class="lang-en">RELEASE GATE</span></p>
+          <p class="d lang-zh">得分是否有提升？</p><p class="d lang-en">did the score improve?</p>
+        </div>
+      </div>
+      <div class="ev-notes">
+        <div class="ev-note ok">
+          ✓ <span class="lang-zh">得分提升 → 新版本上线</span><span class="lang-en">score improves → ship the new version</span>
+        </div>
+        <div class="ev-note bad">
+          ↺ <span class="lang-zh">未提升 → 带着诊断进入新一轮迭代</span><span class="lang-en">no gain → next iteration with the diagnosis</span>
+        </div>
+      </div>
+      <p class="dg-cap"><span class="lang-zh">评测覆盖端到端（话术合规 · 任务完成率 · 幻觉率 · 成本与时延）与核心模块（任务规划 · 路由决策 · 工具调用 · Skill 触发 · 知识检索 · 上下文准确性）两个层面；问答评测辅以 GSB 对比与 Mock UserSimulator</span><span class="lang-en">Evaluation spans end-to-end metrics (compliance · completion · hallucination · cost &amp; latency) and core modules (planning · routing · tool use · skill triggering · retrieval · context accuracy), with GSB comparisons and a mock user simulator for QA</span></p>
+    </div>
+
+  </div>
+</section>
+
+<section id="benchmark" aria-labelledby="bench-h">
+  <div class="container">
+    <p class="eyebrow">05 / Benchmark</p>
+    <h2 id="bench-h" class="lang-zh">两个基准、三类场景：自进化效果的公开验证</h2>
+    <h2 id="bench-h-en" class="lang-en">Self-evolution gains across two benchmarks and three scenarios</h2>
+    <p class="lead lang-zh">
+      最新实验覆盖 τ³-bench 的 banking 场景，以及 EvoAgentBench 的办公与信息检索场景。
+      6 组实验均从原始 Agent 出发，自进化后的 Candidate 在表中报告的 40 项前后对比中全部提升。
+      两个基准的任务和评分口径不同，下方分开展示，不对绝对分数做横向混算。
+    </p>
+    <p class="lead lang-en">
+      The latest experiments cover the banking scenario in τ³-bench and the office and information
+      retrieval scenarios in EvoAgentBench. Across six configurations, evolved candidates improve all
+      40 before-and-after comparisons reported in the source table. Because the two benchmarks use
+      different tasks and scoring protocols, their absolute scores are presented separately rather
+      than blended into one ranking.
+    </p>
+
+    <figure class="figure benchmark-overview">
+      <div id="chart-benchmark-overview" class="chart chart-overview"></div>
+      <figcaption class="lang-zh">
+        每个雷达独立阅读：灰色圆点为 Base，蓝色菱形为 Evolved；轴标签给出该榜单内部的平均提升。
+        形状扩张表示本榜单内的进化效果，不用于两个榜单之间的排名。
+      </figcaption>
+      <figcaption class="lang-en">
+        Read each radar independently: gray circles are Base and blue diamonds are Evolved; axis labels
+        show mean uplift within that benchmark. Shape expansion shows within-benchmark evolution, not a cross-benchmark ranking.
+      </figcaption>
+    </figure>
+
+    <div class="table-wrap h-scroll benchmark-summary-wrap" tabindex="0" role="region"
+      aria-label="Base 与 Evolved 的双榜单平均分对比表">
+      <table class="data benchmark-summary">
+        <caption>
+          <span class="lang-zh">
+            各榜单按其纳入配置取算术平均；绿色数值为相对 Base 的百分点提升（pp）。
+            该表用于查看榜单内部的进化效果，不用于比较两个榜单的绝对难度或排名。
+          </span>
+          <span class="lang-en">
+            Values are arithmetic means across the configurations included in each benchmark; green values
+            show percentage-point uplift over Base. Read gains within each row rather than ranking the two benchmarks by absolute score.
+          </span>
+        </caption>
+        <thead>
+          <tr>
+            <th rowspan="2" scope="col">Benchmark</th>
+            <th rowspan="2" scope="col"><span class="lang-zh">统计范围</span><span class="lang-en">Scope</span></th>
+            <th colspan="4" scope="colgroup" class="group-base">Base · <span class="lang-zh">原始版本</span><span class="lang-en">Initial</span></th>
+            <th colspan="4" scope="colgroup" class="group-evolved">Evolved · <span class="lang-zh">自进化后</span><span class="lang-en">After evolution</span></th>
+          </tr>
+          <tr>
+            <th scope="col">Train</th>
+            <th scope="col">Validation</th>
+            <th scope="col">Test</th>
+            <th scope="col">Reward</th>
+            <th scope="col">Train</th>
+            <th scope="col">Validation</th>
+            <th scope="col">Test</th>
+            <th scope="col">Reward</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="benchmark-name">τ³-bench</td>
+            <td class="scope">
+              <span class="lang-zh">4 组模型 × 检索配置均值</span>
+              <span class="lang-en">Mean of four model × retrieval configurations</span>
+            </td>
+            <td>0.500</td>
+            <td>0.397</td>
+            <td>0.356</td>
+            <td>0.485</td>
+            <td><span class="score">0.735</span><span class="gain">+23.5pp</span></td>
+            <td><span class="score">0.516</span><span class="gain">+12.0pp</span></td>
+            <td><span class="score">0.544</span><span class="gain">+18.8pp</span></td>
+            <td class="reward-evolved"><span class="score">0.588</span><span class="gain">+10.3pp</span></td>
+          </tr>
+          <tr>
+            <td class="benchmark-name">EvoAgentBench</td>
+            <td class="scope">
+              <span class="lang-zh">2 个场景均值：办公 + 信息检索</span>
+              <span class="lang-en">Mean of two scenarios: office + information retrieval</span>
+            </td>
+            <td>0.560</td>
+            <td>0.521</td>
+            <td>0.326</td>
+            <td>0.463</td>
+            <td><span class="score">0.668</span><span class="gain">+10.8pp</span></td>
+            <td><span class="score">0.722</span><span class="gain">+20.1pp</span></td>
+            <td><span class="score">0.452</span><span class="gain">+12.7pp</span></td>
+            <td class="reward-evolved"><span class="score">0.602</span><span class="gain">+14.0pp</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="benchmark-block">
+      <p class="benchmark-kicker">Benchmark 01</p>
+      <h3 class="benchmark-title lang-zh">τ³-bench · Banking：多轮工具调用与长链路执行</h3>
+      <h3 class="benchmark-title lang-en">τ³-bench · Banking: multi-turn tool use and long execution chains</h3>
+      <p class="lead lang-zh" style="font-size:15.5px">
+        τ³-bench 源自
+        <a href="https://github.com/sierra-research/tau2-bench" target="_blank" rel="noopener">tau2-bench</a>，
+        按 pass/fail 严格判定 Agent 是否在多轮对话中借助领域工具完成客户请求。
+        本次实验覆盖两类模型与两种检索方式；Validation 作为黑盒评估，Test 全程 held-out。
+      </p>
+      <p class="lead lang-en" style="font-size:15.5px">
+        Derived from
+        <a href="https://github.com/sierra-research/tau2-bench" target="_blank" rel="noopener">tau2-bench</a>,
+        τ³-bench uses strict pass/fail scoring to test whether an agent can complete customer requests
+        through multi-turn conversations and domain tools. This experiment covers two model families and
+        two retrieval modes; validation stays a black-box evaluation and the test split remains held out.
+      </p>
+    </div>
+
+    <figure class="figure">
+      <div id="chart-trend" class="chart chart-lg" role="img"
+        aria-label="tau3_banking_t34v23 自进化轨迹图：训练与验证分数随迭代持续上升"></div>
+      <noscript><img src="assets/evolution-trend.png" alt="tau3_banking_t34v23 自进化轨迹：12 个候选线性链上训练/验证分数随迭代持续上升"></noscript>
+      <figcaption class="lang-zh">真实运行证据：tau3_banking_t34v23 任务 12 个候选的线性进化链——训练集与验证集分数随迭代持续爬升，最终候选 0.735，相对初版 +26.4pp</figcaption>
+      <figcaption class="lang-en">Evidence from a real run: the 12-candidate linear evolution chain on tau3_banking_t34v23 — train and validation scores climb iteration over iteration, ending at 0.735, +26.4pp over the initial version</figcaption>
+      <details class="chart-data">
+        <summary><span class="lang-zh">图表数据表</span><span class="lang-en">Chart data table</span></summary>
+        <div class="table-wrap">
+          <table class="data">
+            <caption class="lang-zh">12 个候选（按时间顺序）的训练集与验证集分数；“—”表示该候选未跑验证集</caption>
+            <caption class="lang-en">Train and validation scores of the 12 candidates in time order; “—” means the validation set was not run for that candidate</caption>
+            <thead>
+              <tr><th>#</th><th><span class="lang-zh">时间</span><span class="lang-en">Time</span></th><th>Train</th><th>Validation</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>09/19 23:09</td><td>0.471</td><td>0.261</td></tr>
+              <tr><td>2</td><td>09/20 01:04</td><td>0.471</td><td>0.261</td></tr>
+              <tr><td>3</td><td>09/20 03:45</td><td>0.471</td><td>0.217</td></tr>
+              <tr><td>4</td><td>09/20 06:27</td><td>0.559</td><td>0.337</td></tr>
+              <tr><td>5</td><td>09/20 08:28</td><td>0.559</td><td>0.283</td></tr>
+              <tr><td>6</td><td>09/20 10:43</td><td>0.441</td><td>—</td></tr>
+              <tr><td>7</td><td>09/20 11:42</td><td>0.559</td><td>0.413</td></tr>
+              <tr><td>8</td><td>09/20 18:10</td><td>0.588</td><td>0.424</td></tr>
+              <tr><td>9</td><td>09/20 22:37</td><td>0.471</td><td>—</td></tr>
+              <tr><td>10</td><td>09/21 00:27</td><td>0.588</td><td>0.413</td></tr>
+              <tr><td>11</td><td>09/21 04:11</td><td>0.647</td><td>0.478</td></tr>
+              <tr><td>12</td><td>09/21 11:56</td><td>0.735</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </figure>
+
+    <h3 class="dg-h3 lang-zh" id="bench-table">τ³-bench 四组配置：自进化前后全部指标提升</h3>
+    <h3 class="dg-h3 lang-en">τ³-bench: every metric improved across all four configurations</h3>
+    <p class="lead lang-zh" style="font-size:15.5px">
+      在 τ³-bench · Banking 场景中，自进化后的 Candidate 相对原始版本：多次采样一致性（Pass^1–Pass^4）
+      16 项对比全部提升（+4.9 ~ +18.1pp），训练 / 验证 / 测试集与 Reward 得分也全面提升；在本次 held-out
+      测试集上未观察到回退。
+    </p>
+    <p class="lead lang-en" style="font-size:15.5px">
+      On τ³-bench · Banking, evolved candidates improve all 16 sampling-consistency comparisons across
+      Pass^1–Pass^4 (+4.9 to +18.1pp), as well as every train / validation / test and reward comparison;
+      no regression was observed on the held-out test split in this experiment.
+    </p>
+    <h4 class="bench-table-title" id="bench-pass-table"><span class="lang-zh">表 1 · 多次采样表现与 Reward</span><span class="lang-en">Table 1 · Sampling consistency &amp; Reward</span></h4>
+    <div class="table-wrap h-scroll benchmark-detail-wrap" tabindex="0" role="region" aria-labelledby="bench-pass-table">
+      <table class="data benchmark-detail">
+        <caption><span class="lang-zh">原始版本 → 自进化后，数值保留三位小数。</span><span class="lang-en">Base → Evolved, rounded to three decimal places.</span></caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="lang-zh">模型 / 检索方式</span><span class="lang-en">Model / retrieval</span></th>
+            <th scope="col">Pass<sup>1</sup></th>
+            <th scope="col">Pass<sup>2</sup></th>
+            <th scope="col">Pass<sup>3</sup></th>
+            <th scope="col">Pass<sup>4</sup></th>
+            <th scope="col">Reward</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="cfg">qwen3.8-27B<span class="retrieval">bm25</span></th>
+            <td><span class="before">0.436</span><span class="to">→</span><span class="after">0.598</span></td>
+            <td><span class="before">0.328</span><span class="to">→</span><span class="after">0.509</span></td>
+            <td><span class="before">0.271</span><span class="to">→</span><span class="after">0.446</span></td>
+            <td><span class="before">0.243</span><span class="to">→</span><span class="after">0.402</span></td>
+            <td><span class="before">0.436</span><span class="to">→</span><span class="after">0.600</span></td>
+          </tr>
+          <tr>
+            <th scope="row" class="cfg">qwen3.8-27B<span class="retrieval">golden_retrieval</span></th>
+            <td><span class="before">0.558</span><span class="to">→</span><span class="after">0.637</span></td>
+            <td><span class="before">0.497</span><span class="to">→</span><span class="after">0.562</span></td>
+            <td><span class="before">0.454</span><span class="to">→</span><span class="after">0.513</span></td>
+            <td><span class="before">0.423</span><span class="to">→</span><span class="after">0.474</span></td>
+            <td><span class="before">0.560</span><span class="to">→</span><span class="after">0.637</span></td>
+          </tr>
+          <tr>
+            <th scope="row" class="cfg">deepseek-v4-flash-0713<span class="retrieval">bm25</span></th>
+            <td><span class="before">0.339</span><span class="to">→</span><span class="after">0.421</span></td>
+            <td><span class="before">0.255</span><span class="to">→</span><span class="after">0.365</span></td>
+            <td><span class="before">0.216</span><span class="to">→</span><span class="after">0.342</span></td>
+            <td><span class="before">0.195</span><span class="to">→</span><span class="after">0.337</span></td>
+            <td><span class="before">0.349</span><span class="to">→</span><span class="after">0.442</span></td>
+          </tr>
+          <tr>
+            <th scope="row" class="cfg">deepseek-v4-flash-0713<span class="retrieval">golden_retrieval</span></th>
+            <td><span class="before">0.591</span><span class="to">→</span><span class="after">0.663</span></td>
+            <td><span class="before">0.536</span><span class="to">→</span><span class="after">0.606</span></td>
+            <td><span class="before">0.503</span><span class="to">→</span><span class="after">0.564</span></td>
+            <td><span class="before">0.484</span><span class="to">→</span><span class="after">0.533</span></td>
+            <td><span class="before">0.595</span><span class="to">→</span><span class="after">0.674</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="bench-table-title" id="bench-splits-table"><span class="lang-zh">表 2 · 训练集、验证集与测试集</span><span class="lang-en">Table 2 · Train, validation &amp; test</span></h4>
+    <div class="table-wrap h-scroll benchmark-detail-wrap" tabindex="0" role="region" aria-labelledby="bench-splits-table">
+      <table class="data benchmark-detail">
+        <caption><span class="lang-zh">原始版本 → 自进化后，数值保留三位小数。</span><span class="lang-en">Base → Evolved, rounded to three decimal places.</span></caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="lang-zh">模型 / 检索方式</span><span class="lang-en">Model / retrieval</span></th>
+            <th scope="col"><span class="lang-zh">训练集</span><span class="lang-en">Train</span></th>
+            <th scope="col"><span class="lang-zh">验证集</span><span class="lang-en">Validation</span></th>
+            <th scope="col"><span class="lang-zh">测试集</span><span class="lang-en">Test</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="cfg">qwen3.8-27B<span class="retrieval">bm25</span></th>
+            <td><span class="before">0.471</span><span class="to">→</span><span class="after">0.794</span></td>
+            <td><span class="before">0.348</span><span class="to">→</span><span class="after">0.457</span></td>
+            <td><span class="before">0.300</span><span class="to">→</span><span class="after">0.550</span></td>
+          </tr>
+          <tr>
+            <th scope="row" class="cfg">qwen3.8-27B<span class="retrieval">golden_retrieval</span></th>
+            <td><span class="before">0.559</span><span class="to">→</span><span class="after">0.794</span></td>
+            <td><span class="before">0.446</span><span class="to">→</span><span class="after">0.641</span></td>
+            <td><span class="before">0.350</span><span class="to">→</span><span class="after">0.625</span></td>
+          </tr>
+          <tr>
+            <th scope="row" class="cfg">deepseek-v4-flash-0713<span class="retrieval">bm25</span></th>
+            <td><span class="before">0.353</span><span class="to">→</span><span class="after">0.559</span></td>
+            <td><span class="before">0.217</span><span class="to">→</span><span class="after">0.337</span></td>
+            <td><span class="before">0.350</span><span class="to">→</span><span class="after">0.400</span></td>
+          </tr>
+          <tr>
+            <th scope="row" class="cfg">deepseek-v4-flash-0713<span class="retrieval">golden_retrieval</span></th>
+            <td><span class="before">0.618</span><span class="to">→</span><span class="after">0.794</span></td>
+            <td><span class="before">0.576</span><span class="to">→</span><span class="after">0.630</span></td>
+            <td><span class="before">0.425</span><span class="to">→</span><span class="after">0.600</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="dg-cap"><span class="lang-zh">四组配置为模型 × 检索方式的组合；顶部总览图与汇总表中的 τ³-bench 数据为四组算术平均；pp = 百分点。</span><span class="lang-en">Each configuration combines a model and a retrieval method. The overview chart and summary table show the arithmetic mean across all four τ³-bench configurations; pp = percentage points.</span></p>
+
+    <details class="more">
+      <summary>
+        <span class="lang-zh">查看全部实验图表：提升热力图 · Reward 对比 · 分档柱状图 · 采样曲线</span>
+        <span class="lang-en">All experiment charts: improvement heatmap · reward · per-tier bars · sampling curves</span>
+        <span class="hint lang-zh">展开</span><span class="hint lang-en">expand</span><span class="hint-open hint lang-zh">收起</span><span class="hint-open hint lang-en">collapse</span>
+      </summary>
+      <div class="more-body">
+        <figure class="figure">
+          <div id="chart-heatmap" class="chart chart-lg"></div>
+          <noscript><p class="chart-fallback">Latest data / 最新数据：请参见上方 τ³-bench 对比表。</p></noscript>
+          <figcaption class="lang-zh">提升热力图：4 组配置 × Pass^1–4 共 16 项对比全部改善（+4.9 ~ +18.1pp），颜色越深提升越大——没有一项回退</figcaption>
+          <figcaption class="lang-en">Improvement heatmap: all 16 comparisons (4 configurations × Pass^1–4) improved, +4.9 to +18.1pp — darker means larger gain, not a single regression</figcaption>
+        </figure>
+        <figure class="figure">
+          <div id="chart-reward" class="chart chart-md"></div>
+          <noscript><p class="chart-fallback">Latest data / 最新数据：请参见上方 τ³-bench 对比表。</p></noscript>
+          <figcaption class="lang-zh">Reward 得分：四组配置从灰点（原始版本）到绿点（自进化后）的跨度一眼可见，提升 +7.7 ~ +16.4pp</figcaption>
+          <figcaption class="lang-en">Reward score: the span from each gray dot (base) to its green dot (evolved) is visible at a glance — gains of +7.7 to +16.4pp</figcaption>
+        </figure>
+        <figure class="figure">
+          <div class="chart-grid">
+            <div id="chart-pass-0" class="chart chart-mini"></div>
+            <div id="chart-pass-1" class="chart chart-mini"></div>
+            <div id="chart-pass-2" class="chart chart-mini"></div>
+            <div id="chart-pass-3" class="chart chart-mini"></div>
+          </div>
+          <noscript><p class="chart-fallback">Latest data / 最新数据：请参见上方 τ³-bench 对比表。</p></noscript>
+          <figcaption class="lang-zh">多次采样一致性（Pass^1–Pass^4）：四组配置（模型 × 检索方式）逐项对比，每一格蓝柱均高于灰柱，红色数字为提升幅度（pp）</figcaption>
+          <figcaption class="lang-en">Multi-sample consistency (Pass^1–Pass^4): four configurations (model × retrieval) compared item by item — every blue bar beats its gray baseline, red numbers are gains in pp</figcaption>
+        </figure>
+        <figure class="figure">
+          <div class="chart-grid">
+            <div id="chart-splits-0" class="chart chart-mini"></div>
+            <div id="chart-splits-1" class="chart chart-mini"></div>
+            <div id="chart-splits-2" class="chart chart-mini"></div>
+            <div id="chart-splits-3" class="chart chart-mini"></div>
+          </div>
+          <noscript><p class="chart-fallback">Latest data / 最新数据：请参见上方 τ³-bench 对比表。</p></noscript>
+          <figcaption class="lang-zh">训练 / 验证 / 测试集与 Reward 得分：提升不限于训练集，held-out 测试集与 Reward 同样提升</figcaption>
+          <figcaption class="lang-en">Train / validation / test and reward score: gains are not confined to the training split — the held-out test split and the reward score improve as well</figcaption>
+        </figure>
+        <figure class="figure">
+          <div class="chart-grid">
+            <div id="chart-curve-0" class="chart chart-mini"></div>
+            <div id="chart-curve-1" class="chart chart-mini"></div>
+            <div id="chart-curve-2" class="chart chart-mini"></div>
+            <div id="chart-curve-3" class="chart chart-mini"></div>
+          </div>
+          <noscript><p class="chart-fallback">Latest data / 最新数据：请参见上方 τ³-bench 对比表。</p></noscript>
+          <figcaption class="lang-zh">多次采样一致性曲线：横轴为采样次数 k，蓝线（自进化后）全程位于灰线（原始版本）上方，阴影面积即整体差距，红色数字为各档提升（pp）</figcaption>
+          <figcaption class="lang-en">Multi-sample consistency curves: k on the x-axis; the blue line (evolved) stays above the gray line (base) end to end — the shaded area is the overall gap, red numbers are per-tier gains in pp</figcaption>
+        </figure>
+      </div>
+    </details>
+
+    <div class="benchmark-block" id="evoagentbench-results">
+      <p class="benchmark-kicker">Benchmark 02</p>
+      <h3 class="benchmark-title lang-zh">EvoAgentBench · 办公与信息检索场景</h3>
+      <h3 class="benchmark-title lang-en">EvoAgentBench · Office and information retrieval</h3>
+      <p class="lead lang-zh" style="font-size:15.5px">
+        在 qwen3.8-27B 上，两个场景都在 11 轮进化后产出候选版本。办公场景的 Train / Validation
+        原始分数已较高（0.781 / 0.792），Reward 仍从 0.686 提升到 0.724（+3.8pp）；
+        信息检索场景的 Validation 从 0.250 提升到 0.611（+36.1pp），Reward 从 0.240
+        提升到 0.481（+24.1pp）。
+      </p>
+      <p class="lead lang-en" style="font-size:15.5px">
+        On qwen3.8-27B, both scenarios produced an evolved candidate after 11 iterations. The office
+        scenario starts from strong train / validation baselines (0.781 / 0.792) and still lifts
+        reward from 0.686 to 0.724 (+3.8pp). In information retrieval, validation rises from 0.250
+        to 0.611 (+36.1pp) and reward from 0.240 to 0.481 (+24.1pp).
+      </p>
+    </div>
+
+    <figure class="figure">
+      <div class="chart-grid">
+        <div id="chart-evo-0" class="chart chart-mini"></div>
+        <div id="chart-evo-1" class="chart chart-mini"></div>
+      </div>
+      <figcaption class="lang-zh">EvoAgentBench：办公与信息检索场景的 Train / Validation / Test / Reward 全部提升</figcaption>
+      <figcaption class="lang-en">EvoAgentBench: train, validation, test and reward all improve in both office and information-retrieval scenarios</figcaption>
+    </figure>
+
+    <h4 class="bench-table-title" id="evo-results-table"><span class="lang-zh">两类场景的自进化表现</span><span class="lang-en">Evolution results across two scenarios</span></h4>
+    <div class="table-wrap h-scroll benchmark-detail-wrap" tabindex="0" role="region" aria-labelledby="evo-results-table">
+      <table class="data benchmark-detail">
+        <caption class="lang-zh">qwen3.8-27B 在两个场景中自进化前 → 后的得分，数值保留三位小数；pp = 百分点</caption>
+        <caption class="lang-en">Scores before → after evolution for qwen3.8-27B in two scenarios, rounded to three decimals; pp = percentage points</caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="lang-zh">场景</span><span class="lang-en">Scenario</span></th>
+            <th scope="col"><span class="lang-zh">训练集</span><span class="lang-en">Train</span></th>
+            <th scope="col"><span class="lang-zh">验证集</span><span class="lang-en">Val</span></th>
+            <th scope="col"><span class="lang-zh">测试集</span><span class="lang-en">Test</span></th>
+            <th scope="col">Reward</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row" class="cfg"><span class="lang-zh">办公场景</span><span class="lang-en">Office</span></th>
+            <td><span class="before">0.781</span><span class="to">→</span><span class="after">0.870</span></td>
+            <td><span class="before">0.792</span><span class="to">→</span><span class="after">0.833</span></td>
+            <td><span class="before">0.467</span><span class="to">→</span><span class="after">0.567</span></td>
+            <td><span class="before">0.686</span><span class="to">→</span><span class="after">0.724</span></td>
+          </tr>
+          <tr>
+            <th scope="row" class="cfg"><span class="lang-zh">信息检索场景</span><span class="lang-en">Information retrieval</span></th>
+            <td><span class="before">0.339</span><span class="to">→</span><span class="after">0.466</span></td>
+            <td><span class="before">0.250</span><span class="to">→</span><span class="after">0.611</span></td>
+            <td><span class="before">0.185</span><span class="to">→</span><span class="after">0.338</span></td>
+            <td><span class="before">0.240</span><span class="to">→</span><span class="after">0.481</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note" id="benchmark-evidence">
+      <p class="lang-zh"><b>证据与复现</b>：τ³-bench 划分为 Train 34 / Validation 23 个 case，Test 全程
+        held-out 不参与选优。为降低网络抖动与模型随机性的影响，Validation 设置
+        <code>num_trials=4</code>，并要求有效 trials 比例 ≥ 0.85 才参与选优；不可归因于基建的真实失败
+        不补跑。</p>
+      <p class="lang-en"><b>Evidence &amp; reproduction</b>: τ³-bench uses 34 train and 23 validation cases;
+        the test split stays held out and never participates in selection. To reduce network jitter
+        and model randomness, validation runs with <code>num_trials=4</code> and counts toward selection
+        only when the valid-trial ratio is ≥ 0.85; genuine non-infrastructure failures are not re-run.</p>
+    </div>
+  </div>
+</section>
+
+<section id="scenarios" aria-labelledby="scen-h">
+  <div class="container">
+    <p class="eyebrow">06 / Scenarios</p>
+    <h2 id="scen-h" class="lang-zh">两个真实业务，跑在同一套系统能力上</h2>
+    <h2 id="scen-h-en" class="lang-en">Two real businesses, one set of runtime capabilities</h2>
+    <p class="lead lang-zh">
+      客服与电销是两类典型的长程交互业务：一个从全渠道服务请求进入，一个跨 14 天持续推进成交。
+      两个场景中的每个功能模块，都映射到 HUMAN-CENTRIC LONG HORIZON AGENT 的一项运行时能力，而不是一次性定制逻辑。
+    </p>
+    <p class="lead lang-en">
+      Customer service and telesales are two typical long-horizon businesses: one starts from
+      omnichannel service requests, the other advances a deal across fourteen days. Every module
+      in both scenarios maps onto a HUMAN-CENTRIC LONG HORIZON AGENT runtime capability — no one-off bespoke logic.
+    </p>
+
+    <h3 class="dg-h3 lang-zh">场景一 · 客服：AI 知识检索服务中枢</h3>
+    <h3 class="dg-h3 lang-en">Scenario 1 · Customer service: the AI knowledge hub</h3>
+    <div class="diagram" tabindex="0" role="region" aria-label="Customer service capability map, scrollable horizontally">
+      <p class="dg-title"><span class="lang-zh">客服场景 · 能力地图</span><span class="lang-en">Customer service · capability map</span></p>
+      <div class="cs-grid">
+        <div class="dg-col c-purple">
+          <p class="dg-head">06 · <span class="lang-zh">多模态识别</span><span class="lang-en">Multimodal</span></p>
+          <p class="dg-desc"><span class="lang-zh">故障照片 / 证件图片理解识别 · 图文混合问答</span><span class="lang-en">fault-photo &amp; document understanding · mixed image-text Q&amp;A</span></p>
+          <span class="dg-scenes"><span class="lang-zh">技术答疑</span><span class="lang-en">tech Q&amp;A</span></span>
+          <span class="tag">asset · multimodal</span>
+        </div>
+        <div class="dg-col c-blue">
+          <p class="dg-head">01 · RAG<span class="lang-zh"> 知识检索</span><span class="lang-en"> Knowledge Retrieval</span></p>
+          <p class="dg-desc"><span class="lang-zh">知识库检索 · 答案生成 · 多轮追问</span><span class="lang-en">KB retrieval · grounded answers · follow-up Q&amp;A</span></p>
+          <span class="dg-scenes"><span class="lang-zh">日常咨询</span><span class="lang-en">general inquiries</span></span>
+          <span class="dg-scenes"><span class="lang-zh">技术答疑</span><span class="lang-en">tech Q&amp;A</span></span>
+          <span class="tag">knowledge pipeline · kb_search</span>
+        </div>
+        <div class="dg-col c-teal">
+          <p class="dg-head">02 · <span class="lang-zh">人机协同</span><span class="lang-en">Human Handoff</span></p>
+          <p class="dg-desc"><span class="lang-zh">要点总结 · 顾问推送 · 工单流转</span><span class="lang-en">summaries · advisor push · ticket routing</span></p>
+          <span class="dg-scenes"><span class="lang-zh">服务类</span><span class="lang-en">service requests</span></span>
+          <span class="dg-scenes"><span class="lang-zh">技术兜底</span><span class="lang-en">engineer fallback</span></span>
+          <span class="tag">handoff · human-in-loop</span>
+        </div>
+        <div class="dg-col c-red">
+          <p class="dg-head">05 · <span class="lang-zh">实时诉求响应</span><span class="lang-en">Live Request Updates</span></p>
+          <p class="dg-desc"><span class="lang-zh">接收插话补充 · 识别诉求变化 · 调整处理步骤</span><span class="lang-en">accept new input · recognize changed needs · adapt next steps</span></p>
+          <span class="dg-scenes"><span class="lang-zh">诉求变更</span><span class="lang-en">request changes</span></span>
+          <span class="tag">steer · live input</span>
+        </div>
+        <div class="cs-hub">
+          <span class="cs-badge">7×24 <span class="lang-zh">在线</span><span class="lang-en">online</span></span>
+          <p class="cs-title"><span class="lang-zh">AI 智能客服中枢</span><span class="lang-en">AI Service Hub</span></p>
+          <p class="cs-sub"><span class="lang-zh">全渠道接入 · 意图识别 · 场景分发</span><span class="lang-en">omnichannel intake · intent recognition · scenario routing</span></p>
+          <p class="cs-ch"><span class="lang-zh">微信 · 电话 · APP · 网页</span><span class="lang-en">WeChat · Phone · App · Web</span></p>
+        </div>
+        <div class="dg-col c-gold">
+          <p class="dg-head">03 · <span class="lang-zh">定时任务调度</span><span class="lang-en">Scheduled Follow-up</span></p>
+          <p class="dg-desc"><span class="lang-zh">读客户资料 · 任务生成 · 定时触达</span><span class="lang-en">reads customer profiles · generates tasks · scheduled outreach</span></p>
+          <span class="dg-scenes"><span class="lang-zh">定期招揽</span><span class="lang-en">periodic outreach</span></span>
+          <span class="tag">cron · unified inbox</span>
+        </div>
+        <div class="dg-col c-blue">
+          <p class="dg-head">07 · <span class="lang-zh">客户记忆画像</span><span class="lang-en">Customer Memory</span></p>
+          <p class="dg-desc"><span class="lang-zh">用户偏好沉淀 · 历史交互回忆 · 个性化应答</span><span class="lang-en">preference memory · interaction history · personalized replies</span></p>
+          <span class="dg-scenes"><span class="lang-zh">全部场景</span><span class="lang-en">all scenarios</span></span>
+          <span class="tag">memory · user profile</span>
+        </div>
+        <div class="dg-col c-teal">
+          <p class="dg-head">04 · <span class="lang-zh">数据回流学习</span><span class="lang-en">Feedback Learning</span></p>
+          <p class="dg-desc"><span class="lang-zh">服务记录沉淀 · 效果反馈 · 知识迭代</span><span class="lang-en">service records · outcome feedback · knowledge iteration</span></p>
+          <span class="dg-scenes"><span class="lang-zh">全部场景</span><span class="lang-en">all scenarios</span></span>
+          <span class="tag">evaluation · evolution</span>
+        </div>
+        <div class="dg-col c-gold">
+          <p class="dg-head">08 · <span class="lang-zh">会话质检预警</span><span class="lang-en">Quality Monitoring</span></p>
+          <p class="dg-desc"><span class="lang-zh">话术合规检查 · 服务质量评分 · 同类问题批量预警</span><span class="lang-en">compliance checks · quality scoring · batch anomaly alerts</span></p>
+          <span class="dg-scenes"><span class="lang-zh">全部场景</span><span class="lang-en">all scenarios</span></span>
+          <span class="tag">L1 rules · L2 judge</span>
+        </div>
+      </div>
+      <div class="cs-base">
+        <p class="cs-base-label"><span class="lang-zh">共享数据底座 · 模块按需调用</span><span class="lang-en">Shared data foundation · invoked on demand</span></p>
+        <div class="cs-base-chips">
+          <div class="cs-base-chip">
+            <b><span class="lang-zh">业务知识库</span><span class="lang-en">Business KB</span></b>
+            <span class="lang-zh">价格 · 工时费 · 服务时长</span><span class="lang-en">pricing · labor · duration</span>
+          </div>
+          <div class="cs-base-chip">
+            <b><span class="lang-zh">技术知识库</span><span class="lang-en">Tech KB</span></b>
+            <span class="lang-zh">常见故障 · 排查步骤</span><span class="lang-en">common faults · troubleshooting</span>
+          </div>
+          <div class="cs-base-chip">
+            <b><span class="lang-zh">客户资料表</span><span class="lang-en">Customer profiles</span></b>
+            <span class="lang-zh">保养 · 生日 · 续保周期</span><span class="lang-en">maintenance · birthday · renewal</span>
+          </div>
+          <div class="cs-base-chip">
+            <b><span class="lang-zh">内部服务顾问</span><span class="lang-en">Human advisors</span></b>
+            <span class="lang-zh">要点推送 · 客户诉求同步</span><span class="lang-en">key-point push · customer request updates</span>
+          </div>
+        </div>
+      </div>
+      <p class="dg-cap"><span class="lang-zh">八大功能模块覆盖五类客服业务场景：日常咨询 · 技术答疑 · 服务类 · 定期招揽 · 诉求变更</span><span class="lang-en">Eight modules cover five scenario types: general inquiries · tech Q&amp;A · service requests · periodic outreach · request changes</span></p>
+    </div>
+
+    <h3 class="dg-h3 lang-zh">场景二 · 电销：一通电话的 14 天旅程</h3>
+    <h3 class="dg-h3 lang-en">Scenario 2 · Telesales: the 14-day journey of one call</h3>
+    <p class="lead lang-zh" style="font-size:15.5px">
+      AI × 客户 × 销售坐席三方协同的全流程：客户、AI 与销售坐席共享同一目标和上下文；图片输入进入
+      多模态理解，外部业务系统可以异步回调并恢复同一次运行，复杂节点允许人工接管后由 AI 带着上下文
+      接回，而客户沉默时调度器会在未来主动开启新的运行继续推进。
+    </p>
+    <p class="lead lang-en" style="font-size:15.5px">
+      One call, three parties — AI, customer, and human sales agent — sharing one goal and one context.
+      Images flow into multimodal understanding; external business systems call back asynchronously and
+      resume the same run; humans take over at complex moments and the AI re-joins with full context;
+      when the customer goes silent, the scheduler opens a new run in the future to keep things moving.
+    </p>
+    <figure class="figure h-scroll" tabindex="0" role="region" aria-label="The 14-day journey of one telesales call, scrollable horizontally">
+      <p class="dg-title"><span class="lang-zh">一通电销电话的 14 天旅程</span><span class="lang-en">The 14-day journey of one call</span></p>
+      <div class="j-legend">
+        <span class="j-chip"><i class="j-dot jd-blue" aria-hidden="true"></i><span class="lang-zh">AI 坐席</span><span class="lang-en">AI agent</span></span>
+        <span class="j-chip"><i class="j-dot jd-teal" aria-hidden="true"></i><span class="lang-zh">客户（用户）</span><span class="lang-en">Customer</span></span>
+        <span class="j-chip"><i class="j-dot jd-gold" aria-hidden="true"></i><span class="lang-zh">销售坐席</span><span class="lang-en">Sales agent</span></span>
+      </div>
+      <div class="j-row">
+        <div class="j-card jb-blue">
+          <div class="j-head">
+            <span class="j-num">1</span>
+            <span class="j-title lang-zh">AI 外呼 · 三方同场</span>
+            <span class="j-title lang-en">AI outreach, three-party live</span>
+            <span class="j-day">DAY 0</span>
+          </div>
+          <div class="mini-flow">
+            <span class="mf"><span class="lang-zh">AI 坐席</span><span class="lang-en">AI</span></span> →
+            <span class="mf"><span class="lang-zh">客户</span><span class="lang-en">customer</span></span>
+          </div>
+          <p class="j-sub lang-zh">销售坐席全程旁听 · 随时介入</p>
+          <p class="j-sub lang-en">sales listens in and can step in anytime</p>
+          <p class="j-desc lang-zh">系统按外呼策略自动拨打，多轮对话识别意向</p>
+          <p class="j-desc lang-en">Policy-driven auto-dial with multi-turn intent qualification</p>
+          <span class="j-cap"><span class="lang-zh">三方协同</span><span class="lang-en">three-party collab</span></span>
+        </div>
+        <div class="j-arrow" aria-hidden="true">→</div>
+        <div class="j-card jb-teal">
+          <div class="j-head">
+            <span class="j-num">2</span>
+            <span class="j-title lang-zh">客户发来证件照片</span>
+            <span class="j-title lang-en">Customer sends ID photos</span>
+            <span class="j-day">DAY 0</span>
+          </div>
+          <div class="mini-flow">
+            <span class="mf"><span class="lang-zh">证件照片</span><span class="lang-en">ID photos</span></span> →
+            <span class="mf"><span class="lang-zh">关键字段抽取</span><span class="lang-en">field extraction</span></span>
+          </div>
+          <p class="j-sub lang-zh">身份证 · 行驶证 · 车辆登记证</p>
+          <p class="j-sub lang-en">ID card · driving license · registration</p>
+          <p class="j-desc lang-zh">Asset 统一安全存储，多模态引擎识别图片并抽取字段</p>
+          <p class="j-desc lang-en">Assets stored safely; the multimodal model extracts key fields</p>
+          <span class="j-cap"><span class="lang-zh">多模态理解</span><span class="lang-en">multimodal</span></span>
+        </div>
+        <div class="j-arrow" aria-hidden="true">→</div>
+        <div class="j-card jb-gold">
+          <div class="j-head">
+            <span class="j-num">3</span>
+            <span class="j-title lang-zh">高意向 · 人工接管</span>
+            <span class="j-title lang-en">High intent · human takeover</span>
+            <span class="j-day">DAY 1</span>
+          </div>
+          <div class="mini-flow">
+            <span class="mf">AI</span> →
+            <span class="mf"><span class="lang-zh">销售坐席</span><span class="lang-en">sales</span></span> →
+            <span class="mf"><span class="lang-zh">客户</span><span class="lang-en">customer</span></span>
+          </div>
+          <p class="j-sub lang-zh">对话摘要随接管同步</p>
+          <p class="j-sub lang-en">conversation summary synced on handoff</p>
+          <p class="j-desc lang-zh">沟通结束后 AI 携带完整上下文接回，继续执行</p>
+          <p class="j-desc lang-en">Afterwards the AI rejoins with full context and continues</p>
+          <span class="j-cap"><span class="lang-zh">人机切换</span><span class="lang-en">human handoff</span></span>
+        </div>
+      </div>
+      <p class="j-mid"><span class="dg-arrow" aria-hidden="true">↓</span><span class="lbl" style="margin-left:8px"><span class="lang-zh">任务持续推进 · 状态跨天保持</span><span class="lang-en">the journey advances · state persists across days</span></span></p>
+      <div class="j-row">
+        <div class="j-card jb-red">
+          <div class="j-head">
+            <span class="j-num">4</span>
+            <span class="j-title lang-zh">客户沉默 48 小时</span>
+            <span class="j-title lang-en">Customer silent for 48h</span>
+            <span class="j-day">DAY 3</span>
+          </div>
+          <div class="mini-flow">
+            <span class="mf"><span class="lang-zh">停滞检测</span><span class="lang-en">stall detected</span></span> →
+            <span class="mf"><span class="lang-zh">定时唤醒</span><span class="lang-en">cron wakeup</span></span> →
+            <span class="mf"><span class="lang-zh">二次触达</span><span class="lang-en">re-engage</span></span>
+          </div>
+          <p class="j-desc lang-zh">Cron 按策略唤醒，触发结果投递到同一 Inbox</p>
+          <p class="j-desc lang-en">Cron wakes the journey on policy, delivered into the same Inbox</p>
+          <span class="j-cap"><span class="lang-zh">停滞唤醒</span><span class="lang-en">stagnation wakeup</span></span>
+        </div>
+        <div class="j-arrow" aria-hidden="true">→</div>
+        <div class="j-card jb-purple">
+          <div class="j-head">
+            <span class="j-num">5</span>
+            <span class="j-title lang-zh">预约工单 · 异步回调</span>
+            <span class="j-title lang-en">Ticket · async callback</span>
+            <span class="j-day">DAY 7</span>
+          </div>
+          <div class="mini-flow">
+            <span class="mf">AI</span> →
+            <span class="mf"><span class="lang-zh">CRM 系统</span><span class="lang-en">CRM</span></span> →
+            <span class="mf"><span class="lang-zh">Webhook 恢复</span><span class="lang-en">webhook resume</span></span>
+          </div>
+          <p class="j-desc lang-zh">工具 PENDING 不阻塞对话，一次性 resume token 恢复同一 run</p>
+          <p class="j-desc lang-en">Tool pends without blocking; a one-time token resumes the same run</p>
+          <span class="j-cap"><span class="lang-zh">异步回调</span><span class="lang-en">async callback</span></span>
+        </div>
+        <div class="j-arrow" aria-hidden="true">→</div>
+        <div class="j-card jb-navy">
+          <div class="j-head">
+            <span class="j-num">6</span>
+            <span class="j-title lang-zh">成交回访 · 任务闭环</span>
+            <span class="j-title lang-en">Deal follow-up · loop closed</span>
+            <span class="j-day">DAY 14</span>
+          </div>
+          <div class="mini-flow">
+            <span class="mf"><span class="lang-zh">D7 演示</span><span class="lang-en">D7 demo</span></span> →
+            <span class="mf"><span class="lang-zh">D10 成交</span><span class="lang-en">D10 deal</span></span> →
+            <span class="mf"><span class="lang-zh">D14 回访</span><span class="lang-en">D14 follow-up</span></span>
+          </div>
+          <p class="j-desc lang-zh">任务状态跨天持久化保存，按阶段推进直至闭环归档</p>
+          <p class="j-desc lang-en">Task state persists across days, advancing stage by stage to closure</p>
+          <span class="j-cap"><span class="lang-zh">长周期任务</span><span class="lang-en">long-horizon task</span></span>
+        </div>
+      </div>
+      <figcaption class="lang-zh">一张图看懂系统核心能力：从 Day 0 首呼到 Day 14 成交回访、闭环归档</figcaption>
+      <figcaption class="lang-en">The core capabilities in one journey: from the Day-0 cold call to the Day-14 follow-up and closed loop</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="quickstart" aria-labelledby="qs-h">
+  <div class="container">
+    <p class="eyebrow">07 / Quickstart</p>
+    <h2 id="qs-h">
+      <span class="lang-zh">从运行到进化，按模块开始</span>
+      <span class="lang-en">Start by module — from runtime to evolution</span>
+    </h2>
+    <p class="lead lang-zh">先完成一次公共准备，再按目标选择模块。启动后端只需要 Python 3.13+、uv
+      和 Docker；使用 Web 控制台时再准备 Node.js。实际调用模型前，请在 <code>.env</code>
+      中填写对应的模型配置。</p>
+    <p class="lead lang-en">Complete the shared setup once, then start only the modules you need.
+      The backend requires Python 3.13+, uv, and Docker; the web console additionally requires Node.js.
+      Add the relevant model configuration to <code>.env</code> before making real model calls.</p>
+
+    <div class="qs-setup">
+      <p class="qs-kicker"><span class="lang-zh">公共准备</span><span class="lang-en">Shared setup</span></p>
+      <h3><span class="lang-zh">安装依赖并创建本地配置</span><span class="lang-en">Install dependencies and create local config</span></h3>
+      <p class="lang-zh">以下命令只需在仓库根目录执行一次。</p>
+      <p class="lang-en">Run these commands once from the repository root.</p>
+      <div class="pre-wrap">
+        <pre><code><span class="c"># shared setup · 公共准备</span>
+git clone https://github.com/YiXin-AILab/KinArc.git
+cd KinArc
+uv sync
+cp .env.example .env</code></pre>
+      </div>
+    </div>
+
+    <div class="qs-grid">
+      <article class="qs-module">
+        <p class="qs-kicker">01 / Runtime</p>
+        <h3><span class="lang-zh">启动 Agent Runtime</span><span class="lang-en">Start the Agent Runtime</span></h3>
+        <p class="lang-zh">启动 Redis、API、Dispatcher 与调度器。对话、平台、评测和进化接口都由这个服务提供。</p>
+        <p class="lang-en">Start Redis, the API, Dispatcher, and scheduler. This service exposes chat, platform, evaluation, and evolution APIs.</p>
+        <div class="pre-wrap">
+          <pre><code>docker compose -f deploy/runtime/docker-compose.yml up -d redis
+uv run agentsystem</code></pre>
+        </div>
+        <p class="qs-result"><span class="lang-zh">默认地址：</span><span class="lang-en">Default endpoint: </span><code>http://127.0.0.1:10060</code></p>
+      </article>
+
+      <article class="qs-module">
+        <p class="qs-kicker">02 / Console</p>
+        <h3><span class="lang-zh">打开 Web 控制台</span><span class="lang-en">Open the web console</span></h3>
+        <p class="lang-zh">通过可视化界面测试对话，并管理 Agent、Skill、知识库、评测与进化任务。</p>
+        <p class="lang-en">Test conversations and manage agents, skills, knowledge bases, evaluation, and evolution from the UI.</p>
+        <div class="pre-wrap">
+          <pre><code>cd web
+npm ci
+npm run dev</code></pre>
+        </div>
+        <p class="qs-result"><span class="lang-zh">浏览器访问：</span><span class="lang-en">Open in a browser: </span><code>http://127.0.0.1:10061</code></p>
+      </article>
+
+      <article class="qs-module">
+        <p class="qs-kicker">03 / Evaluation</p>
+        <h3><span class="lang-zh">运行一次真实评测</span><span class="lang-en">Run an evidence-based evaluation</span></h3>
+        <p class="lang-zh">从 <code>eval_tasks/</code> 选择任务，运行真实 Agent Case，查看规则与 LLM Judge 报告。</p>
+        <p class="lang-en">Choose a task from <code>eval_tasks/</code>, run real agent cases, and inspect rule-based and LLM Judge reports.</p>
+        <div class="pre-wrap">
+          <pre><code>EVAL_TASK_ID=your-task-id
+curl -X POST \
+  "http://127.0.0.1:10060/v1/evaluation/tasks/${EVAL_TASK_ID}/runs"</code></pre>
+        </div>
+        <p class="qs-result"><span class="lang-zh">可视化入口：</span><span class="lang-en">Visual entry point: </span><code>/platform/evaluation</code></p>
+      </article>
+
+      <article class="qs-module">
+        <p class="qs-kicker">04 / Evolution</p>
+        <h3><span class="lang-zh">开启 Agent 自进化</span><span class="lang-en">Start Agent evolution</span></h3>
+        <p class="lang-zh">基于 Train 与 Validation 证据自动诊断、修改、复评并保留更优候选版本。</p>
+        <p class="lang-en">Use Train and Validation evidence to diagnose, modify, re-evaluate, and retain better candidates.</p>
+        <div class="pre-wrap">
+          <pre><code>EVOLUTION_TASK=evolution_tasks/your-task
+uv run evolution run "$EVOLUTION_TASK" \
+  --runtime-config config/runtime.yaml
+uv run evolution status "$EVOLUTION_TASK"</code></pre>
+        </div>
+        <p class="qs-result"><span class="lang-zh">可视化入口：</span><span class="lang-en">Visual entry point: </span><code>/platform/evolution</code></p>
+      </article>
+    </div>
+
+    <div class="qs-path" aria-label="Recommended workflow">
+      <b><span class="lang-zh">启动 Runtime</span><span class="lang-en">Start Runtime</span></b><span>→</span>
+      <b><span class="lang-zh">对话 / 配置</span><span class="lang-en">Chat / Configure</span></b><span>→</span>
+      <b><span class="lang-zh">运行评测</span><span class="lang-en">Evaluate</span></b><span>→</span>
+      <b><span class="lang-zh">开启进化</span><span class="lang-en">Evolve</span></b><span>→</span>
+      <b><span class="lang-zh">重新评测</span><span class="lang-en">Re-evaluate</span></b>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container f-inner">
+    <div class="f-col">
+      <p class="f-logo">KinArc · HUMAN-CENTRIC LONG HORIZON AGENT</p>
+      <p class="lang-zh">为人的长期决策旅程，构建可持续运行、可恢复、可观察、可进化的 Agent Harness。</p>
+      <p class="lang-en">Built for the long arc of human decisions.</p>
+      <p>Stay with the journey. Run with control. Improve with evidence.</p>
+    </div>
+    <div class="f-col">
+      <p class="f-head"><span class="lang-zh">资源</span><span class="lang-en">Resources</span></p>
+      <ul class="f-links">
+        <li>
+          <a href="https://github.com/YiXin-AILab/KinArc"><span class="lang-zh">开源项目</span><span class="lang-en">Open source</span></a>
+        </li>
+        <li><a href="#quickstart"><span class="lang-zh">快速开始</span><span class="lang-en">Quickstart</span></a></li>
+        <li><a href="#benchmark-evidence"><span class="lang-zh">Benchmark 证据与复现</span><span class="lang-en">Benchmark evidence &amp; reproduction</span></a></li>
+        <li><a href="#capabilities"><span class="lang-zh">核心能力</span><span class="lang-en">Core capabilities</span></a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/echarts.min.js" defer></script>
+<script src="assets/charts.js?v=test-base-0300" defer></script>
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.getElementById('langToggle');
+
+  var ARIA = {
+    zh: {
+      langToggle: '切换语言：当前中文，点击切换为 English',
+      menuOpen: '打开章节导航',
+      menuClose: '关闭章节导航',
+      copy: '复制代码',
+      copied: '已复制 ✓'
+    },
+    en: {
+      langToggle: 'Switch language: currently English, click for 中文',
+      menuOpen: 'Open section navigation',
+      menuClose: 'Close section navigation',
+      copy: 'Copy code',
+      copied: 'Copied ✓'
+    }
+  };
+  function cur() { return body.classList.contains('lang-en') ? 'en' : 'zh'; }
+
+  function setLang(lang, persist) {
+    var isZh = lang !== 'en';
+    body.classList.toggle('lang-zh', isZh);
+    body.classList.toggle('lang-en', !isZh);
+    document.documentElement.lang = isZh ? 'zh-CN' : 'en';
+    toggle.querySelector('.opt-zh').classList.toggle('on', isZh);
+    toggle.querySelector('.opt-en').classList.toggle('on', !isZh);
+    var a = ARIA[isZh ? 'zh' : 'en'];
+    toggle.setAttribute('aria-label', a.langToggle);
+    menuBtn.setAttribute('aria-label',
+      menuBtn.getAttribute('aria-expanded') === 'true' ? a.menuClose : a.menuOpen);
+    document.querySelectorAll('.copy-btn').forEach(function (b) {
+      if (!b.classList.contains('copied')) b.textContent = a.copy;
+      b.setAttribute('aria-label', a.copy);
+    });
+    if (window.LongarcCharts) window.LongarcCharts.setLang(lang);
+    if (persist) {
+      try { localStorage.setItem('human-centric-agent-lang', lang); } catch (e) {}
+    }
+    refreshHints();
+  }
+
+  /* ---------- mobile menu ---------- */
+  var menuBtn = document.getElementById('navMenuBtn');
+  var navPanel = document.getElementById('navPanel');
+  function setMenu(open) {
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', ARIA[cur()][open ? 'menuClose' : 'menuOpen']);
+    menuBtn.textContent = open ? '✕' : '☰';
+    navPanel.hidden = !open;
+  }
+  menuBtn.addEventListener('click', function () {
+    setMenu(menuBtn.getAttribute('aria-expanded') !== 'true');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      menuBtn.focus();
+    }
+  });
+  navPanel.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { setMenu(false); });
+  });
+
+  /* ---------- language init ---------- */
+  var initial = 'zh';
+  var m = location.search.match(/[?&]lang=(zh|en)\b/);
+  if (m) {
+    initial = m[1];
+  } else {
+    try {
+      var saved = localStorage.getItem('human-centric-agent-lang');
+      if (saved === 'en' || saved === 'zh') initial = saved;
+    } catch (e) {}
+  }
+
+  /* ---------- copy buttons ---------- */
+  document.querySelectorAll('.pre-wrap').forEach(function (wrap) {
+    var pre = wrap.querySelector('pre');
+    if (!pre) return;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-btn';
+    btn.textContent = ARIA.zh.copy;
+    btn.setAttribute('aria-label', ARIA.zh.copy);
+    btn.addEventListener('click', function () {
+      var done = function () {
+        btn.classList.add('copied');
+        btn.textContent = ARIA[cur()].copied;
+        setTimeout(function () {
+          btn.classList.remove('copied');
+          btn.textContent = ARIA[cur()].copy;
+        }, 1600);
+      };
+      var text = pre.innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, done);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        done();
+      }
+    });
+    wrap.appendChild(btn);
+  });
+
+  /* ---------- horizontal scroll hints ---------- */
+  var hintText = { zh: '← 左右滑动查看完整内容 →', en: '← scroll horizontally →' };
+  var watched = [];
+  document.querySelectorAll('.h-scroll').forEach(function (el) {
+    var hint = document.createElement('p');
+    hint.className = 'scroll-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    el.parentNode.insertBefore(hint, el.nextSibling);
+    watched.push({ el: el, hint: hint });
+  });
+  function refreshHints() {
+    var lang = cur();
+    watched.forEach(function (w) {
+      var need = w.el.scrollWidth > w.el.clientWidth + 8 &&
+        w.el.getBoundingClientRect().width > 0;
+      w.hint.textContent = hintText[lang];
+      w.hint.classList.toggle('visible', need);
+    });
+  }
+  window.addEventListener('resize', refreshHints);
+  document.addEventListener('toggle', function (e) {
+    if (e.target.tagName === 'DETAILS') refreshHints();
+  }, true);
+
+  setLang(initial, false);
+  refreshHints();
+
+  toggle.addEventListener('click', function () {
+    setLang(body.classList.contains('lang-zh') ? 'en' : 'zh', true);
+  });
+
+  /* ---------- scroll-spy ---------- */
+  var links = Array.prototype.slice.call(
+    document.querySelectorAll('.nav-links a[data-spy], .nav-panel a[data-spy]'));
+  var byId = {};
+  links.forEach(function (a) {
+    var k = a.getAttribute('data-spy');
+    (byId[k] = byId[k] || []).push(a);
+  });
+  var sections = Object.keys(byId)
+    .map(function (k) { return document.getElementById(k); })
+    .filter(Boolean);
+  function onScroll() {
+    var pos = window.scrollY + 120;
+    var current = null;
+    sections.forEach(function (s) { if (s.offsetTop <= pos) current = s.id; });
+    links.forEach(function (a) {
+      var active = a.getAttribute('data-spy') === current;
+      a.classList.toggle('active', active);
+      if (active) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

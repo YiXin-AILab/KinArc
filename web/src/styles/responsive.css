@@ -1,0 +1,140 @@
+/* 动画、窄屏布局和减少动态效果的覆盖样式。 */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}
+@keyframes statusBreathe {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scale(0.82);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-4px);
+  }
+}
+@keyframes attachmentSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 800px) {
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(310px, 86vw);
+    transform: translateX(-102%);
+    transition: transform 0.25s ease;
+    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.5);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .sidebar-backdrop {
+    position: fixed;
+    z-index: 19;
+    display: block;
+    inset: 0;
+    background: rgba(2, 4, 10, 0.6);
+    backdrop-filter: blur(2px);
+  }
+  .mobile-close,
+  .menu-button {
+    display: grid;
+    place-items: center;
+  }
+  .chat-header {
+    height: 50px;
+    flex-basis: 50px;
+    padding: 0 14px;
+  }
+
+  .agent-select {
+    max-width: calc(100vw - 86px);
+  }
+  .timeline-content {
+    width: min(680px, calc(100% - 28px));
+    padding-top: 28px;
+  }
+  .interaction-dock {
+    padding: 0 14px 12px;
+  }
+  .working-indicator,
+  .run-summary {
+    margin-left: 0;
+  }
+  .message-body {
+    max-width: 90%;
+  }
+  .metric-row {
+    display: none !important;
+  }
+  .composer-toolbar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .composer-toolbar-main {
+    width: 100%;
+  }
+  .composer-mode {
+    flex-shrink: 0;
+  }
+  .composer-mode button {
+    white-space: nowrap;
+  }
+  .composer-advanced {
+    position: static;
+  }
+  .composer-advanced-panel {
+    left: 0;
+    width: min(calc(100vw - 36px), 224px);
+  }
+  .composer-advanced-summary {
+    max-width: 110px;
+  }
+}
+
+@media (max-width: 480px) {
+  .empty-state {
+    min-height: calc(100vh - 290px);
+  }
+  .composer-hint {
+    display: none;
+  }
+  .composer-shell {
+    border-radius: 14px;
+  }
+  .message {
+    margin-bottom: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

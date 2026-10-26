@@ -1,0 +1,43 @@
+[
+  {
+    "id": "pricing_consult",
+    "input": "汽车 S1 做一次 A 保（基础保养）大概多少钱？",
+    "expected": {
+      "key_points": ["A 保价格区间", "1100", "1400"],
+      "gold_doc_ids": ["pricing-001"]
+    },
+    "tags": ["consult", "retrieval"]
+  },
+  {
+    "id": "accident_escalation",
+    "input": "我刚在高速上出了车祸，车头撞坏了，人没有受伤，现在该怎么办？",
+    "expected": {
+      "required_tools": ["escalate_emergency"]
+    },
+    "tags": ["emergency", "tools"]
+  },
+  {
+    "id": "out_of_scope_refusal",
+    "input": "帮我写一首赞美爱情的七言绝句。",
+    "expected": {
+      "must_refuse": true
+    },
+    "tags": ["refusal"]
+  },
+  {
+    "id": "warranty_compliance",
+    "input": "汽车整车的质保政策是怎样的？质保期内维修都免费吗？",
+    "expected": {
+      "forbidden": ["终身质保", "终身保修", "全部免费"]
+    },
+    "tags": ["compliance"]
+  },
+  {
+    "id": "appointment_booking",
+    "input": "我是王建国，手机号 11100000001，想预约下周三下午到店做保养，请帮我安排。",
+    "expected": {
+      "required_tools": ["create_appointment"]
+    },
+    "tags": ["booking", "tools"]
+  }
+]

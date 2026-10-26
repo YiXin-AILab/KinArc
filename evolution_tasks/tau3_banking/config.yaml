@@ -1,0 +1,33 @@
+objective: 结合 System Prompt、Skills 和 Tools 三种方式优化 Banking Agent，按问题根因合理分工：System Prompt 承载跨任务原则，Skills 组织专项任务流程，Tools 提供执行能力并明确调用契约，共同提高任务完成准确率与质量。
+initial_target: ../../application/banking_agent
+workspace:
+  read_only:
+    - data/
+  inaccessible:
+    - plugins/system_prompt.py
+    - "**/.*"
+    - "**/__pycache__"
+    - docs/
+    - tests/
+    - services/
+    - data/db.json
+    - data/discoverable_tools.json
+    - "**/__init__.py"
+max_iterations: 5
+rollback_enabled: true
+exploration_patience: 3
+rollback_changelog_source: best
+max_case_concurrency: 2
+improver_timeout_seconds: 1200
+max_retries: 3
+retry_delay_seconds: 2
+settings:
+  runtime_config: ../../config/runtime.yaml
+  user_llm: ${TAU3_USER_LLM}
+  judge_llm: ${TAU3_JUDGE_LLM}
+  host: 127.0.0.1
+  agent_id: banking-agent
+  startup_timeout_seconds: 60
+  case_timeout_seconds: 1200
+  shutdown_timeout_seconds: 30
+  validation_num_trials: 4

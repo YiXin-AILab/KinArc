@@ -1,0 +1,1 @@
+"""SQLAlchemy Core Todo adapter。"""

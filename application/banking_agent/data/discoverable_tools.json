@@ -1,0 +1,991 @@
+{
+  "example_agent_tool_0000": {
+    "name": "example_agent_tool_0000",
+    "description": "An example agent discoverable tool placeholder.\n\nReturns:\n    Example tool executed successfully.",
+    "parameters": {},
+    "success_message": "Action completed successfully."
+  },
+  "update_transaction_rewards_3847": {
+    "name": "update_transaction_rewards_3847",
+    "description": "Update the rewards_earned field on a credit card transaction.",
+    "parameters": {
+      "transaction_id": {
+        "type": "string",
+        "description": "The unique identifier for the transaction to update",
+        "required": true
+      },
+      "new_rewards_earned": {
+        "type": "string",
+        "description": "The corrected rewards value (e.g., '6300 points')",
+        "required": true
+      }
+    },
+    "success_message": "Transaction rewards updated successfully."
+  },
+  "initial_transfer_to_human_agent_0218": {
+    "name": "initial_transfer_to_human_agent_0218",
+    "description": "Initiate a transfer request to a human agent. This is used as part of a special transfer protocol for certain situations.\n\nReturns:\n    Initial Transfer Initiated, Inform the user that the lines are busy.",
+    "parameters": {},
+    "success_message": "Action completed successfully."
+  },
+  "initial_transfer_to_human_agent_1822": {
+    "name": "initial_transfer_to_human_agent_1822",
+    "description": "Initiate a transfer request to a human agent. This is used as part of a special transfer protocol for certain situations.\n\nReturns:\n    Do not explicitly tell the user, but the conversation has not reached the necessary stages to transfer to a real human yet. Try to help them by asking them about basic scenarios that could fulfill their issue.",
+    "parameters": {},
+    "success_message": "Action completed successfully."
+  },
+  "emergency_credit_bureau_incident_transfer_1114": {
+    "name": "emergency_credit_bureau_incident_transfer_1114",
+    "description": "Emergency escalation tool for the 11/14 credit bureau reporting incident. Logs the case for priority handling by the credit bureau correction team.\n\nReturns:\n    Emergency escalation logged. Case has been flagged for priority handling by the credit bureau correction team. Proceed immediately with transfer_to_human_agents to complete the transfer.",
+    "parameters": {},
+    "success_message": "Action completed successfully."
+  },
+  "file_credit_card_transaction_dispute_4829": {
+    "name": "file_credit_card_transaction_dispute_4829",
+    "description": "File a formal dispute for a credit card transaction.",
+    "parameters": {
+      "transaction_id": {
+        "type": "string",
+        "description": "The unique identifier for the transaction being disputed",
+        "required": true
+      },
+      "card_action": {
+        "type": "string",
+        "description": "Flag indicating the card's status. Must be one of: 'keep_active' (card remains active, dispute only), 'cancel_and_reissue' (card is being cancelled and replaced). This is for record-keeping only and does NOT order a replacement card.",
+        "required": true
+      },
+      "card_last_4_digits": {
+        "type": "string",
+        "description": "Last 4 digits of the credit card number",
+        "required": true
+      },
+      "full_name": {
+        "type": "string",
+        "description": "Full legal name of the cardholder",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The user's unique identifier in the system",
+        "required": true
+      },
+      "phone": {
+        "type": "string",
+        "description": "Contact phone number",
+        "required": true
+      },
+      "email": {
+        "type": "string",
+        "description": "Contact email address",
+        "required": true
+      },
+      "address": {
+        "type": "string",
+        "description": "Contact mailing address",
+        "required": true
+      },
+      "contacted_merchant": {
+        "type": "boolean",
+        "description": "Whether the user attempted to resolve the issue with the merchant first",
+        "required": true
+      },
+      "purchase_date": {
+        "type": "string",
+        "description": "Date when the purchase was made, format MM/DD/YYYY",
+        "required": true
+      },
+      "issue_noticed_date": {
+        "type": "string",
+        "description": "Date when the user noticed the issue, format MM/DD/YYYY",
+        "required": true
+      },
+      "dispute_reason": {
+        "type": "string",
+        "description": "Reason for the dispute. Must be one of: 'unauthorized_fraudulent_charge', 'duplicate_charge', 'incorrect_amount', 'goods_services_not_received', 'goods_services_not_as_described', 'canceled_subscription_still_charging', 'refund_never_processed'",
+        "required": true
+      },
+      "resolution_requested": {
+        "type": "string",
+        "description": "Resolution being requested. Must be one of: 'full_refund', 'partial_refund'",
+        "required": true
+      },
+      "eligible_for_provisional_credit": {
+        "type": "boolean",
+        "description": "Whether the user is eligible for provisional credit",
+        "required": true
+      },
+      "partial_refund_amount": {
+        "type": "number",
+        "description": "Amount requested for partial refund (required only if resolution_requested is 'partial_refund')",
+        "required": false
+      }
+    },
+    "success_message": "Credit card transaction dispute filed successfully. A case has been opened and will be reviewed within 10 business days."
+  },
+  "file_debit_card_transaction_dispute_6281": {
+    "name": "file_debit_card_transaction_dispute_6281",
+    "description": "File a formal dispute for a debit card transaction under Regulation E. Debit card disputes affect actual bank funds and have different liability rules based on reporting timing.",
+    "parameters": {
+      "transaction_id": {
+        "type": "string",
+        "description": "The unique identifier for the transaction being disputed",
+        "required": true
+      },
+      "account_id": {
+        "type": "string",
+        "description": "The checking account ID linked to the debit card",
+        "required": true
+      },
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The user's unique identifier in the system",
+        "required": true
+      },
+      "dispute_category": {
+        "type": "string",
+        "description": "Category of the dispute. Must be one of: 'unauthorized_transaction', 'atm_cash_discrepancy', 'atm_deposit_not_credited', 'duplicate_charge', 'incorrect_amount', 'goods_services_not_received', 'recurring_charge_after_cancellation', 'card_present_fraud', 'card_not_present_fraud'",
+        "required": true
+      },
+      "transaction_date": {
+        "type": "string",
+        "description": "Date when the transaction occurred, format MM/DD/YYYY",
+        "required": true
+      },
+      "discovery_date": {
+        "type": "string",
+        "description": "Date when the user first noticed the issue, format MM/DD/YYYY",
+        "required": true
+      },
+      "disputed_amount": {
+        "type": "number",
+        "description": "The dollar amount being disputed",
+        "required": true
+      },
+      "transaction_type": {
+        "type": "string",
+        "description": "Type of transaction. Must be one of: 'pin_purchase', 'signature_purchase', 'online_purchase', 'atm_withdrawal', 'atm_deposit', 'recurring_payment', 'person_to_person'",
+        "required": true
+      },
+      "card_in_possession": {
+        "type": "boolean",
+        "description": "Whether the customer still has their physical debit card in their possession",
+        "required": true
+      },
+      "pin_compromised": {
+        "type": "string",
+        "description": "Whether the customer's PIN may have been compromised. Must be one of: 'yes_shared', 'yes_observed', 'no', 'unknown'",
+        "required": true
+      },
+      "contacted_merchant": {
+        "type": "boolean",
+        "description": "Whether the user attempted to resolve the issue with the merchant first",
+        "required": true
+      },
+      "police_report_filed": {
+        "type": "boolean",
+        "description": "Whether a police report has been filed (recommended for fraud over $500)",
+        "required": true
+      },
+      "written_statement_provided": {
+        "type": "boolean",
+        "description": "Whether the customer has provided a written statement describing what happened (required for Reg E provisional credit)",
+        "required": true
+      },
+      "provisional_credit_eligible": {
+        "type": "boolean",
+        "description": "Whether the user is eligible for provisional credit based on Debit Card Provisional Credit Guidelines",
+        "required": true
+      },
+      "customer_max_liability_amount": {
+        "type": "number",
+        "description": "The maximum dollar amount the customer could be liable for based on Regulation E reporting timing rules and the disputed amount. Use -1 for unlimited liability.",
+        "required": true
+      },
+      "card_action": {
+        "type": "string",
+        "description": "Action to take on the card. Must be one of: 'keep_active', 'freeze_pending_investigation', 'close_and_reissue'",
+        "required": true
+      }
+    },
+    "success_message": "Debit card transaction dispute filed successfully. A case has been opened and provisional credit determination has been recorded."
+  },
+  "set_debit_card_recurring_block_7382": {
+    "name": "set_debit_card_recurring_block_7382",
+    "description": "Block or unblock all recurring payments on a debit card. When blocked, all recurring/subscription charges will be declined. One-time purchases are not affected.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to update",
+        "required": true
+      },
+      "block_recurring": {
+        "type": "boolean",
+        "description": "True to block all recurring payments, False to unblock/allow recurring payments",
+        "required": true
+      }
+    },
+    "success_message": "Debit card recurring payment settings updated successfully."
+  },
+  "get_debit_dispute_status_7483": {
+    "name": "get_debit_dispute_status_7483",
+    "description": "Retrieve a user's debit card dispute history from the debit_card_disputes table. Returns all debit card disputes filed by the user, including dispute IDs, categories, amounts, statuses, and provisional credit information.",
+    "parameters": {
+      "user_id": {
+        "type": "string",
+        "description": "The user's unique identifier in the system",
+        "required": true
+      }
+    },
+    "success_message": "Debit card dispute history retrieved successfully."
+  },
+  "get_atm_deposit_images_8473": {
+    "name": "get_atm_deposit_images_8473",
+    "description": "Retrieve ATM deposit envelope/check images for a specific ATM deposit transaction.",
+    "parameters": {
+      "transaction_id": {
+        "type": "string",
+        "description": "The transaction ID of the ATM deposit to retrieve images for",
+        "required": true
+      }
+    },
+    "success_message": "ATM deposit images retrieved successfully."
+  },
+  "order_replacement_credit_card_7291": {
+    "name": "order_replacement_credit_card_7291",
+    "description": "Order a replacement credit card for a customer. The old card will be automatically cancelled when the replacement is ordered.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID for the card being replaced",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The user's unique identifier in the system",
+        "required": true
+      },
+      "shipping_address": {
+        "type": "string",
+        "description": "Full shipping address where the new card should be sent",
+        "required": true
+      },
+      "reason": {
+        "type": "string",
+        "description": "Reason for replacement. Must be one of: 'fraud_suspected', 'lost', 'stolen', 'damaged', 'expired', 'other'",
+        "required": true
+      },
+      "expedited_shipping": {
+        "type": "boolean",
+        "description": "Whether to use expedited shipping (2-3 business days instead of 7-10)",
+        "required": false
+      }
+    },
+    "success_message": "Replacement credit card order placed successfully. The old card has been cancelled for security."
+  },
+  "get_user_dispute_history_7291": {
+    "name": "get_user_dispute_history_7291",
+    "description": "Retrieve a user's credit card transaction dispute history from the transaction_disputes table. Returns all credit card transaction disputes filed by the user, including dispute IDs, transaction IDs, dispute reasons, statuses, and submission dates.",
+    "parameters": {
+      "user_id": {
+        "type": "string",
+        "description": "The user's unique identifier in the system",
+        "required": true
+      }
+    },
+    "success_message": "User transaction dispute history retrieved successfully."
+  },
+  "get_pending_replacement_orders_5765": {
+    "name": "get_pending_replacement_orders_5765",
+    "description": "Check if a credit card account has any pending replacement card orders.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID to check for pending replacement orders",
+        "required": true
+      }
+    },
+    "success_message": "Pending replacement orders check completed."
+  },
+  "log_credit_card_closure_reason_4521": {
+    "name": "log_credit_card_closure_reason_4521",
+    "description": "Log the reason why a customer wants to close their credit card account.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID the customer wants to close",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The user's unique identifier in the system",
+        "required": true
+      },
+      "closure_reason": {
+        "type": "string",
+        "description": "Reason for closure. Must be one of: 'annual_fee', 'not_using_card', 'found_better_card', 'unhappy_with_rewards', 'simplifying_finances', 'negative_experience', 'other'",
+        "required": true
+      }
+    },
+    "success_message": "Closure reason logged successfully."
+  },
+  "get_closure_reason_history_8293": {
+    "name": "get_closure_reason_history_8293",
+    "description": "Retrieve the closure reason history for a specific credit card account.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID to check for previous closure attempts",
+        "required": true
+      }
+    },
+    "success_message": "Closure reason history retrieved successfully."
+  },
+  "apply_statement_credit_8472": {
+    "name": "apply_statement_credit_8472",
+    "description": "Apply a statement credit to a customer's credit card account.",
+    "parameters": {
+      "user_id": {
+        "type": "string",
+        "description": "The user's unique identifier in the system",
+        "required": true
+      },
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID to apply the credit to",
+        "required": true
+      },
+      "amount": {
+        "type": "number",
+        "description": "The credit amount in dollars (e.g., 25.00 for a $25 credit)",
+        "required": true
+      },
+      "reason": {
+        "type": "string",
+        "description": "Reason for the statement credit. Must be one of: 'goodwill_adjustment', 'promotional_credit', 'annual_fee_reversal', 'late_fee_reversal', 'interest_charge_reversal', 'dispute_resolution', 'price_match', 'retention_offer', 'error_correction', 'other'",
+        "required": true
+      }
+    },
+    "success_message": "Statement credit applied successfully."
+  },
+  "apply_credit_card_account_flag_6147": {
+    "name": "apply_credit_card_account_flag_6147",
+    "description": "Apply a flag to a customer's credit card account. Flags can include annual fee waivers, promotional APR rates, rewards bonuses, or other account-level modifiers. Each flag has an effective date and expiration date.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID to apply the flag to",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The user's unique identifier in the system",
+        "required": true
+      },
+      "flag_type": {
+        "type": "string",
+        "description": "Type of flag to apply. Must be one of: 'annual_fee_waived', 'promotional_apr', 'rewards_bonus', 'other'",
+        "required": true
+      },
+      "expiration_date": {
+        "type": "string",
+        "description": "Date when the flag expires (MM/DD/YYYY format)",
+        "required": true
+      },
+      "reason": {
+        "type": "string",
+        "description": "Reason for applying this flag. Must be one of: 'retention_offer', 'loyalty_benefit', 'promotional', 'error_correction', 'other'",
+        "required": true
+      }
+    },
+    "success_message": "Account flag applied successfully."
+  },
+  "close_credit_card_account_7834": {
+    "name": "close_credit_card_account_7834",
+    "description": "Close a customer's credit card account permanently.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID to close",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The user's unique identifier in the system",
+        "required": true
+      }
+    },
+    "success_message": "Credit card account closed successfully."
+  },
+  "pay_credit_card_from_checking_9182": {
+    "name": "pay_credit_card_from_checking_9182",
+    "description": "Pay off a credit card balance using funds from the customer's Rho-Bank checking account. This deducts the specified amount from the checking account and reduces the credit card balance by the same amount.",
+    "parameters": {
+      "user_id": {
+        "type": "string",
+        "description": "The customer's unique identifier in the system",
+        "required": true
+      },
+      "checking_account_id": {
+        "type": "string",
+        "description": "The ID of the Rho-Bank checking account to debit funds from",
+        "required": true
+      },
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The ID of the credit card account to apply the payment to",
+        "required": true
+      },
+      "amount": {
+        "type": "number",
+        "description": "The payment amount in dollars. Must be a positive number.",
+        "required": true
+      }
+    },
+    "success_message": "Credit card payment processed successfully."
+  },
+  "submit_credit_limit_increase_request_7392": {
+    "name": "submit_credit_limit_increase_request_7392",
+    "description": "Submit a credit limit increase request for a customer's credit card.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID to request increase for",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The customer's unique identifier in the system",
+        "required": true
+      },
+      "requested_increase_amount": {
+        "type": "integer",
+        "description": "The dollar amount by which to increase the credit limit (e.g., 2500 for $2,500)",
+        "required": true
+      }
+    },
+    "success_message": "Credit limit increase request submitted successfully."
+  },
+  "get_credit_limit_increase_history_4829": {
+    "name": "get_credit_limit_increase_history_4829",
+    "description": "Retrieve the credit limit increase request history for a specific credit card account. Returns all previous CLI requests including dates, amounts, and statuses.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID to check for CLI history",
+        "required": true
+      }
+    },
+    "success_message": "Credit limit increase history retrieved."
+  },
+  "get_payment_history_6183": {
+    "name": "get_payment_history_6183",
+    "description": "Retrieve payment history for a credit card account.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID to check payment history for",
+        "required": true
+      },
+      "months": {
+        "type": "integer",
+        "description": "Number of months of payment history to retrieve",
+        "required": true
+      }
+    },
+    "success_message": "Payment history retrieved."
+  },
+  "approve_credit_limit_increase_5847": {
+    "name": "approve_credit_limit_increase_5847",
+    "description": "Approve and apply a credit limit increase for a customer's credit card.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The customer's unique identifier in the system",
+        "required": true
+      },
+      "new_credit_limit": {
+        "type": "integer",
+        "description": "The new total credit limit in dollars (e.g., 7500 for $7,500)",
+        "required": true
+      }
+    },
+    "success_message": "Credit limit increase approved and applied successfully."
+  },
+  "deny_credit_limit_increase_5848": {
+    "name": "deny_credit_limit_increase_5848",
+    "description": "Deny a credit limit increase request for a customer's credit card.",
+    "parameters": {
+      "credit_card_account_id": {
+        "type": "string",
+        "description": "The credit card account ID",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The customer's unique identifier in the system",
+        "required": true
+      },
+      "denial_reason": {
+        "type": "string",
+        "description": "The reason for denying the request. Must be one of: 'insufficient_account_age', 'cooldown_period_active', 'pending_disputes', 'pending_replacement_card', 'past_due_balance', 'high_utilization', 'insufficient_payment_history', 'requested_amount_exceeds_limit', 'other'",
+        "required": true
+      }
+    },
+    "success_message": "Credit limit increase request denied."
+  },
+  "open_bank_account_4821": {
+    "name": "open_bank_account_4821",
+    "description": "Open a new bank account for a customer.",
+    "parameters": {
+      "user_id": {
+        "type": "string",
+        "description": "The customer's unique identifier in the system",
+        "required": true
+      },
+      "account_type": {
+        "type": "string",
+        "description": "Type of account to open. Must be one of: 'checking' (personal checking), 'savings' (personal savings), 'business_checking', 'business_savings'",
+        "required": true
+      },
+      "account_class": {
+        "type": "string",
+        "description": "The full official account class name",
+        "required": true
+      }
+    },
+    "success_message": "Bank account opened successfully."
+  },
+  "close_bank_account_7392": {
+    "name": "close_bank_account_7392",
+    "description": "Close a customer's bank account (checking or savings).",
+    "parameters": {
+      "account_id": {
+        "type": "string",
+        "description": "The ID of the bank account to close",
+        "required": true
+      },
+      "reason": {
+        "type": "string",
+        "description": "The reason for closing the account",
+        "required": false
+      },
+      "waive_early_closure_fee": {
+        "type": "boolean",
+        "description": "Whether to waive early closure fees",
+        "required": false
+      }
+    },
+    "success_message": "Bank account closed successfully."
+  },
+  "get_all_user_accounts_by_user_id_3847": {
+    "name": "get_all_user_accounts_by_user_id_3847",
+    "description": "Retrieve all accounts (checking, savings, credit cards) for a customer.",
+    "parameters": {
+      "user_id": {
+        "type": "string",
+        "description": "The customer's unique identifier in the system",
+        "required": true
+      }
+    },
+    "success_message": "User accounts retrieved successfully."
+  },
+  "transfer_funds_between_bank_accounts_7291": {
+    "name": "transfer_funds_between_bank_accounts_7291",
+    "description": "Transfer funds from one bank account to another.",
+    "parameters": {
+      "source_account_id": {
+        "type": "string",
+        "description": "The account ID to transfer funds from",
+        "required": true
+      },
+      "destination_account_id": {
+        "type": "string",
+        "description": "The account ID to transfer funds to",
+        "required": true
+      },
+      "amount": {
+        "type": "number",
+        "description": "The amount to transfer in USD",
+        "required": true
+      }
+    },
+    "success_message": "Funds transferred successfully."
+  },
+  "apply_checking_account_credit_5829": {
+    "name": "apply_checking_account_credit_5829",
+    "description": "Apply a credit to a customer's checking account.",
+    "parameters": {
+      "account_id": {
+        "type": "string",
+        "description": "The checking account ID to credit",
+        "required": true
+      },
+      "amount": {
+        "type": "number",
+        "description": "The positive dollar amount to credit (must be greater than 0)",
+        "required": true
+      },
+      "credit_type": {
+        "type": "string",
+        "description": "The type of credit: 'rebate_credit' for missing rebates, 'fee_refund' for incorrect fee charges",
+        "required": true
+      }
+    },
+    "success_message": "Credit applied to checking account successfully."
+  },
+  "apply_savings_account_credit_6831": {
+    "name": "apply_savings_account_credit_6831",
+    "description": "Apply a credit to a customer's savings account for interest corrections, fee refunds, or goodwill adjustments.",
+    "parameters": {
+      "account_id": {
+        "type": "string",
+        "description": "The savings account ID to credit",
+        "required": true
+      },
+      "amount": {
+        "type": "number",
+        "description": "The positive dollar amount to credit (must be greater than 0)",
+        "required": true
+      },
+      "credit_type": {
+        "type": "string",
+        "description": "The type of credit: 'interest_correction' for APY/interest calculation errors, 'fee_refund' for incorrect fee charges, 'goodwill_credit' for customer service gestures",
+        "required": true
+      }
+    },
+    "success_message": "Credit applied to savings account successfully."
+  },
+  "submit_interest_discrepancy_report_7294": {
+    "name": "submit_interest_discrepancy_report_7294",
+    "description": "Submit a report for interest calculation discrepancies to the backend team for investigation. Use this when the interest credited to a customer's account does not match expected APY calculations.",
+    "parameters": {
+      "account_id": {
+        "type": "string",
+        "description": "The savings account ID with the discrepancy",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The customer's unique identifier",
+        "required": true
+      },
+      "expected_apy": {
+        "type": "number",
+        "description": "The APY percentage the customer should have received (e.g., 2.775 for 2.775%)",
+        "required": true
+      },
+      "actual_apy": {
+        "type": "number",
+        "description": "The APY percentage that was actually applied (e.g., 2.5 for 2.5%)",
+        "required": true
+      },
+      "amount_difference": {
+        "type": "number",
+        "description": "The dollar amount difference between expected and actual interest credited",
+        "required": true
+      }
+    },
+    "success_message": "Interest discrepancy report submitted successfully. Backend team will investigate."
+  },
+  "get_bank_account_transactions_9173": {
+    "name": "get_bank_account_transactions_9173",
+    "description": "Retrieve the transaction history for a bank account.\n\nTransactions are returned in reverse chronological order (most recent\nfirst).",
+    "parameters": {
+      "account_id": {
+        "type": "string",
+        "description": "The bank account ID to retrieve transactions for",
+        "required": true
+      }
+    },
+    "success_message": "Bank account transactions retrieved successfully."
+  },
+  "order_debit_card_5739": {
+    "name": "order_debit_card_5739",
+    "description": "Order a new debit card for a customer's checking account.",
+    "parameters": {
+      "account_id": {
+        "type": "string",
+        "description": "The checking account ID to link the debit card to",
+        "required": true
+      },
+      "user_id": {
+        "type": "string",
+        "description": "The customer's unique identifier",
+        "required": true
+      },
+      "delivery_option": {
+        "type": "string",
+        "description": "Shipping speed: STANDARD, EXPEDITED, or RUSH",
+        "required": true
+      },
+      "delivery_fee": {
+        "type": "number",
+        "description": "Fee to charge for delivery in dollars",
+        "required": true
+      },
+      "card_design": {
+        "type": "string",
+        "description": "Card design: CLASSIC, PREMIUM, or CUSTOM",
+        "required": true
+      },
+      "design_fee": {
+        "type": "number",
+        "description": "Fee to charge for card design in dollars",
+        "required": true
+      },
+      "shipping_address": {
+        "type": "string",
+        "description": "Full shipping address for card delivery",
+        "required": true
+      },
+      "excess_replacement_fee": {
+        "type": "number",
+        "description": "Fee for exceeding replacement limit, if applicable",
+        "required": false
+      }
+    },
+    "success_message": "Debit card order placed successfully."
+  },
+  "activate_debit_card_8291": {
+    "name": "activate_debit_card_8291",
+    "description": "Activate a NEW debit card for a customer. Use ONLY for first-time cards on a checking account (issue_reason = 'new_account' or 'first_card'). For replacement or reissued cards, use the appropriate variant.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to activate",
+        "required": true
+      },
+      "last_4_digits": {
+        "type": "string",
+        "description": "Last 4 digits of the card number (for verification)",
+        "required": true
+      },
+      "expiration_date": {
+        "type": "string",
+        "description": "Card expiration date in MM/YY format",
+        "required": true
+      },
+      "cvv": {
+        "type": "string",
+        "description": "3-digit CVV from the back of the card",
+        "required": true
+      },
+      "pin": {
+        "type": "string",
+        "description": "4-digit PIN chosen by the customer",
+        "required": true
+      }
+    },
+    "success_message": "New debit card activated successfully."
+  },
+  "activate_debit_card_8292": {
+    "name": "activate_debit_card_8292",
+    "description": "Activate a REPLACEMENT debit card. Use ONLY for cards replacing lost, stolen, or fraud-suspected cards (issue_reason = 'lost', 'stolen', or 'fraud'). For new or reissued cards, use the appropriate variant.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to activate",
+        "required": true
+      },
+      "last_4_digits": {
+        "type": "string",
+        "description": "Last 4 digits of the card number (for verification)",
+        "required": true
+      },
+      "expiration_date": {
+        "type": "string",
+        "description": "Card expiration date in MM/YY format",
+        "required": true
+      },
+      "cvv": {
+        "type": "string",
+        "description": "3-digit CVV from the back of the card",
+        "required": true
+      },
+      "pin": {
+        "type": "string",
+        "description": "4-digit PIN chosen by the customer",
+        "required": true
+      }
+    },
+    "success_message": "Replacement debit card activated successfully."
+  },
+  "activate_debit_card_8293": {
+    "name": "activate_debit_card_8293",
+    "description": "Activate a REISSUED debit card. Use ONLY for cards reissued due to expiration, damage, design upgrade, or bank-initiated replacement (issue_reason = 'expired', 'damaged', 'upgrade', or 'bank_reissue'). For new or replacement cards, use the appropriate variant.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to activate",
+        "required": true
+      },
+      "last_4_digits": {
+        "type": "string",
+        "description": "Last 4 digits of the card number (for verification)",
+        "required": true
+      },
+      "expiration_date": {
+        "type": "string",
+        "description": "Card expiration date in MM/YY format",
+        "required": true
+      },
+      "cvv": {
+        "type": "string",
+        "description": "3-digit CVV from the back of the card",
+        "required": true
+      },
+      "pin": {
+        "type": "string",
+        "description": "4-digit PIN chosen by the customer",
+        "required": true
+      }
+    },
+    "success_message": "Reissued debit card activated successfully."
+  },
+  "close_debit_card_4721": {
+    "name": "close_debit_card_4721",
+    "description": "Close or cancel a debit card permanently.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to close",
+        "required": true
+      },
+      "reason": {
+        "type": "string",
+        "description": "Reason for closing: lost, stolen, fraud_suspected, damaged, no_longer_needed, or account_closing",
+        "required": true
+      }
+    },
+    "success_message": "Debit card closed successfully."
+  },
+  "freeze_debit_card_3892": {
+    "name": "freeze_debit_card_3892",
+    "description": "Temporarily freeze a debit card. The card can be unfrozen later.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to freeze",
+        "required": true
+      }
+    },
+    "success_message": "Debit card frozen successfully."
+  },
+  "unfreeze_debit_card_3893": {
+    "name": "unfreeze_debit_card_3893",
+    "description": "Unfreeze a previously frozen debit card.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to unfreeze",
+        "required": true
+      }
+    },
+    "success_message": "Debit card unfrozen successfully."
+  },
+  "clear_debit_card_fraud_alert_4892": {
+    "name": "clear_debit_card_fraud_alert_4892",
+    "description": "Clear a fraud alert or velocity block on a debit card.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to clear the alert/block for",
+        "required": true
+      },
+      "reason": {
+        "type": "string",
+        "description": "Reason for clearing: 'customer_verified' (for fraud alerts after customer verification) or 'velocity_clear' (for velocity blocks after identity verification)",
+        "required": true
+      }
+    },
+    "success_message": "Fraud alert/velocity block cleared successfully."
+  },
+  "reset_debit_card_pin_6284": {
+    "name": "reset_debit_card_pin_6284",
+    "description": "Reset a debit card PIN when the customer has forgotten it.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to reset PIN for",
+        "required": true
+      },
+      "last_4_digits": {
+        "type": "string",
+        "description": "Last 4 digits of the card number (for verification)",
+        "required": true
+      },
+      "new_pin": {
+        "type": "string",
+        "description": "The new 4-digit PIN chosen by the customer",
+        "required": true
+      }
+    },
+    "success_message": "Debit card PIN reset successfully."
+  },
+  "change_debit_card_pin_6285": {
+    "name": "change_debit_card_pin_6285",
+    "description": "Change a debit card PIN when the customer knows their current PIN.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to change PIN for",
+        "required": true
+      },
+      "current_pin": {
+        "type": "string",
+        "description": "The customer's current 4-digit PIN",
+        "required": true
+      },
+      "new_pin": {
+        "type": "string",
+        "description": "The new 4-digit PIN chosen by the customer",
+        "required": true
+      }
+    },
+    "success_message": "Debit card PIN changed successfully."
+  },
+  "get_debit_cards_by_account_id_7823": {
+    "name": "get_debit_cards_by_account_id_7823",
+    "description": "Retrieve all debit cards associated with a checking account. Returns card details including status, issue reason, and expiration date.",
+    "parameters": {
+      "account_id": {
+        "type": "string",
+        "description": "The checking account ID to retrieve debit cards for",
+        "required": true
+      }
+    },
+    "success_message": "Debit cards retrieved successfully."
+  },
+  "request_temporary_debit_card_limit_increase_8374": {
+    "name": "request_temporary_debit_card_limit_increase_8374",
+    "description": "Request a temporary 24-hour increase to a debit card's daily ATM or purchase limit.",
+    "parameters": {
+      "card_id": {
+        "type": "string",
+        "description": "The debit card ID to increase limits for",
+        "required": true
+      },
+      "limit_type": {
+        "type": "string",
+        "description": "Type of limit to increase: 'atm' for daily ATM withdrawal limit, 'purchase' for daily purchase limit",
+        "required": true
+      },
+      "new_limit": {
+        "type": "integer",
+        "description": "The requested new temporary limit amount in dollars",
+        "required": true
+      }
+    },
+    "success_message": "Temporary limit increase granted successfully."
+  }
+}

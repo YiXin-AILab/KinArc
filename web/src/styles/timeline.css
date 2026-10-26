@@ -1,0 +1,495 @@
+/* 对话布局、消息块和运行状态。 */
+.timeline-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 255, 0.25) transparent;
+}
+.timeline-content {
+  width: min(680px, calc(100% - 48px));
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 30px 0 30px;
+}
+.empty-state {
+  display: flex;
+  min-height: calc(100vh - 340px);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: var(--muted);
+  text-align: center;
+}
+.empty-orbit {
+  position: relative;
+  display: grid;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 22px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--muted);
+  background: var(--panel);
+}
+.empty-orbit svg {
+  width: 27px;
+}
+.empty-orbit span {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 11px;
+  height: 11px;
+  border: 3px solid #04060d;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 9px rgba(34, 211, 238, 0.7);
+}
+.empty-heading {
+  text-align: center;
+}
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--cyan);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-align: center;
+  font-family: var(--mono);
+}
+.empty-state h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.message {
+  display: flex;
+  gap: 12px;
+  margin: 0 0 30px;
+  animation: rise 0.25s ease-out;
+}
+.assistant-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+}
+.assistant-avatar svg {
+  width: 15px;
+}
+.message-body {
+  min-width: 0;
+  max-width: 86%;
+}
+
+.message-body time {
+  color: var(--dim);
+  font-size: 11px;
+  font-family: var(--mono);
+}
+.message-body p {
+  margin: 0;
+  color: #cdd9ee;
+  font-size: 12.5px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.message-user {
+  justify-content: flex-end;
+}
+.message-user .user-message-blocks {
+  padding: 9px 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px 14px 14px 14px;
+  background: var(--panel2);
+}
+.assistant-meta {
+  display: flex;
+  flex: 0 0 32px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.assistant-meta time {
+  color: var(--dim);
+  font-size: 9px;
+  white-space: nowrap;
+  font-family: var(--mono);
+}
+.user-message-time {
+  display: block;
+  margin-top: 5px;
+  padding-right: 2px;
+  text-align: right;
+}
+.message-user p {
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+.message-agent {
+  margin-bottom: 24px;
+}
+.message-agent .message-body {
+  width: min(720px, calc(100% - 44px));
+}
+.message-error .message-body {
+  color: var(--danger);
+}
+.live-label {
+  color: var(--cyan);
+  font-size: 9px;
+  font-family: var(--mono);
+}
+.agent-response > p + .compact-event,
+.agent-response > .compact-event + p,
+.agent-response > .compact-event + .compact-event,
+.agent-response > p + .compaction-event,
+.agent-response > .compaction-event + p,
+.agent-response > .compact-event + .compaction-event,
+.agent-response > .compaction-event + .compact-event,
+.agent-response > .compaction-event + .compaction-event {
+  margin-top: 7px;
+}
+.compact-event {
+  width: min(100%, 680px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--muted);
+  background: rgba(4, 6, 13, 0.5);
+}
+.compact-event summary {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 20px;
+  list-style: none;
+  transition: color 0.15s;
+}
+.compact-event summary::-webkit-details-marker {
+  display: none;
+}
+.compact-event summary:hover {
+  color: var(--ink);
+}
+.compact-event summary > svg {
+  width: 12px;
+  height: 12px;
+  color: var(--dim);
+}
+.compact-event summary > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.compact-event summary strong {
+  color: #7dd3fc;
+  font-size: 11.5px;
+  font-weight: 500;
+  font-family: var(--mono);
+}
+.compaction-event {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 20px;
+}
+.compaction-event > svg {
+  width: 12px;
+  height: 12px;
+  color: var(--dim);
+}
+.compaction-event > span {
+  color: var(--muted);
+  font-weight: 600;
+}
+.event-status-dot {
+  width: 5px;
+  height: 5px;
+  margin-left: 1px;
+  border-radius: 50%;
+  background: var(--dim);
+}
+.event-status-dot.status-completed {
+  background: var(--success);
+  box-shadow: 0 0 6px rgba(52, 211, 153, 0.6);
+}
+.event-status-dot.status-running {
+  background: var(--cyan);
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+  animation: statusBreathe 1.15s ease-in-out infinite;
+}
+.event-status-dot.status-failed {
+  background: var(--danger);
+}
+.event-metric,
+.event-duration {
+  color: var(--dim);
+  font:
+    12px/14px 'JetBrains Mono',
+    monospace;
+}
+.event-chevron {
+  width: 5px;
+  height: 5px;
+  margin: 0 2px;
+  border-right: 1.2px solid var(--dim);
+  border-bottom: 1.2px solid var(--dim);
+  transform: rotate(-45deg);
+  transition: transform 0.15s;
+}
+.compact-event[open] .event-chevron {
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+.compact-event > p,
+.compact-event > pre,
+.event-detail {
+  margin: 0;
+  padding: 9px 12px;
+  border-top: 1px dashed var(--line);
+  color: var(--muted);
+  background: transparent;
+  font-size: 11px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.compact-event > pre,
+.event-detail pre,
+.event-detail p {
+  max-height: 280px;
+  overflow: auto;
+  font:
+    12px/1.65 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.event-detail pre,
+.event-detail p {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.event-detail pre + p {
+  margin-top: 8px;
+}
+.tool-event[data-status='failed'] summary,
+.tool-result-error summary {
+  color: var(--danger);
+}
+.tool-event[data-status='failed'] summary > svg,
+.tool-event[data-status='failed'] summary strong,
+.tool-result-error summary strong {
+  color: var(--danger);
+}
+.streaming-answer {
+  color: #cdd9ee;
+  font-size: 12.5px;
+  line-height: 1.8;
+  white-space: normal;
+}
+
+/* 库的排版样式仅作用于助手正文；用户文本和工具输出保持原样。 */
+.assistant-markdown.stream-markdown {
+  font-family: inherit;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #cdd9ee;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  --primary: #7dd3fc;
+}
+.message-body .assistant-markdown p {
+  margin: 0.65em 0;
+  white-space: normal;
+}
+.assistant-markdown > :first-child {
+  margin-top: 0;
+}
+.assistant-markdown > :last-child {
+  margin-bottom: 0;
+}
+.assistant-markdown.stream-markdown :is(h1, h2, h3, h4, h5, h6) {
+  margin: 1em 0 0.5em;
+  line-height: 1.5;
+  font-weight: 600;
+}
+.assistant-markdown.stream-markdown h1 {
+  font-size: 18px;
+}
+.assistant-markdown.stream-markdown h2 {
+  font-size: 16px;
+}
+.assistant-markdown.stream-markdown :is(h3, h4, h5, h6) {
+  font-size: 14px;
+}
+.assistant-markdown.stream-markdown :is(ul, ol) {
+  padding-left: 1.5em;
+  line-height: 1.65;
+}
+.assistant-markdown.stream-markdown li {
+  padding-block: 2px;
+}
+/* 列表段落不继承独立段落之间的间距。 */
+.message-body .assistant-markdown li > p {
+  margin: 0;
+  line-height: inherit;
+}
+.message-body .assistant-markdown li > p + p {
+  margin-top: 0.35em;
+}
+.assistant-markdown.stream-markdown pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  font-size: 12px;
+}
+.assistant-markdown.stream-markdown code,
+.assistant-markdown.stream-markdown [data-stream-markdown='code-line'] {
+  font-size: 12px;
+}
+.assistant-markdown table {
+  font-size: 12px;
+}
+/* 覆盖库中表格正文的半粗字重和较大的单元格字号。 */
+.assistant-markdown.stream-markdown table :is(th, td) {
+  font-size: inherit;
+  font-weight: 400;
+  overflow-wrap: normal;
+}
+.text-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  background: var(--cyan);
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.7);
+  animation: blink 0.8s infinite;
+  vertical-align: -2px;
+}
+.tool-error {
+  color: var(--danger) !important;
+}
+.working-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 8px 0 22px 44px;
+  color: var(--dim);
+}
+.working-indicator span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(34, 211, 238, 0.55);
+  animation: bounce 1.2s infinite;
+}
+.working-indicator span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.working-indicator span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.working-indicator small {
+  margin-left: 6px;
+  font-size: 9px;
+  font-family: var(--mono);
+}
+.run-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 0 20px 44px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+}
+.summary-content {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.summary-heading {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.run-summary strong {
+  color: var(--muted);
+  font-size: 9px;
+}
+.summary-check {
+  display: grid;
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  place-items: center;
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  border-radius: 50%;
+  color: var(--success);
+  background: transparent;
+  font-size: 8px;
+}
+.run-summary-failed {
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: rgba(248, 113, 113, 0.05);
+}
+.run-summary-failed .summary-check {
+  border-color: transparent;
+  color: #04060d;
+  background: var(--danger);
+}
+.run-summary-failed strong {
+  color: var(--danger);
+}
+.run-error-message {
+  margin: 0 0 0 25px;
+  color: #fca5a5;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.run-error-message code {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: rgba(248, 113, 113, 0.12);
+  color: var(--danger);
+  font: inherit;
+}
+.run-summary-canceled .summary-check {
+  border-color: var(--line2);
+  color: var(--muted);
+  background: transparent;
+}
+.metric-row {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.metric-row span {
+  padding: 2px 0;
+  color: var(--dim);
+  font-size: 8px;
+  font-family: var(--mono);
+}
+.metric-row span + span {
+  margin-left: 8px;
+}

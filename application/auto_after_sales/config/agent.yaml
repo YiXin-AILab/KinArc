@@ -1,0 +1,49 @@
+agent_id: auto-after-sales
+agent_name: auto_after_sales
+prompt: prompt/system.md
+skill_roots: [skills]
+enabled_skills: [human-touch]
+output_mode: stream
+media:
+  archive_rules: []
+outbound:
+  type: stream
+enabled_tools:
+  - skill_view
+  - kb_search
+  - customer_lookup
+  - create_appointment
+  - forward_to_advisor
+  - escalate_emergency
+  - file_complaint
+  - list_advisors
+  - generate_reminders
+  - list_reminders
+  - review_reminder
+  - memory_read
+  - memory_add
+  - memory_update
+  - schedule_task_*
+memory:
+  scopes: [user_agent]
+enabled_context_providers:
+  - current-datetime
+knowledge_bases:
+  - name: pricing
+  - name: tech_faq
+  - name: service_flow
+llm_model:
+  type: litellm
+  model: ${AUTO_LLM_MODEL}
+  api_key: ${AUTO_LLM_API_KEY}
+  base_url: ${AUTO_LLM_BASE_URL}
+  temperature: 0.3
+  max_output_tokens: 16384
+  parallel_tool_calls: false
+  timeout_seconds: 120
+  context_window: 128000
+compaction:
+  safety_margin_tokens: 2048
+  trigger_ratio: 0.8
+  recent_message_ratio: 0.2
+  media_block_tokens: 2048

@@ -1,0 +1,617 @@
+/* 输入区、附件、媒体和继续执行控件。 */
+.interaction-dock {
+  flex: 0 0 auto;
+  padding: 0 24px 18px;
+  background: transparent;
+}
+.composer-shell,
+.todo-panel,
+.resume-panel,
+.error-banner,
+.pending-input-list {
+  width: min(680px, 100%);
+  margin: 0 auto;
+}
+.pending-input-list {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+.pending-input {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(4, 6, 13, 0.5);
+}
+.pending-input > span {
+  flex: 0 0 auto;
+  padding: 3px 6px;
+  border-radius: 4px;
+  color: var(--muted);
+  background: var(--panel2);
+  font:
+    7px/1 'JetBrains Mono',
+    monospace;
+  letter-spacing: 0.06em;
+}
+.pending-input > span[data-mode='steer'] {
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.1);
+}
+.pending-input > p {
+  overflow: hidden;
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.composer-shell {
+  position: relative;
+  padding: 10px 12px 8px;
+  border: 1px solid var(--line2);
+  border-radius: 16px;
+  background: rgba(9, 14, 26, 0.85);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+.composer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 0 6px;
+}
+.composer-toolbar-main {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+}
+.composer-mode {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(4, 6, 13, 0.5);
+}
+.composer-mode button {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--dim);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  transition:
+    color 0.16s,
+    background 0.16s;
+}
+.composer-mode button:hover {
+  color: var(--ink);
+}
+.composer-mode button svg {
+  width: 12px;
+}
+.composer-mode button.active {
+  color: var(--cyan);
+  background: var(--panel2);
+  border-color: rgba(34, 211, 238, 0.3);
+}
+.composer-advanced {
+  min-width: 0;
+}
+.composer-advanced-trigger {
+  display: flex;
+  max-width: min(260px, 100%);
+  min-height: 30px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--dim);
+  background: transparent;
+  cursor: pointer;
+}
+.composer-advanced-trigger:hover {
+  color: var(--ink);
+  background: var(--panel);
+}
+.composer-advanced-trigger.active {
+  color: var(--cyan);
+  background: rgba(34, 211, 238, 0.08);
+}
+.composer-advanced-trigger svg {
+  flex: 0 0 14px;
+  width: 14px;
+}
+.composer-advanced-summary {
+  overflow: hidden;
+  min-width: 0;
+  max-width: 210px;
+  font:
+    11px/1.5 'JetBrains Mono',
+    monospace;
+  letter-spacing: 0.03em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.composer-advanced-panel {
+  position: absolute;
+  z-index: 30;
+  bottom: calc(100% + 8px);
+  left: 0;
+  display: grid;
+  width: 224px;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  background: #0d1322;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+}
+.composer-advanced-field {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font:
+    11px/1.5 Inter,
+    'Noto Sans SC',
+    sans-serif;
+  letter-spacing: 0;
+}
+.composer-role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: rgba(4, 6, 13, 0.5);
+}
+.composer-role-selector button {
+  height: 22px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--dim);
+  background: transparent;
+  cursor: pointer;
+  font:
+    11px/1 'JetBrains Mono',
+    monospace;
+}
+.composer-role-selector button:hover {
+  color: var(--ink);
+}
+.composer-role-selector button.active {
+  color: var(--cyan);
+  background: var(--panel2);
+}
+.composer-origin-input {
+  width: 100%;
+  min-width: 0;
+  height: 26px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  outline: 0;
+  color: var(--ink);
+  background: rgba(4, 6, 13, 0.6);
+  font:
+    11px/1.5 'JetBrains Mono',
+    monospace;
+  letter-spacing: 0;
+}
+.composer-origin-input:focus {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.attachment-draft-list {
+  display: flex;
+  width: min(680px, 100%);
+  height: 42px;
+  align-items: center;
+  gap: 6px;
+  margin: 0 auto 2px;
+  padding: 4px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  scrollbar-width: none;
+}
+.attachment-draft-list::-webkit-scrollbar {
+  display: none;
+}
+.attachment-draft {
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 220px;
+  height: 34px;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 5px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: rgba(4, 6, 13, 0.5);
+}
+.attachment-thumbnail,
+.attachment-type {
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+.attachment-type {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  background: var(--panel2);
+  font:
+    6px/1 'JetBrains Mono',
+    monospace;
+}
+.attachment-name {
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.attachment-status,
+.attachment-remove {
+  display: grid;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font:
+    9px/1 'JetBrains Mono',
+    monospace;
+}
+.attachment-spinner {
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  border-top-color: var(--cyan);
+  animation: attachmentSpin 0.8s linear infinite;
+}
+.attachment-ready {
+  color: var(--success);
+  background: transparent;
+}
+.attachment-result-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.attachment-error {
+  color: var(--danger);
+  background: transparent;
+  cursor: pointer;
+}
+.attachment-remove {
+  color: var(--dim);
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+}
+.attachment-remove:hover {
+  color: var(--danger);
+}
+.attachment-button {
+  display: grid;
+  flex: 0 0 26px;
+  height: 26px;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  color: var(--dim);
+  background: transparent;
+  cursor: pointer;
+}
+.attachment-button:hover {
+  color: var(--ink);
+  background: var(--panel);
+}
+.attachment-button svg {
+  width: 12px;
+  height: 12px;
+}
+.user-message-blocks {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 7px;
+}
+.user-message-blocks > p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.media-message-block {
+  overflow: hidden;
+  /* 为网格指定明确的固有宽度，再在窄屏上收缩。 */
+  width: 420px;
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(4, 6, 13, 0.5);
+}
+.media-message-block img,
+.media-message-block video {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  background: #04060d;
+}
+.media-message-block audio {
+  display: block;
+  width: 100%;
+  min-width: 260px;
+}
+.media-document {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 9px;
+  padding: 9px;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.media-document:hover {
+  color: var(--ink);
+}
+.media-document span {
+  display: grid;
+  flex: 0 0 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 6px;
+  color: var(--muted);
+  background: var(--panel2);
+  font:
+    7px/1 'JetBrains Mono',
+    monospace;
+}
+.media-document strong {
+  overflow: hidden;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.media-unavailable {
+  display: block;
+  overflow: hidden;
+  padding: 10px;
+  color: var(--dim);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.composer-input {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 4px 0;
+}
+.composer-input textarea {
+  width: 100%;
+  min-height: 34px;
+  max-height: 180px;
+  padding: 5px 0;
+  resize: none;
+  border: 0;
+  outline: 0;
+  color: var(--ink);
+  background: transparent;
+  font-size: 13.5px;
+  font-weight: 400;
+  line-height: 1.65;
+}
+.composer-input textarea::placeholder {
+  color: var(--dim);
+}
+.send-button {
+  display: grid;
+  flex: 0 0 34px;
+  height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  color: #04060d;
+  background: var(--grad);
+  box-shadow: 0 4px 16px rgba(34, 211, 238, 0.3);
+  cursor: pointer;
+  transition:
+    filter 0.16s,
+    opacity 0.16s;
+}
+.send-button:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+.send-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+  box-shadow: none;
+}
+.send-button svg {
+  width: 17px;
+  height: 17px;
+}
+.composer-hint {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 3px 2px 0;
+  color: var(--dim);
+  font:
+    10px/1.5 'JetBrains Mono',
+    monospace;
+  letter-spacing: 0;
+}
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 11px;
+  color: var(--danger);
+  background: rgba(248, 113, 113, 0.06);
+  font-size: 10px;
+}
+.error-banner svg {
+  width: 15px;
+}
+.error-banner button {
+  margin-left: auto;
+  border: 0;
+  color: var(--danger);
+  background: transparent;
+  cursor: pointer;
+  font-size: 9px;
+  text-decoration: underline;
+}
+.resume-panel {
+  margin-bottom: 9px;
+  padding: 13px;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 10px;
+  background: rgba(139, 92, 246, 0.08);
+  box-shadow: none;
+}
+.resume-copy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.resume-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 7px;
+  color: #a78bfa;
+  background: rgba(139, 92, 246, 0.2);
+  font-weight: 700;
+}
+.resume-copy strong {
+  font-size: 11px;
+  color: #a78bfa;
+}
+.resume-copy p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 9px;
+}
+.resume-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 11px 0 4px 38px;
+}
+.resume-details label {
+  color: var(--muted);
+  font-size: 9px;
+}
+.resume-details textarea {
+  padding: 8px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  outline: none;
+  color: var(--ink);
+  background: rgba(4, 6, 13, 0.6);
+  font:
+    10px/1.5 ui-monospace,
+    monospace;
+}
+.field-error {
+  color: var(--danger);
+}
+.resume-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  margin-top: 9px;
+}
+.ghost-button,
+.primary-button {
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 600;
+}
+.ghost-button {
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+}
+.ghost-button:hover {
+  color: var(--ink);
+  background: var(--panel);
+}
+.primary-button {
+  border: 0;
+  color: #04060d;
+  background: var(--grad);
+}
+.primary-button:hover {
+  filter: brightness(1.12);
+}
+.stop-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.composer-shell:focus-within {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 0 3px rgba(34, 211, 238, 0.1);
+}
+.composer-shortcut {
+  margin-left: auto;
+  text-align: right;
+}
+.sidebar-backdrop {
+  display: none;
+}

@@ -1,0 +1,99 @@
+/* 字体、主题值、元素默认样式和目录页面。 */
+/* 使用 SIL OFL 授权的开源字体：Inter、Noto Sans SC 和 JetBrains Mono。 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600&display=swap');
+
+:root {
+  font-family: Inter, 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #dde6f6;
+  background: #04060d;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #dde6f6;
+  --muted: #7d8aa5;
+  --dim: #525f7a;
+  --line: rgba(148, 163, 255, 0.13);
+  --line2: rgba(148, 163, 255, 0.25);
+  --soft: #090e1a;
+  --panel: rgba(148, 163, 255, 0.045);
+  --panel2: rgba(148, 163, 255, 0.07);
+  --accent: #22d3ee;
+  --cyan: #22d3ee;
+  --violet: #8b5cf6;
+  --amber: #fbbf24;
+  --danger: #f87171;
+  --success: #34d399;
+  --grad: linear-gradient(135deg, #22d3ee, #8b5cf6);
+  --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+body {
+  min-width: 320px;
+  overflow: hidden;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+button,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgba(34, 211, 238, 0.5);
+  outline-offset: 2px;
+}
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.catalog-state {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-content: center;
+  gap: 12px;
+  color: var(--muted);
+  background: #04060d;
+  text-align: center;
+}
+.catalog-state p {
+  margin: 0;
+  font-size: 13px;
+}
+.catalog-state button {
+  justify-self: center;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--ink);
+  background: var(--panel);
+  cursor: pointer;
+}
+.catalog-state button:hover {
+  background: var(--panel2);
+  border-color: var(--line2);
+}

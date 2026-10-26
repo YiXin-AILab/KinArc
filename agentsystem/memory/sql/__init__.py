@@ -1,0 +1,1 @@
+"""MySQL Memory adapter。"""

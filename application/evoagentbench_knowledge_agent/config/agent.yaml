@@ -1,0 +1,32 @@
+agent_id: evoagentbench-knowledge
+agent_name: EvoAgentBench Knowledge Agent
+prompt: prompt/system.md
+skill_roots: []
+enabled_skills: []
+enabled_tools:
+  - eab_read
+  - eab_write_memory
+  - run_command
+  - read_file
+  - write_file
+  - list_files
+  - replace_text
+  - read_image
+enabled_context_providers: []
+output_mode: complete
+outbound:
+  type: log
+llm_model:
+  type: litellm
+  model: ${EAB_MODEL}
+  api_key: ${EAB_API_KEY}
+  base_url: ${EAB_BASE_URL}
+  temperature: 0.6
+  max_output_tokens: null
+  timeout_seconds: 180
+  context_window: 128000
+compaction:
+  safety_margin_tokens: 2048
+  trigger_ratio: 0.8
+  recent_message_ratio: 0.2
+  media_block_tokens: 2048

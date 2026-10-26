@@ -1,0 +1,23 @@
+redis:
+  type: standalone
+  host: ${REDIS_HOST}
+  port: ${REDIS_PORT}
+  username: ${REDIS_USERNAME}
+  password: ${REDIS_PASSWORD}
+  database: ${REDIS_DATABASE}
+  key_prefix: agentsystem
+  socket_timeout_seconds: 5
+asset:
+  max_file_bytes: 104857600
+  download_timeout_seconds: 10
+  upload_timeout_seconds: 30
+  allowed_url_schemes: [http, https]
+asset_store:
+  type: s3
+  endpoint_url: ${TEST_ASSET_S3_ENDPOINT}
+  bucket: ${TEST_ASSET_S3_BUCKET}
+  region: ${TEST_ASSET_S3_REGION}
+  access_key: ${TEST_ASSET_S3_ACCESS_KEY}
+  secret_key: ${TEST_ASSET_S3_SECRET_KEY}
+trace:
+  enabled: false

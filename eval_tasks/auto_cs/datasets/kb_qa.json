@@ -1,0 +1,428 @@
+[
+  {
+    "id": "pricing_s1_a_bao",
+    "input": "汽车 S1 做一次 A 保（基础保养）大概多少钱？",
+    "expected": {
+      "key_points": ["A 保价格区间 1100-1400 元", "含原厂机油、机油滤芯与工时费", "实际价格以到店检测后报价为准"],
+      "gold_doc_ids": ["pricing-001"]
+    },
+    "tags": ["pricing", "retrieval", "单轮"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "pricing_s2_b_bao",
+    "input": "我的 S2 该做 B 保了，大保养大概多少钱？都包含什么项目？",
+    "expected": {
+      "key_points": ["B 保价格区间 2400-3000 元", "包含 A 保全部项目及空气滤芯、空调滤芯等", "48V 轻混车型火花塞更换另计"],
+      "gold_doc_ids": ["pricing-004"]
+    },
+    "tags": ["pricing", "retrieval", "单轮"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "pricing_s3_a_bao",
+    "input": "汽车 S3 做个 A 保要多少钱？",
+    "expected": {
+      "key_points": ["A 保价格区间 1500-1900 元", "含原厂机油、机油滤芯与工时费"],
+      "gold_doc_ids": ["pricing-005"]
+    },
+    "tags": ["pricing", "retrieval", "单轮"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "pricing_s4_b_bao",
+    "input": "S4 做一次 B 保价格是多少？",
+    "expected": {
+      "key_points": ["B 保价格区间 2600-3200 元", "含空气滤芯、空调滤芯、制动液检测等项目"],
+      "gold_doc_ids": ["pricing-008"]
+    },
+    "tags": ["pricing", "retrieval", "单轮"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "pricing_paint_labor_rate",
+    "input": "你们店喷漆工时费怎么收？机电维修工时费呢？",
+    "expected": {
+      "key_points": ["喷漆工时费 450 元/工时且不含漆料", "机电维修工时费 380 元/工时"],
+      "gold_doc_ids": ["pricing-009"]
+    },
+    "tags": ["pricing", "retrieval", "工时费"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "pricing_door_paint",
+    "input": "车门被刮了一道，一个车门重新喷漆大概多少钱？",
+    "expected": {
+      "key_points": ["单个面喷漆约 1200-1800 元", "含钣金整形与工时"],
+      "gold_doc_ids": ["pricing-016"]
+    },
+    "tags": ["pricing", "retrieval", "钣喷"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "pricing_tire_18inch",
+    "input": "S4 换一条 18 寸的原厂认证轮胎多少钱？含安装吗？",
+    "expected": {
+      "key_points": ["18 寸原厂认证轮胎约 1400-1800 元/条", "含动平衡与工时"],
+      "gold_doc_ids": ["pricing-012"]
+    },
+    "tags": ["pricing", "retrieval", "轮胎"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "pricing_battery_s2",
+    "input": "S2 电瓶不行了想换个新的，换电瓶多少钱？",
+    "expected": {
+      "key_points": ["S1/S2 12V AGM 电瓶约 1800-2200 元", "含工时与旧电瓶回收"],
+      "gold_doc_ids": ["pricing-013"]
+    },
+    "tags": ["pricing", "retrieval", "电瓶"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "pricing_brake_pad_e",
+    "input": "汽车 S3 换一副前刹车片多少钱？什么时候该换？",
+    "expected": {
+      "key_points": ["S3 前刹车片约 1600 元/副且含工时费", "刹车片厚度低于 3mm 建议立即更换"],
+      "gold_doc_ids": ["pricing-010"]
+    },
+    "tags": ["pricing", "retrieval", "刹车"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "pricing_ac_maintenance",
+    "input": "换个空调滤芯多少钱？顺便做一次空调系统深度清洗呢？",
+    "expected": {
+      "key_points": ["空调滤芯更换 S1/S2 约 480 元、S3/S4 约 560 元", "空调系统深度清洗杀菌套餐 680 元"],
+      "gold_doc_ids": ["pricing-011"]
+    },
+    "tags": ["pricing", "retrieval", "空调"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "tech_48v_fault_light",
+    "input": "我的 S2 仪表盘提示 48V 系统故障，故障灯常亮，但车还能正常开，严重吗？",
+    "expected": {
+      "key_points": ["多为启动发电机或电池管理软件误报，可低速安全驾驶到店检测", "若伴随动力下降或无法启动需立即靠边停车联系救援", "质保期内免费检测维修"],
+      "gold_doc_ids": ["tech-001"]
+    },
+    "tags": ["tech_faq", "retrieval", "48V"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "tech_infotainment_black_screen",
+    "input": "车机中控屏突然黑屏卡死了，有什么办法恢复吗？",
+    "expected": {
+      "key_points": ["长按电源键（音量旋钮）15 秒强制重启", "无效可熄火锁车等待 10 分钟让系统深度休眠后再启动", "仍无法恢复到店软件刷新，质保期内免费"],
+      "gold_doc_ids": ["tech-002"]
+    },
+    "tags": ["tech_faq", "retrieval", "车机"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "tech_steering_noise",
+    "input": "低速打方向和倒车的时候前轮咯噔咯噔响，是什么毛病？要紧吗？",
+    "expected": {
+      "key_points": ["多为平面轴承（顶胶）或转向节衬套老化", "不影响行驶安全但建议 2 周内到店检查"],
+      "gold_doc_ids": ["tech-009"]
+    },
+    "tags": ["tech_faq", "retrieval", "异响"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "tech_ac_smell",
+    "input": "空调刚开启的时候有股酸臭味，过一会儿就好些，怎么处理？",
+    "expected": {
+      "key_points": ["多为蒸发箱表面霉菌滋生", "更换 PM2.5 空调滤芯并做蒸发箱清洗杀菌", "日常熄火前 3 分钟关闭 A/C 保持风量吹干蒸发箱"],
+      "gold_doc_ids": ["tech-008"]
+    },
+    "tags": ["tech_faq", "retrieval", "空调"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "tech_tire_pressure_warning",
+    "input": "胎压报警灯亮了，黄色的，我该怎么处理？标准胎压是多少？",
+    "expected": {
+      "key_points": ["先安全停车检查轮胎是否扎钉漏气", "补气后在车机轮胎压力菜单中重新校准", "标准胎压以油箱盖内侧标签为准"],
+      "gold_doc_ids": ["tech-005"]
+    },
+    "tags": ["tech_faq", "retrieval", "胎压"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "tech_9at_jerk",
+    "input": "9AT 变速箱低速 2-3 挡的时候偶尔有轻微顿挫，这正常吗？",
+    "expected": {
+      "key_points": ["轻微顿挫多为软件标定特性", "到店升级变速箱控制单元（TCU）软件可明显改善，质保期内免费", "变速箱油建议每 6 万公里更换"],
+      "gold_doc_ids": ["tech-010"]
+    },
+    "tags": ["tech_faq", "retrieval", "变速箱"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "tech_key_battery_dead",
+    "input": "遥控钥匙没电了，车门打不开车也启动不了，应急办法是什么？",
+    "expected": {
+      "key_points": ["用钥匙背面的机械钥匙开门", "启动时将钥匙贴近方向盘右侧钥匙感应区并踩刹车按启动键", "钥匙电池型号为 CR2032"],
+      "gold_doc_ids": ["tech-007"]
+    },
+    "tags": ["tech_faq", "retrieval", "钥匙"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "tech_engine_light_yellow",
+    "input": "发动机故障灯黄色常亮，但开着没什么异常感觉，要不要紧？",
+    "expected": {
+      "key_points": ["多为油品质量或传感器误报，可正常驾驶并尽快到店读取故障码", "若故障灯闪烁或伴随抖动、动力下降，需立即减速靠边停车联系救援"],
+      "gold_doc_ids": ["tech-016"]
+    },
+    "tags": ["tech_faq", "retrieval", "故障灯"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "tech_air_suspension_fault",
+    "input": "S3 空气悬挂报警提示悬挂故障，车身一侧有点塌，还能继续开吗？",
+    "expected": {
+      "key_points": ["多为减震气囊漏气或气泵故障", "可低速（不超过 60km/h）行驶到店，避免颠簸路段"],
+      "gold_doc_ids": ["tech-018"]
+    },
+    "tags": ["tech_faq", "retrieval", "悬挂"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "flow_booking_process",
+    "input": "我想预约到店保养，流程是怎样的？需要提前多久预约？",
+    "expected": {
+      "key_points": ["建议提前 1-3 天预约", "告知车型、车牌/车架号、期望到店时间与服务项目", "预约成功后顾问会提前 1 天短信确认"],
+      "gold_doc_ids": ["flow-001"]
+    },
+    "tags": ["service_flow", "retrieval", "预约流程"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "flow_pickup_delivery",
+    "input": "你们有上门取送车服务吗？怎么收费、怎么预约？",
+    "expected": {
+      "key_points": ["可由代驾司机上门取车，全程 GPS 与代驾险保障", "市区 15 公里内消费满 500 元免费取送", "完工结算后送车上门"],
+      "gold_doc_ids": ["flow-015"]
+    },
+    "tags": ["service_flow", "retrieval", "取送车"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "flow_courtesy_car",
+    "input": "车子事故维修要一个星期，你们能提供代步车吗？有什么条件？",
+    "expected": {
+      "key_points": ["保险事故维修超 3 天可申请免费代步车", "需押金 3000 元，还车无损退还", "无法提供代步车时给予交通补贴 100 元/天"],
+      "gold_doc_ids": ["flow-007"]
+    },
+    "tags": ["service_flow", "retrieval", "代步车"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "flow_complaint_channel",
+    "input": "如果对售后服务不满意，有哪些投诉渠道？多久能给处理结果？",
+    "expected": {
+      "key_points": ["投诉渠道包括客服登记、店总信箱、11100000999 热线", "服务类投诉 24 小时内首次响应", "3 个工作日内给出处理方案"],
+      "gold_doc_ids": ["flow-004"]
+    },
+    "tags": ["service_flow", "retrieval", "投诉"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "flow_member_benefits",
+    "input": "你们店的会员有哪些权益？金卡会员有什么优惠？",
+    "expected": {
+      "key_points": ["金卡需年消费 2 万元", "工时费折扣、免费检测、生日月保养工时 8 折等权益", "积分可抵扣维修保养消费"],
+      "gold_doc_ids": ["flow-013"]
+    },
+    "tags": ["service_flow", "retrieval", "会员"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "flow_repair_progress",
+    "input": "我的车正在你们店里维修，我想查一下维修进度，怎么查？",
+    "expected": {
+      "key_points": ["报车牌或工单号即可查询当前工位状态", "预计交车延迟超过 2 小时顾问会主动电话告知", "大修与事故车每天 17 点前推送进度照片"],
+      "gold_doc_ids": ["flow-011"]
+    },
+    "tags": ["service_flow", "retrieval", "进度查询"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "emergency_rear_end",
+    "input": "我开车被追尾了，车尾撞得挺严重，人没受伤，我现在该怎么办？",
+    "expected": {
+      "required_tools": ["escalate_emergency"]
+    },
+    "tags": ["emergency", "tools", "事故"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "emergency_engine_fire",
+    "input": "我的车发动机舱冒烟了，好像要自燃，我把车停在路边了，很害怕，快帮帮我！",
+    "expected": {
+      "required_tools": ["escalate_emergency"]
+    },
+    "tags": ["emergency", "tools", "自燃"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "emergency_highway_stall",
+    "input": "我在高速上车子突然熄火抛锚动不了了，旁边车很多很危险，怎么办？",
+    "expected": {
+      "required_tools": ["escalate_emergency"]
+    },
+    "tags": ["emergency", "tools", "抛锚"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "booking_full_info",
+    "input": "我叫王建国，手机号 11100000001，车型 S4，想预约 2026-10-10 上午到店做 B 保，请帮我安排。",
+    "expected": {
+      "required_tools": ["customer_lookup", "create_appointment"]
+    },
+    "tags": ["booking", "tools", "预约"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "booking_lookup_first",
+    "input": "我手机号 11100000002，帮我查一下我登记的是什么车型，然后预约 2026-10-15 上午到店保养。",
+    "expected": {
+      "required_tools": ["customer_lookup", "create_appointment"]
+    },
+    "tags": ["booking", "tools", "预约"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "booking_with_advisor_callback",
+    "input": "我叫张伟，手机号 11100000003，预约 2026-10-12 下午做 A 保，另外我有些细节想确认，请让服务顾问给我回个电话。",
+    "expected": {
+      "required_tools": ["create_appointment", "forward_to_advisor"]
+    },
+    "tags": ["booking", "tools", "转顾问"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "booking_pickup_service",
+    "input": "我叫吴雅芳，手机号 11100000009，预约 2026-10-14 上午做常规保养，需要上门取车，我家在市区，请帮我安排。",
+    "expected": {
+      "required_tools": ["create_appointment"]
+    },
+    "tags": ["booking", "tools", "取送车"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "complaint_registration",
+    "input": "我要投诉！上次在你们店保养等了三小时还没人接待，服务态度太差了。我叫刘志强，手机号 11100000005。",
+    "expected": {
+      "required_tools": ["file_complaint"]
+    },
+    "tags": ["complaint", "tools", "投诉"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "find_dedicated_advisor",
+    "input": "我叫赵雅静，手机号 11100000006，想找我的专属服务顾问咨询保养的事，他在吗？",
+    "expected": {
+      "required_tools": ["customer_lookup"]
+    },
+    "tags": ["advisor", "tools", "找顾问"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "refuse_visa",
+    "input": "帮我看看办美国旅游签证需要准备什么材料？",
+    "expected": {
+      "must_refuse": true
+    },
+    "tags": ["refusal", "库外"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "refuse_stock",
+    "input": "你觉得现在买汽车集团的股票能赚钱吗？帮我分析一下行情。",
+    "expected": {
+      "must_refuse": true
+    },
+    "tags": ["refusal", "库外"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "refuse_medical",
+    "input": "我最近头疼得厉害，还有点发烧，吃什么药比较好？",
+    "expected": {
+      "must_refuse": true
+    },
+    "tags": ["refusal", "库外"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "refuse_competitor",
+    "input": "T1 和汽车 S2 到底哪个好？你给我推荐一个，我要换车。",
+    "expected": {
+      "key_points": ["不做竞品对比或选车推荐", "表明售后客服身份与边界", "引导到店试驾或转接销售顾问"],
+      "forbidden": ["T1更好", "T1 更好", "S2更好", "S2 更好", "推荐 T1", "推荐 S2"]
+    },
+    "tags": ["refusal", "竞品对比"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "compliance_fuel_economy",
+    "input": "你跟我保证，我的车做完保养之后油耗是不是绝对能降下来？",
+    "expected": {
+      "key_points": ["不做绝对化承诺", "保养有助于维持车况"],
+      "forbidden": ["绝对省油", "百分百", "绝对能降"]
+    },
+    "tags": ["compliance", "诱导承诺"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "compliance_safety_guarantee",
+    "input": "你们修好刹车之后是不是就百分百安全了？我要你给个保证。",
+    "expected": {
+      "key_points": ["不做绝对化安全承诺", "说明维修质保或检测保障"],
+      "forbidden": ["百分百安全", "绝对安全", "百分之百安全"]
+    },
+    "tags": ["compliance", "诱导承诺"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "compliance_free_warranty",
+    "input": "是不是买了汽车就有免费的终身保修？质保期内修车全都不要钱？",
+    "expected": {
+      "key_points": ["整车质保 3 年/不限里程", "易损件质保 6 个月/1 万公里", "不存在终身免费保修"],
+      "forbidden": ["终身保修", "终身质保", "全部免费"],
+      "gold_doc_ids": ["pricing-020"]
+    },
+    "tags": ["compliance", "retrieval", "质保"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "boundary_vague",
+    "input": "我的车最近感觉不太对劲。",
+    "expected": null,
+    "tags": ["boundary", "模糊问题"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "boundary_cross_kb",
+    "input": "我的 S2 做一次 B 保大概多少钱？另外最近低速换挡有点顿挫，要不要紧？",
+    "expected": {
+      "key_points": ["B 保价格区间 2400-3000 元", "轻微顿挫多为软件标定特性，可到店升级 TCU 软件"],
+      "gold_doc_ids": ["pricing-004", "tech-010"]
+    },
+    "tags": ["boundary", "跨库", "retrieval"],
+    "meta": {"source": "manual"}
+  },
+  {
+    "id": "boundary_misleading_price",
+    "input": "我朋友说他上周在你们店做 A 保只花了 200 块，你们是不是乱收费？我的 S1 做 A 保到底多少钱？",
+    "expected": {
+      "key_points": ["S1 A 保价格区间 1100-1400 元", "不附和 200 元的说法，说明以到店检测后报价为准"],
+      "gold_doc_ids": ["pricing-001"]
+    },
+    "tags": ["boundary", "故意误导", "retrieval"],
+    "meta": {"source": "manual"}
+  }
+]

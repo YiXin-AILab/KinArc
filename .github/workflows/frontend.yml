@@ -1,0 +1,54 @@
+name: Frontend
+
+on:
+  push:
+    paths:
+      - 'web/**'
+      - '.github/workflows/frontend.yml'
+  pull_request:
+    paths:
+      - 'web/**'
+      - '.github/workflows/frontend.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm install --global npm@10.9.8
+      - run: npm ci --no-audit
+      - run: npm run check
+
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: web/.nvmrc
+      - run: npm install --global npm@10.9.8
+      - run: npm audit --package-lock-only --audit-level=low

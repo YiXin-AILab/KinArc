@@ -1,0 +1,6 @@
+FROM python:3.13-slim
+RUN apt-get update && apt-get install -y --no-install-recommends git ripgrep g++ \
+    && rm -rf /var/lib/apt/lists/*
+# This image contains no grader, hidden tests, task cache or provider credentials.
+WORKDIR /workspace
+USER 65534:65534

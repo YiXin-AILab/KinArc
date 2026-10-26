@@ -1,0 +1,77 @@
+name: Backend
+
+on:
+  push:
+    paths:
+      - 'agentsystem/**'
+      - 'server/**'
+      - 'application/**'
+      - 'evolution/**'
+      - 'evolution_tasks/**'
+      - 'evaluation/**'
+      - 'eval_tasks/**'
+      - 'benchmarks/**'
+      - 'tests/**'
+      - 'skills/**'
+      - 'knowledge/**'
+      - 'config/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - '.python-version'
+      - '.pre-commit-config.yaml'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    paths:
+      - 'agentsystem/**'
+      - 'server/**'
+      - 'application/**'
+      - 'evolution/**'
+      - 'evolution_tasks/**'
+      - 'evaluation/**'
+      - 'eval_tasks/**'
+      - 'benchmarks/**'
+      - 'tests/**'
+      - 'skills/**'
+      - 'knowledge/**'
+      - 'config/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - '.python-version'
+      - '.pre-commit-config.yaml'
+      - '.github/workflows/backend.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      LITELLM_MODE: PRODUCTION
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Set up uv and Python
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: '0.11.24'
+          python-version: '3.13'
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - name: Install locked dependencies
+        run: uv sync --locked --dev
+      - name: Check formatting
+        run: uv run --locked ruff format --check agentsystem server tests application evolution evaluation evolution_tasks benchmarks
+      - name: Lint
+        run: uv run --locked ruff check agentsystem server tests application evolution evaluation evolution_tasks benchmarks
+      - name: Type check
+        run: uv run --locked mypy
+      - name: Run unit and application tests
+        run: uv run --locked pytest tests/unit application

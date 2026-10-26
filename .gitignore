@@ -1,0 +1,96 @@
+# Python 字节码、扩展模块与构建产物
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+wheels/
+*.egg-info/
+.eggs/
+
+# Python 虚拟环境
+.venv/
+venv/
+env/
+ENV/
+
+# 本地环境配置与密钥；各目录的 .env.example 保留在版本库中
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# 编辑器、操作系统与临时文件
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+*.swp
+*.swo
+.idea/
+.vscode/
+.project
+.classpath
+
+# 静态检查、测试缓存与覆盖率报告
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.cache/
+*.cache
+.coverage
+htmlcov/
+.coverage.*
+
+# 日志与临时运行目录
+*.log
+logs/
+log/
+tmp/
+
+# 本地资产、进化候选与评测结果；保留任务配置和示例数据集
+/data/assets/
+.evolution/
+/eval_tasks/*/runs/
+
+# 售后服务写入的预约、通知与提醒；customers.json 和 advisors.json 是示例输入
+/application/auto_after_sales/data/*.jsonl
+/application/auto_after_sales/data/reminders.json
+
+# 模型权重与二进制数据产物
+*.bin
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.ckpt
+*.h5
+*.pkl
+*.npy
+*.npz
+
+# Node 依赖与缓存；Web 的增量编译文件由 web/.gitignore 管理
+node_modules/
+.npm
+
+# 本地 worktree 与 Agent 工具目录
+.worktrees/
+.superpowers/
+
+# Banking 执行器创建的临时工作区
+.tau3*
+
+# 内置实验的本地派生实验
+/evolution_tasks/tau3_banking_*/
+/evolution_tasks/tau3_bangking_golden_*/
+/evolution_tasks/evoagentbench_knowledge_*/
+/evolution_tasks/evoagentbench_research_*/
+
+# Tau2 接入脚本下载的上游仓库、本地配置与运行结果
+/benchmarks/tau2bench/tau2-bench/
+/benchmarks/tau2bench/local-config.json
+/benchmarks/tau2bench/results/

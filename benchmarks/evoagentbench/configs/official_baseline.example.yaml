@@ -1,0 +1,15 @@
+# Install nanobot-ai==0.1.4.post3 into DomainSettings.upstream_python's environment.
+# Match these sampling parameters to the candidate agent before comparing.
+nanobot_version: 0.1.4.post3
+max_retries: 0
+agent:
+  model: ${EAB_BASE_MODEL}
+  provider: custom
+  providers:
+    custom:
+      apiKey: ${EAB_API_KEY}
+      apiBase: ${EAB_BASE_URL}
+  temperature: 0.6
+  maxTokens: 16384
+  contextWindowTokens: 128000
+  max_tool_iterations: 40

@@ -1,0 +1,40 @@
+agent_id: evolution-agent
+agent_name: evolution_agent
+prompt: prompt/system.md
+skill_roots: [skills]
+enabled_skills: [evolution-meta-skill, changelog]
+output_mode: complete
+media:
+  archive_rules: []
+outbound:
+  type: log
+enabled_tools:
+  - skill_view
+  - list_path
+  - read_file
+  - search_path
+  - write_file
+  - make_directory
+  - move_path
+  - delete_path
+  - read_case_evidence
+  - read_case_tracelog
+enabled_context_providers: []
+plugin_options:
+  turn-reminder:
+    remind_at: 100
+llm_model:
+  type: litellm
+  model: ${EVOLUTION_LLM_MODEL}
+  api_key: ${EVOLUTION_LLM_API_KEY}
+  base_url: ${EVOLUTION_LLM_BASE_URL}
+  temperature: 0
+  max_output_tokens: 32768
+  parallel_tool_calls: true
+  timeout_seconds: 120
+  context_window: 1024000
+compaction:
+  safety_margin_tokens: 2048
+  trigger_ratio: 0.9
+  recent_message_ratio: 0.1
+  media_block_tokens: 2048

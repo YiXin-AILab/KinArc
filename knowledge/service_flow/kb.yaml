@@ -1,0 +1,10 @@
+name: service_flow
+description: 服务流程与门店政策（预约、接待、救援、理赔、会员权益）
+retrieval:
+  strategy: bm25
+  top_k: 5
+relevance_gate:
+  model: ${AUTO_LLM_MODEL}
+  api_key: ${AUTO_LLM_API_KEY}
+  base_url: ${AUTO_LLM_BASE_URL}
+  min_relevance: partial

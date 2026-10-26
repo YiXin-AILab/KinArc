@@ -1,0 +1,43 @@
+agent_id: banking-agent
+agent_name: banking_agent
+prompt: prompt/system.md
+skill_roots: []
+enabled_skills: []
+output_mode: stream
+media:
+  archive_rules: []
+outbound:
+  type: stream
+enabled_tools:
+  - KB_search
+  - grep
+  - transfer_to_human_agents
+  - get_current_time
+  - get_user_information_by_id
+  - get_user_information_by_name
+  - get_user_information_by_email
+  - change_user_email
+  - get_referrals_by_user
+  - get_credit_card_transactions_by_user
+  - get_credit_card_accounts_by_user
+  - log_verification
+  - give_discoverable_user_tool
+  - unlock_discoverable_agent_tool
+  - call_discoverable_agent_tool
+  - list_discoverable_agent_tools
+enabled_context_providers: []
+llm_model:
+  type: litellm
+  model: ${TEST_AGENT_LLM_MODEL}
+  api_key: ${TEST_AGENT_LLM_API_KEY}
+  base_url: ${TEST_AGENT_LLM_BASE_URL}
+  temperature: 0
+  max_output_tokens: 32768
+  parallel_tool_calls: false
+  timeout_seconds: 120
+  context_window: 1024000
+compaction:
+  safety_margin_tokens: 2048
+  trigger_ratio: 0.9
+  recent_message_ratio: 0.1
+  media_block_tokens: 2048

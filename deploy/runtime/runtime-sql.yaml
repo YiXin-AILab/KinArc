@@ -1,0 +1,52 @@
+redis:
+  type: standalone
+  host: ${REDIS_HOST}
+  port: ${REDIS_PORT}
+  username: ${REDIS_USERNAME}
+  password: ${REDIS_PASSWORD}
+  database: ${REDIS_DATABASE}
+  key_prefix: agentsystem
+  socket_timeout_seconds: 5
+database:
+  type: mysql
+  host: ${DATABASE_HOST}
+  port: ${DATABASE_PORT}
+  name: ${DATABASE_NAME}
+  username: ${DATABASE_USERNAME}
+  password: ${DATABASE_PASSWORD}
+  connect_timeout_seconds: 5
+  pool_size: 10
+  max_overflow: 10
+  pool_timeout_seconds: 5
+  operation_timeout_seconds: 10
+managers:
+  message:
+    type: sql
+  state:
+    type: sql
+asset:
+  max_file_bytes: 104857600
+  download_timeout_seconds: 10
+  upload_timeout_seconds: 30
+  allowed_url_schemes: [http, https]
+asset_store:
+  type: local
+  root: data/assets
+dispatcher:
+  ready_block_ms: 100
+  heartbeat_interval_seconds: 1
+trace:
+  enabled: false
+public_stream:
+  enabled: true
+  max_event_bytes: 131072
+  max_tool_payload_bytes: 131072
+  include_thinking: true
+  include_tool_arguments: true
+  include_tool_results: true
+  retention_seconds: 86400
+  terminal_grace_seconds: 300
+  read_batch_size: 100
+  block_ms: 10000
+  heartbeat_seconds: 15
+  max_connection_seconds: 1800

@@ -1,0 +1,120 @@
+name: kinarc
+
+services:
+  redis:
+    profiles: [redis]
+    image: redis:8-alpine
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    ports:
+      - "${RUNTIME_REDIS_BIND_HOST:-127.0.0.1}:${RUNTIME_REDIS_HOST_PORT:-6379}:6379"
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - kinarc_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+      start_period: 2s
+    restart: unless-stopped
+
+  minio:
+    profiles: [s3]
+    image: cgr.dev/chainguard/minio@sha256:5f2b82fe2edccafed7902f423f171ae5e6b8b363fae72441c0e0e4289dc45555
+    entrypoint: sh
+    command: >-
+      -c ': "$${MINIO_ROOT_USER:?set TEST_ASSET_S3_ACCESS_KEY}" &&
+      : "$${MINIO_ROOT_PASSWORD:?set TEST_ASSET_S3_SECRET_KEY}" &&
+      mkdir -p /data && minio server
+      --address ":9000" --console-address ":9001" /data'
+    environment:
+      MINIO_ROOT_USER: ${TEST_ASSET_S3_ACCESS_KEY:-}
+      MINIO_ROOT_PASSWORD: ${TEST_ASSET_S3_SECRET_KEY:-}
+    ports:
+      - "${RUNTIME_MINIO_BIND_HOST:-127.0.0.1}:${TEST_ASSET_S3_PORT:-9092}:9000"
+      - "${RUNTIME_MINIO_BIND_HOST:-127.0.0.1}:${TEST_ASSET_S3_CONSOLE_PORT:-9093}:9001"
+    volumes:
+      - kinarc_minio_data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  minio-init:
+    profiles: [s3]
+    image: cgr.dev/chainguard/minio@sha256:5f2b82fe2edccafed7902f423f171ae5e6b8b363fae72441c0e0e4289dc45555
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: sh
+    command: >-
+      -c ': "$${MINIO_ROOT_USER:?set TEST_ASSET_S3_ACCESS_KEY}" &&
+      : "$${MINIO_ROOT_PASSWORD:?set TEST_ASSET_S3_SECRET_KEY}" &&
+      mc alias set runtime http://minio:9000
+      "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD" &&
+      mc mb --ignore-existing "runtime/$$TEST_ASSET_S3_BUCKET"'
+    environment:
+      MINIO_ROOT_USER: ${TEST_ASSET_S3_ACCESS_KEY:-}
+      MINIO_ROOT_PASSWORD: ${TEST_ASSET_S3_SECRET_KEY:-}
+      TEST_ASSET_S3_BUCKET: ${TEST_ASSET_S3_BUCKET:-agentsystem-assets}
+    restart: "no"
+
+  mysql:
+    profiles: [sql]
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME:-agentsystem}
+      MYSQL_USER: ${DATABASE_USERNAME:-agentsystem}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD:-}
+      MYSQL_ROOT_PASSWORD: ${RUNTIME_MYSQL_ROOT_PASSWORD:-}
+      MYSQL_ROOT_HOST: "%"
+    ports:
+      - "${RUNTIME_MYSQL_BIND_HOST:-127.0.0.1}:${RUNTIME_MYSQL_HOST_PORT:-3306}:3306"
+    volumes:
+      - kinarc_mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "MYSQL_PWD=$${MYSQL_ROOT_PASSWORD} mysqladmin ping -h 127.0.0.1 -uroot --silent",
+        ]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+      start_period: 5s
+    restart: unless-stopped
+
+  mysql-migrate:
+    profiles: [sql]
+    image: kinarc-runtime
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_PORT: "3306"
+      DATABASE_NAME: ${DATABASE_NAME:-agentsystem}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-agentsystem}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-}
+    command:
+      [
+        ".venv/bin/alembic",
+        "-x",
+        "runtime_config=deploy/runtime/runtime-sql.yaml",
+        "upgrade",
+        "head",
+      ]
+    restart: "no"
+
+volumes:
+  kinarc_redis_data:
+    name: kinarc_redis_data
+  kinarc_minio_data:
+    name: kinarc_minio_data
+  kinarc_mysql_data:
+    name: kinarc_mysql_data

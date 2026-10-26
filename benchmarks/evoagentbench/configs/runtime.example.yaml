@@ -1,0 +1,13 @@
+redis:
+  type: standalone
+  host: localhost
+  port: 6379
+  database: 14
+  key_prefix: eab
+asset:
+  max_file_bytes: 16777216
+asset_store:
+  type: local
+  root: data/assets
+trace:
+  enabled: false

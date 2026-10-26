@@ -1,0 +1,1 @@
+"""Local Memory adapter。"""

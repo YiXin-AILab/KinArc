@@ -1,0 +1,41 @@
+executor: ../tau3_banking/executor.py
+evaluator: ../tau3_banking/evaluator.py
+datasets:
+  train: ../tau3_banking/datasets/train.json
+  validation: ../tau3_banking/datasets/validation.json
+  test: ../tau3_banking/datasets/test.json
+objective: 结合 System Prompt、Skills 和 Tools 三种方式优化 Banking Agent，按问题根因合理分工：System Prompt 承载跨任务原则，Skills 组织专项任务流程，Tools 提供执行能力并明确调用契约，共同提高任务完成准确率与质量。禁止新增或启用 KB_search、grep。
+initial_target: ../../application/banking_golden_agent
+workspace:
+  read_only:
+    - data/
+  inaccessible:
+    - plugins/golden_prompt.py
+    - "**/.*"
+    - "**/__pycache__"
+    - docs/
+    - tests/
+    - services/
+    - data/documents/
+    - data/db.json
+    - data/discoverable_tools.json
+    - "**/__init__.py"
+max_iterations: 20
+rollback_enabled: true
+exploration_patience: 3
+rollback_changelog_source: best
+max_case_concurrency: 8
+improver_timeout_seconds: 1200
+max_retries: 5
+retry_delay_seconds: 2
+settings:
+  runtime_config: ../../config/runtime.yaml
+  user_llm: ${TAU3_USER_LLM}
+  judge_llm: ${TAU3_JUDGE_LLM}
+  host: 127.0.0.1
+  agent_id: banking-golden-agent
+  retrieval_config: golden_retrieval
+  startup_timeout_seconds: 120
+  case_timeout_seconds: 1200
+  shutdown_timeout_seconds: 30
+  validation_num_trials: 4

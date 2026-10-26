@@ -1,0 +1,113 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kinarc"
+version = "0.1.0"
+description = "KinArc: human-centric long horizon agent runtime with evaluation and self-evolution"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+requires-python = ">=3.13,<3.15"
+dependencies = [
+    "aiobotocore>=3.9.0",
+    "aiofiles>=25.1.0",
+    "aiohttp>=3.14.3",
+    "alembic>=1.19.1",
+    "asyncmy>=0.2.13",
+    "cachetools>=5.0.0",
+    "croniter>=6.2.4",
+    "docling>=2.132.0",
+    "fastapi>=0.115.0",
+    "greenlet>=3.2,<4",
+    "httpx>=0.28.0",
+    "litellm[google]>=1.95.0",
+    "mcp>=1.0.0",
+    "opentelemetry-exporter-otlp-proto-http>=1.20.0",
+    "opentelemetry-sdk>=1.20.0",
+    "puremagic>=2.2.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.2.0",
+    "python-multipart>=0.0.22",
+    "pyyaml>=6.0.0",
+    "rank-bm25>=0.2.2",
+    "redis>=5.0.0",
+    "sqlalchemy>=2.0.51",
+    "uvicorn>=0.43.0",
+]
+
+[project.urls]
+Homepage = "https://yixin-ailab.github.io/KinArc/"
+Repository = "https://github.com/YiXin-AILab/KinArc"
+Issues = "https://github.com/YiXin-AILab/KinArc/issues"
+
+[project.scripts]
+agentsystem = "server.entrypoint:main"
+evolution = "evolution.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["agentsystem*", "server*", "application*", "evolution*", "evaluation*", "benchmarks*"]
+exclude = ["benchmarks.tau2bench.tau2-bench*", "benchmarks.tau2bench.results*", "evolution_tasks.evoagentbench_*_qwen_*"]
+
+[tool.setuptools.package-data]
+"benchmarks.tau2bench" = ["patches/*.patch", "README.md"]
+"*" = [
+    "scripts/*.lua",
+    "config/*.yaml",
+    "prompt/*.md",
+    "skills/*/*.md",
+    "skills/*/references/*.md",
+    "*.yaml",
+    "data/*.json",
+    "data/documents/*.json",
+    "datasets/*.json",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.0",
+    "pre-commit>=4.6.1",
+    "pytest>=8.4.0",
+    "pytest-asyncio>=1.0.0",
+    "ruff>=0.16.1",
+    "types-aiobotocore[s3]>=3.9.0",
+    "types-aiofiles>=25.1.0.20260518",
+    "types-croniter>=6.2.4.20260711",
+    "types-pyyaml>=6.0.12.20260724",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+src = ["agentsystem", "server", "tests", "application", "evolution", "evolution_tasks", "benchmarks"]
+extend-exclude = ["benchmarks/tau2bench/tau2-bench", "benchmarks/tau2bench/results"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C90"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+files = ["agentsystem", "server", "tests", "application", "evolution", "evaluation", "evolution_tasks", "benchmarks"]
+exclude = ["^evolution_tasks/evoagentbench_(knowledge|research)(_[^/]+)?/(dependencies|resources)/", "^evolution_tasks/tau3_banking/tau2-bench/", "^benchmarks/tau2bench/(tau2-bench|results)/"]
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+# Tau2 has incompatible LiteLLM dependencies and runs in its own environment.
+# Its public boundary is exercised by subprocess contract tests there.
+module = ["tau2.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = ["--import-mode=importlib", "-p", "tests.pytest_bootstrap"]
+asyncio_mode = "auto"

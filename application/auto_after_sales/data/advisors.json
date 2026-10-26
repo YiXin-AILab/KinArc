@@ -1,0 +1,38 @@
+[
+  {
+    "advisor_id": "adv-001",
+    "name": "何军",
+    "specialty": "机电维修",
+    "shift": "早班 8:30-17:30",
+    "phone": "11100000014"
+  },
+  {
+    "advisor_id": "adv-002",
+    "name": "冯雪",
+    "specialty": "保养套餐与会员服务",
+    "shift": "早班 8:30-17:30",
+    "phone": "11100000015"
+  },
+  {
+    "advisor_id": "adv-003",
+    "name": "许志远",
+    "specialty": "钣喷与事故理赔",
+    "shift": "中班 10:00-19:00",
+    "phone": "11100000016"
+  },
+  {
+    "advisor_id": "adv-004",
+    "name": "秦朗",
+    "specialty": "续保与增值服务",
+    "shift": "中班 10:00-19:00",
+    "phone": "11100000017"
+  },
+  {
+    "advisor_id": "adv-999",
+    "name": "高磊",
+    "specialty": "应急救援",
+    "shift": "7×24 值班",
+    "phone": "11100000018",
+    "emergency_oncall": true
+  }
+]

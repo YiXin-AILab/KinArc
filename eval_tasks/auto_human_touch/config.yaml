@@ -1,0 +1,10 @@
+agent_id: auto-after-sales
+server_base_url: http://127.0.0.1:10064
+dataset: human_touch
+judge_llm:
+  model: ${EVAL_JUDGE_LLM_MODEL}
+  api_key: ${EVAL_JUDGE_LLM_API_KEY}
+  base_url: ${EVAL_JUDGE_LLM_BASE_URL}
+  timeout_seconds: 60
+max_case_concurrency: 3
+judge_concurrency: 4

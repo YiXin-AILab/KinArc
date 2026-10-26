@@ -1,0 +1,1 @@
+"""Redis MessageManager adapter。"""
